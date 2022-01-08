@@ -17,7 +17,7 @@
     WHITESPACE='regexp:\s+'
     NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
     VALUE_KEYWORD='regexp:true|false|null|this'
-    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|return|break|continue'
+    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|default|return|break|continue'
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
     SYNTAX='regexp::|\.|==|!=|\(|\)|\[|]|\{|}|>=|<=|=|>|<|\|\||&&|->'
@@ -70,17 +70,19 @@ TryStatement ::= Statements 'catch' '(' IDENTIFIER ')' Statements
 ForEachStatement ::= '(' IDENTIFIER ':' MemberExpression ')' Statements
 ForStatement ::= '(' [Expression] ';' [Expression] ';' [Expression] ')' Statements
 SwitchStatement ::= '(' Expression ')' '{' CaseStatement* '}'
-private CaseStatement ::= ('default' | 'case' CaseValue) '->' Statements
-private CaseValue ::= STRING | NUMBER
+CaseStatement ::= ('default' | 'case' CaseValues) '->' Statements
+
+CaseValues ::= CaseValue (',' CaseValue)*
+CaseValue ::= CaseString | CaseNumber
+private CaseString ::= STRING
+private CaseNumber ::= ['-'] NUMBER
 
 /* expressions */
-Expression ::= SetVariable
-  | ModifyVariable
+Expression ::= ModifyVariable
   | SizeExpression
 
-private SetVariable ::= ['var'] IDENTIFIER '=' Expression
 private ModifyVariable ::= IDENTIFIER ModifyOp
-private ModifyOp ::= '++' | '--'
+private ModifyOp ::= '++' | '--' | '=' Expression
 
 private SizeExpression ::= ComparisonExpression [SizeOp SizeExpression]
 private SizeOp ::= '&&' | '||'
@@ -111,7 +113,7 @@ private MemberOp ::= '(' [CallArguments] ')' [MemberLoop]
   | '=' Expression
   | '++'
   | '--'
-  |
+  | [MemberLoop]
 
 private AtomExpression ::= Atom
   | '[' [ListElements] ']'

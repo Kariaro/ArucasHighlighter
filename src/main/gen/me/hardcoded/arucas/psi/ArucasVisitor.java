@@ -19,6 +19,18 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCaseStatement(@NotNull ArucasCaseStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCaseValue(@NotNull ArucasCaseValue o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCaseValues(@NotNull ArucasCaseValues o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassConstructor(@NotNull ArucasClassConstructor o) {
     visitPsiElement(o);
   }

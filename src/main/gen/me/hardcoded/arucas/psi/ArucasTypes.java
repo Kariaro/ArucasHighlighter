@@ -11,6 +11,9 @@ public interface ArucasTypes {
   IElementType ARGUMENT = new ArucasElementType("ARGUMENT");
   IElementType ARGUMENTS = new ArucasElementType("ARGUMENTS");
   IElementType ATOM = new ArucasElementType("ATOM");
+  IElementType CASE_STATEMENT = new ArucasElementType("CASE_STATEMENT");
+  IElementType CASE_VALUE = new ArucasElementType("CASE_VALUE");
+  IElementType CASE_VALUES = new ArucasElementType("CASE_VALUES");
   IElementType CLASS_CONSTRUCTOR = new ArucasElementType("CLASS_CONSTRUCTOR");
   IElementType CLASS_MEMBER = new ArucasElementType("CLASS_MEMBER");
   IElementType CLASS_METHOD = new ArucasElementType("CLASS_METHOD");
@@ -32,7 +35,6 @@ public interface ArucasTypes {
   IElementType DELIMITER = new ArucasTokenType("DELIMITER");
   IElementType IDENTIFIER = new ArucasTokenType("IDENTIFIER");
   IElementType KEYWORD = new ArucasTokenType("KEYWORD");
-  IElementType MEMBEROP_4_0 = new ArucasTokenType("MemberOp_4_0");
   IElementType NUMBER = new ArucasTokenType("NUMBER");
   IElementType OPERATOR = new ArucasTokenType("OPERATOR");
   IElementType STRING = new ArucasTokenType("STRING");
@@ -50,6 +52,15 @@ public interface ArucasTypes {
       }
       else if (type == ATOM) {
         return new ArucasAtomImpl(node);
+      }
+      else if (type == CASE_STATEMENT) {
+        return new ArucasCaseStatementImpl(node);
+      }
+      else if (type == CASE_VALUE) {
+        return new ArucasCaseValueImpl(node);
+      }
+      else if (type == CASE_VALUES) {
+        return new ArucasCaseValuesImpl(node);
       }
       else if (type == CLASS_CONSTRUCTOR) {
         return new ArucasClassConstructorImpl(node);

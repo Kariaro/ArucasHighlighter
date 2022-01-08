@@ -11,14 +11,14 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasExpressionImpl extends ASTWrapperPsiElement implements ArucasExpression {
+public class ArucasCaseValuesImpl extends ASTWrapperPsiElement implements ArucasCaseValues {
 
-  public ArucasExpressionImpl(@NotNull ASTNode node) {
+  public ArucasCaseValuesImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitCaseValues(this);
   }
 
   @Override
@@ -29,20 +29,8 @@ public class ArucasExpressionImpl extends ASTWrapperPsiElement implements Arucas
 
   @Override
   @NotNull
-  public List<ArucasAtom> getAtomList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasAtom.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ArucasExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ArucasFunctionLambda> getFunctionLambdaList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasFunctionLambda.class);
+  public List<ArucasCaseValue> getCaseValueList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasCaseValue.class);
   }
 
 }

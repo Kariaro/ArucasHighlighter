@@ -18,7 +18,7 @@ import com.intellij.psi.TokenType;
 
 Keyword = "if" | "else" | "foreach" | "for" | "while" | "try" | "catch"
   | "fun" | "class" | "operator" | "new" | "static" | "var" | "switch"
-  | "case" | "return" | "break" | "continue"
+  | "case" | "default" | "return" | "break" | "continue"
 
 ValueKeyword = "true" | "false" | "this" | "null"
 
@@ -65,6 +65,7 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
   "var"                            { return ArucasTypes.KEYWORD; }
   "switch"                         { return ArucasTypes.KEYWORD; }
   "case"                           { return ArucasTypes.KEYWORD; }
+  "default"                        { return ArucasTypes.KEYWORD; }
   "return"                         { return ArucasTypes.KEYWORD; }
   "break"                          { return ArucasTypes.KEYWORD; }
   "continue"                       { return ArucasTypes.KEYWORD; }

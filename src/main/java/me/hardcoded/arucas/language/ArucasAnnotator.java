@@ -25,14 +25,70 @@ public class ArucasAnnotator implements Annotator {
 		if (element instanceof ArucasAtom) {
 			validateAtom((ArucasAtom)element, holder);
 		}
+		
+		if (element instanceof ArucasSwitchStatement) {
+			validateSwitch((ArucasSwitchStatement)element, holder);
+		}
 	}
 	
+	private void validateSwitch(ArucasSwitchStatement switchStatement, AnnotationHolder holder) {
+		List<ArucasCaseStatement> cases = switchStatement.getCaseStatementList();
+		boolean hasDefault = false;
+		int valueType = 0;
+		
+		Set<String> values = new HashSet<>();
+		
+		for (ArucasCaseStatement caseStatement : cases) {
+			ArucasCaseValues caseValues = caseStatement.getCaseValues();
+			if (caseValues == null) {
+				if (hasDefault) {
+					holder.newAnnotation(HighlightSeverity.ERROR, "A switch statement cannot contain multiple default cases")
+						.range(caseStatement.getFirstChild().getTextRange())
+						.create();
+				}
+				
+				hasDefault = true;
+			} else {
+				List<ArucasCaseValue> listValues = caseValues.getCaseValueList();
+				if (valueType == 0) {
+					ArucasCaseValue first = listValues.get(0);
+					valueType = ((first.getNumber() != null) ? 2 : 0) +
+							    ((first.getString() != null) ? 1 : 0);
+				}
+				
+				for (ArucasCaseValue value : listValues) {
+					int caseType = ((value.getNumber() != null) ? 2 : 0) +
+								   ((value.getString() != null) ? 1 : 0);
+					
+					PsiElement element = value.getNumber() == null
+						? value.getString()
+						: value.getNumber();
+					
+					if (valueType != caseType) {
+						holder.newAnnotation(HighlightSeverity.ERROR, "A switch cannot mix value types")
+							.range(element.getTextRange())
+							.create();
+					} else {
+						if (!values.add(element.getText())) {
+							holder.newAnnotation(HighlightSeverity.ERROR, "Duplicate case value")
+								.range(element.getTextRange())
+								.create();
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Used to validate when 'this' is allowed to be used
+	 */
 	private void validateAtom(ArucasAtom atom, AnnotationHolder holder) {
 		PsiElement valueKeyword = atom.getValueKeyword();
 		
 		if (valueKeyword != null && "this".equals(valueKeyword.getText())) {
 			if (!canUseThis(atom)) {
-				holder.newAnnotation(HighlightSeverity.ERROR, "this can only be used inside classes")
+				holder.newAnnotation(HighlightSeverity.ERROR, "'this' is not allowed in a non class context")
 					.range(atom.getTextRange())
 					.create();
 			}
@@ -51,17 +107,17 @@ public class ArucasAnnotator implements Annotator {
 			String className = arucasClass.getIdentifier().getText();
 			Set<Integer> argumentCount = new HashSet<>();
 			
-			for(ArucasClassConstructor constructor : arucasClass.getClassConstructorList()) {
+			for (ArucasClassConstructor constructor : arucasClass.getClassConstructorList()) {
 				ArucasArguments arguments = constructor.getArguments();
 				int parameters = getNumberOfArguments(arguments);
 				
-				if(!className.equals(constructor.getIdentifier().getText())) {
+				if (!className.equals(constructor.getIdentifier().getText())) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "Constructor name is different from class name")
 						.range(constructor.getIdentifier().getTextRange())
 						.create();
 				}
 				
-				if(!argumentCount.add(parameters)) {
+				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with " + getParameterString(parameters) + " has already been defined")
 						.range(constructor.getIdentifier().getTextRange())
 						.create();
@@ -75,7 +131,7 @@ public class ArucasAnnotator implements Annotator {
 			Map<String, Set<Integer>> staticMethods = new HashMap<>();
 			Map<String, Set<Integer>> methods = new HashMap<>();
 			
-			for(ArucasClassMethod method : arucasClass.getClassMethodList()) {
+			for (ArucasClassMethod method : arucasClass.getClassMethodList()) {
 				boolean isStatic = method.getStaticModifier() != null;
 				
 				String name = method.getIdentifier().getText();
@@ -85,7 +141,7 @@ public class ArucasAnnotator implements Annotator {
 				ArucasArguments arguments = method.getArguments();
 				int parameters = getNumberOfArguments(arguments);
 				
-				if(!argumentCount.add(parameters)) {
+				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " method with " + getParameterString(parameters) + " has already been defined")
 						.range(method.getIdentifier().getTextRange())
 						.create();
@@ -98,10 +154,10 @@ public class ArucasAnnotator implements Annotator {
 		/* Members */ {
 			Set<String> members = new HashSet<>();
 			
-			for(ArucasClassMember member : arucasClass.getClassMemberList()) {
+			for (ArucasClassMember member : arucasClass.getClassMemberList()) {
 				String name = member.getIdentifier().getText();
 				
-				if(!members.add(name)) {
+				if (!members.add(name)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A member the name '" + name + "' has already been defined")
 						.range(member.getIdentifier().getTextRange())
 						.create();

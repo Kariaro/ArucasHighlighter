@@ -29,14 +29,14 @@ public class ArucasSwitchStatementImpl extends ASTWrapperPsiElement implements A
 
   @Override
   @NotNull
-  public ArucasExpression getExpression() {
-    return findNotNullChildByClass(ArucasExpression.class);
+  public List<ArucasCaseStatement> getCaseStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasCaseStatement.class);
   }
 
   @Override
   @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  public ArucasExpression getExpression() {
+    return findNotNullChildByClass(ArucasExpression.class);
   }
 
 }

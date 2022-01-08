@@ -10,8 +10,8 @@ public interface ArucasExpression extends PsiElement {
   @NotNull
   List<ArucasAtom> getAtomList();
 
-  @Nullable
-  ArucasExpression getExpression();
+  @NotNull
+  List<ArucasExpression> getExpressionList();
 
   @NotNull
   List<ArucasFunctionLambda> getFunctionLambdaList();
