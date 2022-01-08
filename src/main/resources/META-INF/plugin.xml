@@ -1,0 +1,27 @@
+<idea-plugin>
+    <id>me.hardcoded.arucas.ArucasHighlighter</id>
+    <name>Arucas Syntax Highlighter</name>
+    <vendor/>
+
+    <description>
+        This is a color syntax highlighter for the language Arucas
+    </description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Arucas File"
+                  implementationClass="me.hardcoded.arucas.language.ArucasFileType"
+                  fieldName="INSTANCE"
+                  language="Arucas"
+                  extensions="arucas"/>
+        <lang.parserDefinition language="Arucas"
+                  implementationClass="me.hardcoded.arucas.language.ArucasParserDefinition"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

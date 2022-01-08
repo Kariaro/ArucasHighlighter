@@ -1,0 +1,101 @@
+{
+  parserClass="me.hardcoded.arucas.language.ArucasParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Arucas"
+  psiImplClassSuffix="Impl"
+  psiPackage="me.hardcoded.arucas.psi"
+  psiImplPackage="me.hardcoded.arucas.psi.impl"
+
+  elementTypeHolderClass="me.hardcoded.arucas.psi.ArucasTypes"
+  elementTypeClass="me.hardcoded.arucas.psi.ArucasElementType"
+  tokenTypeClass="me.hardcoded.arucas.psi.ArucasTokenType"
+
+  tokens = [
+    COMMENT='regexp://.*|/\*(.|[\r\n\f])*?\*/'
+    WHITESPACE='regexp:\s+'
+    NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
+    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|new|static|var|switch|case'
+    IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+    STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
+    SYNTAX='regexp:;|:|\.|==|!=|\(|\)|\[|]|\{|}|>=|<=|=|>|<|\|\||&&|,|->'
+    OPERATOR='regexp:--|\+\+|\+|-|\*|/|\^|!'
+  ]
+}
+
+// ROOT
+arucas ::= Statements *
+
+Statements ::= '{' '}' | '{' Statement* '}' | Statement
+Statement ::= '{' Statements '}'
+  | 'if' IfStatement
+  | 'while' WhileStatement
+  | 'class' ClassStatement
+  | 'fun' FunctionStatement
+  | 'try' TryStatement
+  | 'foreach' ForEachStatement
+  | 'for' ForStatement
+  | 'switch' SwitchStatement
+  | 'return' [SizeExpression] ';'
+  | 'continue' ';'
+  | 'break' ';'
+  | [Expression] ';'
+
+IfStatement ::= '(' Expression ')' Statements ['else' Statements]
+WhileStatement ::= '(' Expression ')' Statements
+ClassStatement ::= IDENTIFIER '{' ClassBodyStatement* '}'
+ClassBodyStatement ::= ['static'] 'var' IDENTIFIER ['=' Expression] ';'
+  | ['static'] ['fun'] IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+private FunctionArguments ::= IDENTIFIER [',' FunctionArguments]
+
+FunctionStatement ::= IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+TryStatement ::= Statements 'catch' '(' IDENTIFIER ')' Statements
+ForEachStatement ::= '(' IDENTIFIER ':' MemberExpression ')' Statements
+ForStatement ::= '(' [Expression] ';' [Expression] ';' [Expression] ')' Statements
+SwitchStatement ::= '(' Expression ')' '{' CaseStatement* '}'
+private CaseStatement ::= ('default' | 'case' CaseValue) '->' Statements
+private CaseValue ::= STRING | NUMBER
+
+/* expressions */
+Expression ::= SetVariable
+  | ModifyVariable
+  | SizeExpression
+
+private SetVariable ::= ['var'] IDENTIFIER '=' Expression
+private ModifyVariable ::= IDENTIFIER ModifyOp
+private ModifyOp ::= '++' | '--'
+
+private SizeExpression ::= ComparisonExpression [SizeOp SizeExpression]
+private SizeOp ::= '&&' | '||'
+
+private ComparisonExpression ::= '!' ComparisonExpression
+  | ArithmeticExpression [ComparisonOp ArithmeticExpression]
+private ComparisonOp ::= '==' | '!=' | '<' | '>' | '<=' | '>='
+
+private ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression]
+private ArithmeticOp ::= '+' | '-'
+
+private TermExpression ::= FactorExpression [TermOp TermExpression]
+private TermOp ::= '*' | '/'
+
+private FactorExpression ::= FactorOp FactorExpression
+  | PowerExpression
+private FactorOp ::= '+' | '-'
+
+private PowerExpression ::= CallExpression ['^' FactorExpression]
+private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
+private CallArguments ::= Expression [',' CallArguments]
+private MemberExpression ::= AtomExpression ['.' MemberExpression]
+
+AtomExpression ::= IDENTIFIER
+  | STRING
+  | NUMBER
+  | '[' [ListElements] ']'
+  | '{' [MapElements] '}'
+  | 'fun' '(' [FunctionArguments] ')' '{' Statement* '}'
+  | 'new' IDENTIFIER '(' [FunctionArguments] ')'
+  | '(' Expression ')'
+
+private ListElements ::= Expression [',' ListElements]
+private MapElements ::= Expression ':' Expression [',' MapElements]
