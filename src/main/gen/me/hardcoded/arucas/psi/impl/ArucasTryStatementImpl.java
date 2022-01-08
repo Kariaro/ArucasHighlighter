@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasTryStatementImpl extends ASTWrapperPsiElement implements ArucasTryStatement {
+public class ArucasTryStatementImpl extends ArucasStatementImpl implements ArucasTryStatement {
 
   public ArucasTryStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitTryStatement(this);
   }
@@ -37,6 +37,20 @@ public class ArucasTryStatementImpl extends ASTWrapperPsiElement implements Aruc
   @NotNull
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public ArucasStatement getTryBody() {
+    List<ArucasStatement> p1 = getStatementList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public ArucasStatement getCatchBody() {
+    List<ArucasStatement> p1 = getStatementList();
+    return p1.size() < 2 ? null : p1.get(1);
   }
 
 }

@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasIfStatementImpl extends ASTWrapperPsiElement implements ArucasIfStatement {
+public class ArucasIfStatementImpl extends ArucasStatementImpl implements ArucasIfStatement {
 
   public ArucasIfStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitIfStatement(this);
   }

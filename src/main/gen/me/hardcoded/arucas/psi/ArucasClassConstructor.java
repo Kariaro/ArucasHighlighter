@@ -11,7 +11,7 @@ public interface ArucasClassConstructor extends PsiElement {
   ArucasArguments getArguments();
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  ArucasCodeBlock getCodeBlock();
 
   @NotNull
   PsiElement getIdentifier();

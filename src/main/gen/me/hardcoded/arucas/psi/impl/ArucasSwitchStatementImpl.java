@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasSwitchStatementImpl extends ASTWrapperPsiElement implements ArucasSwitchStatement {
+public class ArucasSwitchStatementImpl extends ArucasStatementImpl implements ArucasSwitchStatement {
 
   public ArucasSwitchStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitSwitchStatement(this);
   }
@@ -29,14 +29,14 @@ public class ArucasSwitchStatementImpl extends ASTWrapperPsiElement implements A
 
   @Override
   @NotNull
-  public List<ArucasCaseStatement> getCaseStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasCaseStatement.class);
+  public ArucasExpression getExpression() {
+    return findNotNullChildByClass(ArucasExpression.class);
   }
 
   @Override
   @NotNull
-  public ArucasExpression getExpression() {
-    return findNotNullChildByClass(ArucasExpression.class);
+  public ArucasSwitchCodeBlock getSwitchCodeBlock() {
+    return findNotNullChildByClass(ArucasSwitchCodeBlock.class);
   }
 
 }

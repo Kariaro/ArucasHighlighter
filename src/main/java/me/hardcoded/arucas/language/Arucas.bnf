@@ -13,74 +13,104 @@
   tokenTypeClass="me.hardcoded.arucas.psi.ArucasTokenType"
 
   tokens = [
-    COMMENT='regexp://.*|/\*(.|[\r\n\f])*?\*/'
+    COMMENT='regexp://.*[^\n\r\f]|/\*(.|[\r\n\f])*?\*/'
     WHITESPACE='regexp:\s+'
     NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
     VALUE_KEYWORD='regexp:true|false|null|this'
     KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|default|return|break|continue'
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
-    SYNTAX='regexp::|\.|==|!=|\(|\)|\[|]|\{|}|>=|<=|=|>|<|\|\||&&|->'
-    DELIMITER='regexp:[;,]'
+    SYNTAX='regexp:|==|!=|>=|<=|>|<|\|\||&&'
     OPERATOR='regexp:--|\+\+|\+|-|\*|/|\^|!'
+    COMMA=','
+    SEMICOLON=";"
+    ASSIGNMENT="="
+    POINTER="->"
+    DOT="."
+    COLON=":"
+    LPAREN="("
+    RPAREN=")"
+    LBRACK="["
+    RBRACK="]"
+    LBRACE="{"
+    RBRACE="}"
   ]
 }
 
 // ROOT
-arucas ::= Statements *
+arucas ::= Statement *
 
-private Statements ::= '{' ('}' | Statement* '}') | Statement
-Statement ::= '{' Statements '}'
-  | 'if' IfStatement
-  | 'while' WhileStatement
-  | 'class' ClassStatement
-  | 'fun' FunctionStatement
-  | 'try' TryStatement
-  | 'foreach' ForEachStatement
-  | 'for' ForStatement
-  | 'switch' SwitchStatement
-  | 'return' [SizeExpression] ';'
-  | 'continue' ';'
-  | 'break' ';'
-  | [Expression] ';'
+CodeBlock ::= '{' ( '}' | Statement+ '}' )
+Statement ::= CodeBlock
+  | ';'
+  | IfStatement
+  | WhileStatement
+  | ClassDeclaration
+  | FunctionStatement
+  | TryStatement
+  | ForEachStatement
+  | ForStatement
+  | SwitchStatement
+  | ReturnStatement
+  | ContinueStatement
+  | BreakStatement
+  | ExpressionStatement
 
-IfStatement ::= '(' Expression ')' Statements ['else' Statements]
-WhileStatement ::= '(' Expression ')' Statements
+ReturnStatement ::= 'return' SizeExpression? ';' {extends=Statement}
+ContinueStatement ::= 'continue' ';' {extends=Statement}
+BreakStatement ::= 'break' ';' {extends=Statement}
+ExpressionStatement ::= Expression ';' {extends=Statement}
+
+IfStatement ::= 'if' '(' Expression ')' Statement ElseStatement? {extends=Statement}
+ElseStatement ::= 'else' Statement {extends=Statement}
+WhileStatement ::= 'while' '(' Expression ')' Statement {extends=Statement}
 
 /* Class Statement */
-ClassStatement ::= IDENTIFIER '{' ClassBodyStatement* '}'
+ClassDeclaration ::= 'class' IDENTIFIER ClassCodeBlock {extends=Statement}
+ClassCodeBlock ::= '{' ClassBodyStatement* '}' {extends=Statement}
 private ClassBodyStatement ::= ClassMember
   | ClassConstructor
   | ClassMethod
-  | ClassOperator
+  | ClassOperator {extends=Statement}
 
-ClassConstructor ::= IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
-ClassOperator ::= 'operator' OPERATOR '(' [Arguments] ')' '{' Statement* '}' { methods=[operator="OPERATOR[1]"] }
-ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+ClassConstructor ::= IDENTIFIER '(' [Arguments] ')' CodeBlock
+ClassOperator ::= 'operator' OPERATOR '(' [Arguments] ')' CodeBlock { methods=[operator="OPERATOR[0]"] }
+ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' CodeBlock
 ClassMember ::= [StaticModifier] 'var' IDENTIFIER ['=' Expression] ';'
-
 StaticModifier ::= 'static'
 
 Arguments ::= Argument (',' Argument)*
 Argument ::= IDENTIFIER
 
 /* Function Statement */
-FunctionStatement ::= IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
-TryStatement ::= Statements 'catch' '(' IDENTIFIER ')' Statements
-ForEachStatement ::= '(' IDENTIFIER ':' MemberExpression ')' Statements
-ForStatement ::= '(' [Expression] ';' [Expression] ';' [Expression] ')' Statements
-SwitchStatement ::= '(' Expression ')' '{' CaseStatement* '}'
-CaseStatement ::= ('default' | 'case' CaseValues) '->' Statements
+FunctionStatement ::= 'fun' IDENTIFIER '(' Arguments? ')' CodeBlock {extends=Statement}
+TryStatement ::= 'try' Statement 'catch' '(' IDENTIFIER ')' Statement {
+  extends=Statement
+  methods=[
+    TRY_BODY="Statement[0]"
+    CATCH_BODY="Statement[1]"
+  ]
+}
+
+/* For Statements */
+ForEachStatement ::= 'foreach' '(' IDENTIFIER ':' MemberExpression ')' Statement {extends=Statement}
+ForStatement ::= 'for' '(' Expression? ';' Expression? ';' Expression? ')' Statement {extends=Statement}
+
+/* Switch Statement */
+SwitchStatement ::= 'switch' '(' Expression ')' SwitchCodeBlock {extends=Statement}
+SwitchCodeBlock ::= '{' CaseStatement* '}' {extends=Statement}
+CaseStatement ::= ('default' | 'case' CaseValues) '->' Statement
 
 CaseValues ::= CaseValue (',' CaseValue)*
 CaseValue ::= CaseString | CaseNumber
 private CaseString ::= STRING
 private CaseNumber ::= ['-'] NUMBER
 
-/* expressions */
+/* Expressions */
 Expression ::= ModifyVariable
   | SizeExpression
 
+// TODO: Make these into two groups Binary and Unary
 private ModifyVariable ::= IDENTIFIER ModifyOp
 private ModifyOp ::= '++' | '--' | '=' Expression
 
@@ -104,9 +134,7 @@ private FactorOp ::= '+' | '-'
 private PowerExpression ::= CallExpression ['^' FactorExpression]
 private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
 private CallArguments ::= Expression (',' Expression)*
-/*
-private MemberExpression ::= AtomExpression [['(' [CallArguments] ')'] '.' MemberExpression]
-*/
+
 private MemberExpression ::= AtomExpression [MemberLoop]
 private MemberLoop ::= '.' AtomExpression MemberOp
 private MemberOp ::= '(' [CallArguments] ')' [MemberLoop]
@@ -116,17 +144,26 @@ private MemberOp ::= '(' [CallArguments] ')' [MemberLoop]
   | [MemberLoop]
 
 private AtomExpression ::= Atom
-  | '[' [ListElements] ']'
-  | '{' [MapElements] '}'
+  | ListExpression
+  | MapExpression
   | FunctionLambda
-  | 'new' IDENTIFIER '(' [CallArguments] ')'
+  | NewExpression
   | '(' Expression ')'
 
-FunctionLambda ::= 'fun' '(' [Arguments] ')' '{' Statement* '}'
+ListExpression ::= '[' [ListElements] ']' {extends=Expression}
+private ListElements ::= Expression (',' Expression)*
+MapExpression ::= '{' [MapElements] '}' {extends=Expression}
+private MapElements ::= MapEntry (',' MapEntry)*
+MapEntry ::= Expression ':' Expression {
+  methods=[
+    key="Expression[0]"
+    value="Expression[1]"
+  ]
+}
+
+NewExpression ::= 'new' IDENTIFIER '(' [CallArguments] ')' {extends=Expression}
+FunctionLambda ::= 'fun' '(' [Arguments] ')' CodeBlock {extends=Expression}
 Atom ::= IDENTIFIER
   | VALUE_KEYWORD
   | STRING
-  | NUMBER
-
-private ListElements ::= Expression (',' Expression)*
-private MapElements ::= Expression ':' Expression (',' Expression ':' Expression)*
+  | NUMBER {extends=Expression}

@@ -30,16 +30,12 @@ Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 Number = [0-9]+(\.[0-9]+)?
 
 Operator = "--" | "++" | "+" | "-" | "*" | "/" | "^" | "!"
-Syntax = ":" | "." | "==" | "!=" | "(" | ")" | "[" | "]" | "{"
-  | "}" | ">=" | "<=" | "=" | ">" | "<" | "||" | "&&" | "->"
-
-Delimiter = ";" | ","
+Syntax = "==" | "!=" | ">=" | "<=" | ">" | "<" | "||" | "&&"
 
 /* comments */
-Comment = {LineComment} | {TraditionalComment} | {EndOfLineComment}
-LineComment          = "//" [^\r\n]* {LineTerminator}
+Comment = {LineComment} | {TraditionalComment}
+LineComment          = "//" [^\r\n]*
 TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
 
 %state STRING_DOUBLE
 %state STRING_SINGLE
@@ -72,11 +68,23 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
   "operator"                       { return ArucasTypes.KEYWORD; }
 */
 
+  "("                              { return ArucasTypes.LPAREN; }
+  ")"                              { return ArucasTypes.RPAREN; }
+  "["                              { return ArucasTypes.LBRACK; }
+  "]"                              { return ArucasTypes.RBRACK; }
+  "{"                              { return ArucasTypes.LBRACE; }
+  "}"                              { return ArucasTypes.RBRACE; }
+  "->"                             { return ArucasTypes.POINTER; }
+  ":"                              { return ArucasTypes.COLON; }
+  "."                              { return ArucasTypes.DOT; }
+  "="                              { return ArucasTypes.ASSIGNMENT; }
+  ";"                              { return ArucasTypes.SEMICOLON; }
+  ","                              { return ArucasTypes.COMMA; }
+
   /* keywords */
   {Keyword}                        { return ArucasTypes.KEYWORD; }
   {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
   {Syntax}                         { return ArucasTypes.SYNTAX; }
-  {Delimiter}                      { return ArucasTypes.DELIMITER; }
   {Operator}                       { return ArucasTypes.OPERATOR; }
 
   /* literals */

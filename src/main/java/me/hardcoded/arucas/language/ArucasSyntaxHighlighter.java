@@ -43,7 +43,8 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		if (tokenType.equals(ArucasTypes.COMMENT)) {
 			return COMMENT_KEYS;
 		}
-		if (tokenType.equals(ArucasTypes.DELIMITER)) {
+		if (tokenType.equals(ArucasTypes.SEMICOLON)
+		|| tokenType.equals(ArucasTypes.COMMA)) {
 			return DELIMITER_KEYS;
 		}
 		if (tokenType.equals(ArucasTypes.STRING)) {

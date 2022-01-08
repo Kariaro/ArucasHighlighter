@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasForEachStatementImpl extends ASTWrapperPsiElement implements ArucasForEachStatement {
+public class ArucasForEachStatementImpl extends ArucasStatementImpl implements ArucasForEachStatement {
 
   public ArucasForEachStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitForEachStatement(this);
   }
@@ -29,26 +29,20 @@ public class ArucasForEachStatementImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public List<ArucasAtom> getAtomList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasAtom.class);
-  }
-
-  @Override
-  @NotNull
   public List<ArucasExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }
 
   @Override
   @NotNull
-  public List<ArucasFunctionLambda> getFunctionLambdaList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasFunctionLambda.class);
+  public ArucasStatement getStatement() {
+    return findNotNullChildByClass(ArucasStatement.class);
   }
 
   @Override
   @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

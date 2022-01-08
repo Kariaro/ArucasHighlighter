@@ -14,8 +14,8 @@ public class ArucasAnnotator implements Annotator {
 	
 	@Override
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-		if (element instanceof ArucasClassStatement) {
-			validateClass((ArucasClassStatement)element, holder);
+		if (element instanceof ArucasClassDeclaration) {
+			validateClass((ArucasClassDeclaration)element, holder);
 		}
 		
 		if (element instanceof ArucasFunctionStatement) {
@@ -29,10 +29,34 @@ public class ArucasAnnotator implements Annotator {
 		if (element instanceof ArucasSwitchStatement) {
 			validateSwitch((ArucasSwitchStatement)element, holder);
 		}
+		
+		if (element instanceof ArucasBreakStatement) {
+			validateBreak((ArucasBreakStatement)element, holder);
+		}
+		
+		if (element instanceof ArucasContinueStatement) {
+			validateContinue((ArucasContinueStatement)element, holder);
+		}
+	}
+	
+	private void validateContinue(ArucasContinueStatement continueStatement, AnnotationHolder holder) {
+		if (!canUseContinue(continueStatement)) {
+			holder.newAnnotation(HighlightSeverity.ERROR, "'continue' is not allowed outside loops")
+				.range(continueStatement.getTextRange())
+				.create();
+		}
+	}
+	
+	private void validateBreak(ArucasBreakStatement breakStatement, AnnotationHolder holder) {
+		if (!canUseBreak(breakStatement)) {
+			holder.newAnnotation(HighlightSeverity.ERROR, "'break' is not allowed outside loops and switch cases")
+				.range(breakStatement.getTextRange())
+				.create();
+		}
 	}
 	
 	private void validateSwitch(ArucasSwitchStatement switchStatement, AnnotationHolder holder) {
-		List<ArucasCaseStatement> cases = switchStatement.getCaseStatementList();
+		List<ArucasCaseStatement> cases = switchStatement.getSwitchCodeBlock().getCaseStatementList();
 		boolean hasDefault = false;
 		int valueType = 0;
 		
@@ -69,7 +93,12 @@ public class ArucasAnnotator implements Annotator {
 							.range(element.getTextRange())
 							.create();
 					} else {
-						if (!values.add(element.getText())) {
+						String text = element.getText();
+						if (valueType == 1) {
+							text = text.substring(1, text.length() - 1);
+						}
+						
+						if (!values.add(text)) {
 							holder.newAnnotation(HighlightSeverity.ERROR, "Duplicate case value")
 								.range(element.getTextRange())
 								.create();
@@ -102,12 +131,14 @@ public class ArucasAnnotator implements Annotator {
 		// TODO: Make sure no function with this name has already been created
 	}
 	
-	private void validateClass(ArucasClassStatement arucasClass, AnnotationHolder holder) {
+	private void validateClass(ArucasClassDeclaration arucasClass, AnnotationHolder holder) {
+		ArucasClassCodeBlock codeBlock = arucasClass.getClassCodeBlock();
+		
 		/* Constructors */ {
 			String className = arucasClass.getIdentifier().getText();
 			Set<Integer> argumentCount = new HashSet<>();
 			
-			for (ArucasClassConstructor constructor : arucasClass.getClassConstructorList()) {
+			for (ArucasClassConstructor constructor : codeBlock.getClassConstructorList()) {
 				ArucasArguments arguments = constructor.getArguments();
 				int parameters = getNumberOfArguments(arguments);
 				
@@ -131,7 +162,7 @@ public class ArucasAnnotator implements Annotator {
 			Map<String, Set<Integer>> staticMethods = new HashMap<>();
 			Map<String, Set<Integer>> methods = new HashMap<>();
 			
-			for (ArucasClassMethod method : arucasClass.getClassMethodList()) {
+			for (ArucasClassMethod method : codeBlock.getClassMethodList()) {
 				boolean isStatic = method.getStaticModifier() != null;
 				
 				String name = method.getIdentifier().getText();
@@ -154,7 +185,7 @@ public class ArucasAnnotator implements Annotator {
 		/* Members */ {
 			Set<String> members = new HashSet<>();
 			
-			for (ArucasClassMember member : arucasClass.getClassMemberList()) {
+			for (ArucasClassMember member : codeBlock.getClassMemberList()) {
 				String name = member.getIdentifier().getText();
 				
 				if (!members.add(name)) {
@@ -191,6 +222,57 @@ public class ArucasAnnotator implements Annotator {
 	
 	private static String getParameterString(int count) {
 		return count == 1 ? "1 parameter" : (count + " parameters");
+	}
+	
+	private static boolean canUseContinue(PsiElement element) {
+		while (element != null) {
+			PsiElement parent = element.getParent();
+			
+			// Functions and lambdas cannot use 'continue'
+			if (parent instanceof ArucasFunctionLambda
+			|| parent instanceof ArucasFunctionStatement
+			|| parent instanceof ArucasClassOperator
+			|| parent instanceof ArucasClassConstructor) {
+				return false;
+			}
+			
+			// Loops can use 'continue'
+			if (parent instanceof ArucasForEachStatement
+			|| parent instanceof ArucasForStatement
+			|| parent instanceof ArucasWhileStatement) {
+				return true;
+			}
+			
+			element = parent;
+		}
+		
+		return false;
+	}
+	
+	private static boolean canUseBreak(PsiElement element) {
+		while (element != null) {
+			PsiElement parent = element.getParent();
+			
+			// Functions and lambdas cannot use 'break'
+			if (parent instanceof ArucasFunctionLambda
+			|| parent instanceof ArucasFunctionStatement
+			|| parent instanceof ArucasClassOperator
+			|| parent instanceof ArucasClassConstructor) {
+				return false;
+			}
+			
+			// Loops and switch cases can use 'break'
+			if (parent instanceof ArucasSwitchStatement
+			|| parent instanceof ArucasForEachStatement
+			|| parent instanceof ArucasForStatement
+			|| parent instanceof ArucasWhileStatement) {
+				return true;
+			}
+			
+			element = parent;
+		}
+		
+		return false;
 	}
 	
 	private static boolean canUseThis(PsiElement element) {

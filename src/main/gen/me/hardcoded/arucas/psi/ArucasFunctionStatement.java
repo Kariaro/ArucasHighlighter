@@ -5,13 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasFunctionStatement extends PsiElement {
+public interface ArucasFunctionStatement extends ArucasStatement {
 
   @Nullable
   ArucasArguments getArguments();
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  ArucasCodeBlock getCodeBlock();
 
   @NotNull
   PsiElement getIdentifier();

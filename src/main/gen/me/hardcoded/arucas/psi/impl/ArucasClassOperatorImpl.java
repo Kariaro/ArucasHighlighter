@@ -35,8 +35,8 @@ public class ArucasClassOperatorImpl extends ASTWrapperPsiElement implements Aru
 
   @Override
   @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  public ArucasCodeBlock getCodeBlock() {
+    return findNotNullChildByClass(ArucasCodeBlock.class);
   }
 
   @Override

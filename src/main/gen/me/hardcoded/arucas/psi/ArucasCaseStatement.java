@@ -11,6 +11,6 @@ public interface ArucasCaseStatement extends PsiElement {
   ArucasCaseValues getCaseValues();
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  ArucasStatement getStatement();
 
 }

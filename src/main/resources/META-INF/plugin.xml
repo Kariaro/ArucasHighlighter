@@ -21,8 +21,17 @@
                   implementationClass="me.hardcoded.arucas.language.ArucasParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Arucas"
                   implementationClass="me.hardcoded.arucas.language.ArucasSyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="me.hardcoded.arucas.language.ArucasColorSettingsPage"/>
+        <colorSettingsPage implementation="me.hardcoded.arucas.language.color.ArucasColorSettingsPage"/>
         <annotator language="Arucas" implementationClass="me.hardcoded.arucas.language.ArucasAnnotator"/>
+        <completion.contributor language="Arucas"
+                  implementationClass="me.hardcoded.arucas.language.ArucasCompletionContributor"/>
+        <lang.braceMatcher language="Arucas"
+                  implementationClass="me.hardcoded.arucas.language.ArucasPairedBraceMatcher"/>
+        <lang.formatter language="Arucas"
+                  implementationClass="me.hardcoded.arucas.language.formatting.ArucasFormattingModelBuilder"/>
+        <codeStyleSettingsProvider implementation="me.hardcoded.arucas.language.formatting.ArucasCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                  implementation="me.hardcoded.arucas.language.formatting.ArucasLanguageCodeStyleSettingsProvider"/>
     </extensions>
 
     <actions>

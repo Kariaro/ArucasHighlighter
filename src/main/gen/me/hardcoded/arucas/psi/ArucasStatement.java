@@ -7,40 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasStatement extends PsiElement {
 
-  @NotNull
-  List<ArucasAtom> getAtomList();
-
   @Nullable
-  ArucasClassStatement getClassStatement();
-
-  @NotNull
-  List<ArucasExpression> getExpressionList();
-
-  @Nullable
-  ArucasForEachStatement getForEachStatement();
-
-  @Nullable
-  ArucasForStatement getForStatement();
-
-  @NotNull
-  List<ArucasFunctionLambda> getFunctionLambdaList();
-
-  @Nullable
-  ArucasFunctionStatement getFunctionStatement();
-
-  @Nullable
-  ArucasIfStatement getIfStatement();
-
-  @NotNull
-  List<ArucasStatement> getStatementList();
-
-  @Nullable
-  ArucasSwitchStatement getSwitchStatement();
-
-  @Nullable
-  ArucasTryStatement getTryStatement();
-
-  @Nullable
-  ArucasWhileStatement getWhileStatement();
+  ArucasCodeBlock getCodeBlock();
 
 }

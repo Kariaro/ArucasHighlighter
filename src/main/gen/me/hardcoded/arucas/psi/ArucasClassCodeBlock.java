@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasClassStatement extends PsiElement {
+public interface ArucasClassCodeBlock extends ArucasStatement {
 
   @NotNull
   List<ArucasClassConstructor> getClassConstructorList();
@@ -18,8 +18,5 @@ public interface ArucasClassStatement extends PsiElement {
 
   @NotNull
   List<ArucasClassOperator> getClassOperatorList();
-
-  @NotNull
-  PsiElement getIdentifier();
 
 }

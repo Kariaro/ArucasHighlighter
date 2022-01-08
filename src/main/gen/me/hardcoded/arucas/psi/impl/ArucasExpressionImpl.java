@@ -29,20 +29,14 @@ public class ArucasExpressionImpl extends ASTWrapperPsiElement implements Arucas
 
   @Override
   @NotNull
-  public List<ArucasAtom> getAtomList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasAtom.class);
-  }
-
-  @Override
-  @NotNull
   public List<ArucasExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }
 
   @Override
-  @NotNull
-  public List<ArucasFunctionLambda> getFunctionLambdaList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasFunctionLambda.class);
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasIfStatement extends PsiElement {
+public interface ArucasIfStatement extends ArucasStatement {
 
   @NotNull
   ArucasExpression getExpression();

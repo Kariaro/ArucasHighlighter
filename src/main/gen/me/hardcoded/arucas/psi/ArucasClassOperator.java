@@ -11,7 +11,7 @@ public interface ArucasClassOperator extends PsiElement {
   ArucasArguments getArguments();
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  ArucasCodeBlock getCodeBlock();
 
   @NotNull
   PsiElement getOperator();

@@ -1,10 +1,12 @@
-package me.hardcoded.arucas.language;
+package me.hardcoded.arucas.language.color;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import me.hardcoded.arucas.language.ArucasIcons;
+import me.hardcoded.arucas.language.ArucasSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +41,7 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 		return "/* This is an example class */\n" +
 			"class Example {\n" +
 			"    static var staticVariable = 'string';\n" +
-			"    memberVariable = 321;\n" +
+			"    var memberVariable = 321;\n" +
 			"\n" +
 			"    Example() {\n" +
 			"        this.memberVariable = true;\n" +

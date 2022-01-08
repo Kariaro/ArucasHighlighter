@@ -21,7 +21,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
 
   public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
-    b = adapt_builder_(t, b, this, null);
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
     r = parse_root_(t, b);
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
@@ -34,6 +34,15 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return arucas(b, l + 1);
   }
+
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(ATOM, EXPRESSION, FUNCTION_LAMBDA, LIST_EXPRESSION,
+      MAP_EXPRESSION, NEW_EXPRESSION),
+    create_token_set_(BREAK_STATEMENT, CLASS_CODE_BLOCK, CLASS_DECLARATION, CONTINUE_STATEMENT,
+      ELSE_STATEMENT, EXPRESSION_STATEMENT, FOR_EACH_STATEMENT, FOR_STATEMENT,
+      FUNCTION_STATEMENT, IF_STATEMENT, RETURN_STATEMENT, STATEMENT,
+      SWITCH_CODE_BLOCK, SWITCH_STATEMENT, TRY_STATEMENT, WHILE_STATEMENT),
+  };
 
   /* ********************************************************** */
   // IDENTIFIER
@@ -76,7 +85,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Arguments_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     r = r && Argument(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -141,82 +150,23 @@ public class ArucasParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // Atom
-  //   | '[' [ListElements] ']'
-  //   | '{' [MapElements] '}'
+  //   | ListExpression
+  //   | MapExpression
   //   | FunctionLambda
-  //   | 'new' IDENTIFIER '(' [CallArguments] ')'
+  //   | NewExpression
   //   | '(' Expression ')'
   static boolean AtomExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AtomExpression")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Atom(b, l + 1);
-    if (!r) r = AtomExpression_1(b, l + 1);
-    if (!r) r = AtomExpression_2(b, l + 1);
+    if (!r) r = ListExpression(b, l + 1);
+    if (!r) r = MapExpression(b, l + 1);
     if (!r) r = FunctionLambda(b, l + 1);
-    if (!r) r = AtomExpression_4(b, l + 1);
+    if (!r) r = NewExpression(b, l + 1);
     if (!r) r = AtomExpression_5(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // '[' [ListElements] ']'
-  private static boolean AtomExpression_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "[");
-    r = r && AtomExpression_1_1(b, l + 1);
-    r = r && consumeToken(b, "]");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [ListElements]
-  private static boolean AtomExpression_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_1_1")) return false;
-    ListElements(b, l + 1);
-    return true;
-  }
-
-  // '{' [MapElements] '}'
-  private static boolean AtomExpression_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "{");
-    r = r && AtomExpression_2_1(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [MapElements]
-  private static boolean AtomExpression_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_2_1")) return false;
-    MapElements(b, l + 1);
-    return true;
-  }
-
-  // 'new' IDENTIFIER '(' [CallArguments] ')'
-  private static boolean AtomExpression_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "new");
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, "(");
-    r = r && AtomExpression_4_3(b, l + 1);
-    r = r && consumeToken(b, ")");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [CallArguments]
-  private static boolean AtomExpression_4_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AtomExpression_4_3")) return false;
-    CallArguments(b, l + 1);
-    return true;
   }
 
   // '(' Expression ')'
@@ -224,10 +174,22 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "AtomExpression_5")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "(");
+    r = consumeToken(b, LPAREN);
     r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, ")");
+    r = r && consumeToken(b, RPAREN);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'break' ';'
+  public static boolean BreakStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BreakStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, BREAK_STATEMENT, "<break statement>");
+    r = consumeToken(b, "break");
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -259,7 +221,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "CallArguments_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -289,9 +251,9 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "CallExpression_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "(");
+    r = consumeToken(b, LPAREN);
     r = r && CallExpression_1_0_1(b, l + 1);
-    r = r && consumeToken(b, ")");
+    r = r && consumeToken(b, RPAREN);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -323,14 +285,14 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('default' | 'case' CaseValues) '->' Statements
+  // ('default' | 'case' CaseValues) '->' Statement
   public static boolean CaseStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CaseStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CASE_STATEMENT, "<case statement>");
     r = CaseStatement_0(b, l + 1);
-    r = r && consumeToken(b, "->");
-    r = r && Statements(b, l + 1);
+    r = r && consumeToken(b, POINTER);
+    r = r && Statement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -403,7 +365,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "CaseValues_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     r = r && CaseValue(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -425,19 +387,41 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+  // '{' ClassBodyStatement* '}'
+  public static boolean ClassCodeBlock(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ClassCodeBlock")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACE);
+    r = r && ClassCodeBlock_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, CLASS_CODE_BLOCK, r);
+    return r;
+  }
+
+  // ClassBodyStatement*
+  private static boolean ClassCodeBlock_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ClassCodeBlock_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ClassBodyStatement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ClassCodeBlock_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER '(' [Arguments] ')' CodeBlock
   public static boolean ClassConstructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassConstructor")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, "(");
+    r = consumeTokens(b, 0, IDENTIFIER, LPAREN);
     r = r && ClassConstructor_2(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && ClassConstructor_5(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && consumeToken(b, RPAREN);
+    r = r && CodeBlock(b, l + 1);
     exit_section_(b, m, CLASS_CONSTRUCTOR, r);
     return r;
   }
@@ -449,15 +433,17 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Statement*
-  private static boolean ClassConstructor_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassConstructor_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ClassConstructor_5", c)) break;
-    }
-    return true;
+  /* ********************************************************** */
+  // 'class' IDENTIFIER ClassCodeBlock
+  public static boolean ClassDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ClassDeclaration")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CLASS_DECLARATION, "<class declaration>");
+    r = consumeToken(b, "class");
+    r = r && consumeToken(b, IDENTIFIER);
+    r = r && ClassCodeBlock(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -470,7 +456,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, "var");
     r = r && consumeToken(b, IDENTIFIER);
     r = r && ClassMember_3(b, l + 1);
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -494,27 +480,24 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ClassMember_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "=");
+    r = consumeToken(b, ASSIGNMENT);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+  // [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' CodeBlock
   public static boolean ClassMethod(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassMethod")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CLASS_METHOD, "<class method>");
     r = ClassMethod_0(b, l + 1);
     r = r && consumeToken(b, "fun");
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, "(");
+    r = r && consumeTokens(b, 0, IDENTIFIER, LPAREN);
     r = r && ClassMethod_4(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && ClassMethod_7(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && consumeToken(b, RPAREN);
+    r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -533,31 +516,17 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Statement*
-  private static boolean ClassMethod_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassMethod_7")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ClassMethod_7", c)) break;
-    }
-    return true;
-  }
-
   /* ********************************************************** */
-  // 'operator' OPERATOR '(' [Arguments] ')' '{' Statement* '}'
+  // 'operator' OPERATOR '(' [Arguments] ')' CodeBlock
   public static boolean ClassOperator(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassOperator")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CLASS_OPERATOR, "<class operator>");
     r = consumeToken(b, "operator");
-    r = r && consumeToken(b, OPERATOR);
-    r = r && consumeToken(b, "(");
+    r = r && consumeTokens(b, 0, OPERATOR, LPAREN);
     r = r && ClassOperator_3(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && ClassOperator_6(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && consumeToken(b, RPAREN);
+    r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -569,41 +538,54 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Statement*
-  private static boolean ClassOperator_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassOperator_6")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ClassOperator_6", c)) break;
-    }
-    return true;
-  }
-
   /* ********************************************************** */
-  // IDENTIFIER '{' ClassBodyStatement* '}'
-  public static boolean ClassStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassStatement")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
+  // '{' ( '}' | Statement+ '}' )
+  public static boolean CodeBlock(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CodeBlock")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, "{");
-    r = r && ClassStatement_2(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, m, CLASS_STATEMENT, r);
+    r = consumeToken(b, LBRACE);
+    r = r && CodeBlock_1(b, l + 1);
+    exit_section_(b, m, CODE_BLOCK, r);
     return r;
   }
 
-  // ClassBodyStatement*
-  private static boolean ClassStatement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassStatement_2")) return false;
-    while (true) {
+  // '}' | Statement+ '}'
+  private static boolean CodeBlock_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CodeBlock_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RBRACE);
+    if (!r) r = CodeBlock_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Statement+ '}'
+  private static boolean CodeBlock_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CodeBlock_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = CodeBlock_1_1_0(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Statement+
+  private static boolean CodeBlock_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CodeBlock_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Statement(b, l + 1);
+    while (r) {
       int c = current_position_(b);
-      if (!ClassBodyStatement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ClassStatement_2", c)) break;
+      if (!Statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "CodeBlock_1_1_0", c)) break;
     }
-    return true;
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -674,6 +656,30 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // 'continue' ';'
+  public static boolean ContinueStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ContinueStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CONTINUE_STATEMENT, "<continue statement>");
+    r = consumeToken(b, "continue");
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'else' Statement
+  public static boolean ElseStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ElseStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ELSE_STATEMENT, "<else statement>");
+    r = consumeToken(b, "else");
+    r = r && Statement(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ModifyVariable
   //   | SizeExpression
   public static boolean Expression(PsiBuilder b, int l) {
@@ -682,6 +688,18 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _COLLAPSE_, EXPRESSION, "<expression>");
     r = ModifyVariable(b, l + 1);
     if (!r) r = SizeExpression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Expression ';'
+  public static boolean ExpressionStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, EXPRESSION_STATEMENT, "<expression statement>");
+    r = Expression(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -721,73 +739,71 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' IDENTIFIER ':' MemberExpression ')' Statements
+  // 'foreach' '(' IDENTIFIER ':' MemberExpression ')' Statement
   public static boolean ForEachStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForEachStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_EACH_STATEMENT, "<for each statement>");
-    r = consumeToken(b, "(");
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, ":");
+    r = consumeToken(b, "foreach");
+    r = r && consumeTokens(b, 0, LPAREN, IDENTIFIER, COLON);
     r = r && MemberExpression(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && Statements(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && Statement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // '(' [Expression] ';' [Expression] ';' [Expression] ')' Statements
+  // 'for' '(' Expression? ';' Expression? ';' Expression? ')' Statement
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, "<for statement>");
-    r = consumeToken(b, "(");
-    r = r && ForStatement_1(b, l + 1);
-    r = r && consumeToken(b, ";");
-    r = r && ForStatement_3(b, l + 1);
-    r = r && consumeToken(b, ";");
-    r = r && ForStatement_5(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && Statements(b, l + 1);
+    r = consumeToken(b, "for");
+    r = r && consumeToken(b, LPAREN);
+    r = r && ForStatement_2(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    r = r && ForStatement_4(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    r = r && ForStatement_6(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && Statement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // [Expression]
-  private static boolean ForStatement_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_1")) return false;
+  // Expression?
+  private static boolean ForStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_2")) return false;
     Expression(b, l + 1);
     return true;
   }
 
-  // [Expression]
-  private static boolean ForStatement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_3")) return false;
+  // Expression?
+  private static boolean ForStatement_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_4")) return false;
     Expression(b, l + 1);
     return true;
   }
 
-  // [Expression]
-  private static boolean ForStatement_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_5")) return false;
+  // Expression?
+  private static boolean ForStatement_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_6")) return false;
     Expression(b, l + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // 'fun' '(' [Arguments] ')' '{' Statement* '}'
+  // 'fun' '(' [Arguments] ')' CodeBlock
   public static boolean FunctionLambda(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionLambda")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_LAMBDA, "<function lambda>");
     r = consumeToken(b, "fun");
-    r = r && consumeToken(b, "(");
+    r = r && consumeToken(b, LPAREN);
     r = r && FunctionLambda_2(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && FunctionLambda_5(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && consumeToken(b, RPAREN);
+    r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -799,84 +815,49 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Statement*
-  private static boolean FunctionLambda_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionLambda_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "FunctionLambda_5", c)) break;
-    }
-    return true;
-  }
-
   /* ********************************************************** */
-  // IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+  // 'fun' IDENTIFIER '(' Arguments? ')' CodeBlock
   public static boolean FunctionStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionStatement")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, "(");
-    r = r && FunctionStatement_2(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && FunctionStatement_5(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, m, FUNCTION_STATEMENT, r);
-    return r;
-  }
-
-  // [Arguments]
-  private static boolean FunctionStatement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionStatement_2")) return false;
-    Arguments(b, l + 1);
-    return true;
-  }
-
-  // Statement*
-  private static boolean FunctionStatement_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionStatement_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "FunctionStatement_5", c)) break;
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // '(' Expression ')' Statements ['else' Statements]
-  public static boolean IfStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, IF_STATEMENT, "<if statement>");
-    r = consumeToken(b, "(");
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && Statements(b, l + 1);
-    r = r && IfStatement_4(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_STATEMENT, "<function statement>");
+    r = consumeToken(b, "fun");
+    r = r && consumeTokens(b, 0, IDENTIFIER, LPAREN);
+    r = r && FunctionStatement_3(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // ['else' Statements]
-  private static boolean IfStatement_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_4")) return false;
-    IfStatement_4_0(b, l + 1);
+  // Arguments?
+  private static boolean FunctionStatement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionStatement_3")) return false;
+    Arguments(b, l + 1);
     return true;
   }
 
-  // 'else' Statements
-  private static boolean IfStatement_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_4_0")) return false;
+  /* ********************************************************** */
+  // 'if' '(' Expression ')' Statement ElseStatement?
+  public static boolean IfStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfStatement")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "else");
-    r = r && Statements(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, IF_STATEMENT, "<if statement>");
+    r = consumeToken(b, "if");
+    r = r && consumeToken(b, LPAREN);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && Statement(b, l + 1);
+    r = r && IfStatement_5(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // ElseStatement?
+  private static boolean IfStatement_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfStatement_5")) return false;
+    ElseStatement(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -907,48 +888,99 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ListElements_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // Expression ':' Expression (',' Expression ':' Expression)*
+  // '[' [ListElements] ']'
+  public static boolean ListExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListExpression")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACK);
+    r = r && ListExpression_1(b, l + 1);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, LIST_EXPRESSION, r);
+    return r;
+  }
+
+  // [ListElements]
+  private static boolean ListExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListExpression_1")) return false;
+    ListElements(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // MapEntry (',' MapEntry)*
   static boolean MapElements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapElements")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Expression(b, l + 1);
-    r = r && consumeToken(b, ":");
-    r = r && Expression(b, l + 1);
-    r = r && MapElements_3(b, l + 1);
+    r = MapEntry(b, l + 1);
+    r = r && MapElements_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (',' Expression ':' Expression)*
-  private static boolean MapElements_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MapElements_3")) return false;
+  // (',' MapEntry)*
+  private static boolean MapElements_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapElements_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!MapElements_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MapElements_3", c)) break;
+      if (!MapElements_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MapElements_1", c)) break;
     }
     return true;
   }
 
-  // ',' Expression ':' Expression
-  private static boolean MapElements_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MapElements_3_0")) return false;
+  // ',' MapEntry
+  private static boolean MapElements_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapElements_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, ":");
-    r = r && Expression(b, l + 1);
+    r = consumeToken(b, COMMA);
+    r = r && MapEntry(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Expression ':' Expression
+  public static boolean MapEntry(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapEntry")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MAP_ENTRY, "<map entry>");
+    r = Expression(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '{' [MapElements] '}'
+  public static boolean MapExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapExpression")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACE);
+    r = r && MapExpression_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, MAP_EXPRESSION, r);
+    return r;
+  }
+
+  // [MapElements]
+  private static boolean MapExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapExpression_1")) return false;
+    MapElements(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -974,9 +1006,10 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   // '.' AtomExpression MemberOp
   static boolean MemberLoop(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberLoop")) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ".");
+    r = consumeToken(b, DOT);
     r = r && AtomExpression(b, l + 1);
     r = r && MemberOp(b, l + 1);
     exit_section_(b, m, null, r);
@@ -1007,9 +1040,9 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "MemberOp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "(");
+    r = consumeToken(b, LPAREN);
     r = r && MemberOp_0_1(b, l + 1);
-    r = r && consumeToken(b, ")");
+    r = r && consumeToken(b, RPAREN);
     r = r && MemberOp_0_3(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1034,7 +1067,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "MemberOp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "=");
+    r = consumeToken(b, ASSIGNMENT);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1065,7 +1098,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ModifyOp_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "=");
+    r = consumeToken(b, ASSIGNMENT);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1082,6 +1115,27 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     r = r && ModifyOp(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // 'new' IDENTIFIER '(' [CallArguments] ')'
+  public static boolean NewExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NewExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, NEW_EXPRESSION, "<new expression>");
+    r = consumeToken(b, "new");
+    r = r && consumeTokens(b, 0, IDENTIFIER, LPAREN);
+    r = r && NewExpression_3(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // [CallArguments]
+  private static boolean NewExpression_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NewExpression_3")) return false;
+    CallArguments(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1112,6 +1166,26 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     r = r && FactorExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // 'return' SizeExpression? ';'
+  public static boolean ReturnStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReturnStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, RETURN_STATEMENT, "<return statement>");
+    r = consumeToken(b, "return");
+    r = r && ReturnStatement_1(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SizeExpression?
+  private static boolean ReturnStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReturnStatement_1")) return false;
+    SizeExpression(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1155,253 +1229,40 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' Statements '}'
-  //   | 'if' IfStatement
-  //   | 'while' WhileStatement
-  //   | 'class' ClassStatement
-  //   | 'fun' FunctionStatement
-  //   | 'try' TryStatement
-  //   | 'foreach' ForEachStatement
-  //   | 'for' ForStatement
-  //   | 'switch' SwitchStatement
-  //   | 'return' [SizeExpression] ';'
-  //   | 'continue' ';'
-  //   | 'break' ';'
-  //   | [Expression] ';'
+  // CodeBlock
+  //   | ';'
+  //   | IfStatement
+  //   | WhileStatement
+  //   | ClassDeclaration
+  //   | FunctionStatement
+  //   | TryStatement
+  //   | ForEachStatement
+  //   | ForStatement
+  //   | SwitchStatement
+  //   | ReturnStatement
+  //   | ContinueStatement
+  //   | BreakStatement
+  //   | ExpressionStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
-    r = Statement_0(b, l + 1);
-    if (!r) r = Statement_1(b, l + 1);
-    if (!r) r = Statement_2(b, l + 1);
-    if (!r) r = Statement_3(b, l + 1);
-    if (!r) r = Statement_4(b, l + 1);
-    if (!r) r = Statement_5(b, l + 1);
-    if (!r) r = Statement_6(b, l + 1);
-    if (!r) r = Statement_7(b, l + 1);
-    if (!r) r = Statement_8(b, l + 1);
-    if (!r) r = Statement_9(b, l + 1);
-    if (!r) r = Statement_10(b, l + 1);
-    if (!r) r = Statement_11(b, l + 1);
-    if (!r) r = Statement_12(b, l + 1);
+    Marker m = enter_section_(b, l, _COLLAPSE_, STATEMENT, "<statement>");
+    r = CodeBlock(b, l + 1);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    if (!r) r = IfStatement(b, l + 1);
+    if (!r) r = WhileStatement(b, l + 1);
+    if (!r) r = ClassDeclaration(b, l + 1);
+    if (!r) r = FunctionStatement(b, l + 1);
+    if (!r) r = TryStatement(b, l + 1);
+    if (!r) r = ForEachStatement(b, l + 1);
+    if (!r) r = ForStatement(b, l + 1);
+    if (!r) r = SwitchStatement(b, l + 1);
+    if (!r) r = ReturnStatement(b, l + 1);
+    if (!r) r = ContinueStatement(b, l + 1);
+    if (!r) r = BreakStatement(b, l + 1);
+    if (!r) r = ExpressionStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // '{' Statements '}'
-  private static boolean Statement_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "{");
-    r = r && Statements(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'if' IfStatement
-  private static boolean Statement_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "if");
-    r = r && IfStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'while' WhileStatement
-  private static boolean Statement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "while");
-    r = r && WhileStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'class' ClassStatement
-  private static boolean Statement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_3")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "class");
-    r = r && ClassStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'fun' FunctionStatement
-  private static boolean Statement_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "fun");
-    r = r && FunctionStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'try' TryStatement
-  private static boolean Statement_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_5")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "try");
-    r = r && TryStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'foreach' ForEachStatement
-  private static boolean Statement_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_6")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "foreach");
-    r = r && ForEachStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'for' ForStatement
-  private static boolean Statement_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_7")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "for");
-    r = r && ForStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'switch' SwitchStatement
-  private static boolean Statement_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_8")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "switch");
-    r = r && SwitchStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'return' [SizeExpression] ';'
-  private static boolean Statement_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_9")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "return");
-    r = r && Statement_9_1(b, l + 1);
-    r = r && consumeToken(b, ";");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [SizeExpression]
-  private static boolean Statement_9_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_9_1")) return false;
-    SizeExpression(b, l + 1);
-    return true;
-  }
-
-  // 'continue' ';'
-  private static boolean Statement_10(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_10")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "continue");
-    r = r && consumeToken(b, ";");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // 'break' ';'
-  private static boolean Statement_11(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_11")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "break");
-    r = r && consumeToken(b, ";");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [Expression] ';'
-  private static boolean Statement_12(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_12")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Statement_12_0(b, l + 1);
-    r = r && consumeToken(b, ";");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [Expression]
-  private static boolean Statement_12_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_12_0")) return false;
-    Expression(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // '{' ('}' | Statement* '}') | Statement
-  static boolean Statements(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statements")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Statements_0(b, l + 1);
-    if (!r) r = Statement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '{' ('}' | Statement* '}')
-  private static boolean Statements_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statements_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "{");
-    r = r && Statements_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '}' | Statement* '}'
-  private static boolean Statements_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statements_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "}");
-    if (!r) r = Statements_0_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Statement* '}'
-  private static boolean Statements_0_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statements_0_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Statements_0_1_1_0(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Statement*
-  private static boolean Statements_0_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statements_0_1_1_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Statements_0_1_1_0", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -1416,30 +1277,43 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' Expression ')' '{' CaseStatement* '}'
-  public static boolean SwitchStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SwitchStatement")) return false;
+  // '{' CaseStatement* '}'
+  public static boolean SwitchCodeBlock(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SwitchCodeBlock")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SWITCH_STATEMENT, "<switch statement>");
-    r = consumeToken(b, "(");
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && consumeToken(b, "{");
-    r = r && SwitchStatement_4(b, l + 1);
-    r = r && consumeToken(b, "}");
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACE);
+    r = r && SwitchCodeBlock_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, SWITCH_CODE_BLOCK, r);
     return r;
   }
 
   // CaseStatement*
-  private static boolean SwitchStatement_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SwitchStatement_4")) return false;
+  private static boolean SwitchCodeBlock_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SwitchCodeBlock_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!CaseStatement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "SwitchStatement_4", c)) break;
+      if (!empty_element_parsed_guard_(b, "SwitchCodeBlock_1", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // 'switch' '(' Expression ')' SwitchCodeBlock
+  public static boolean SwitchStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SwitchStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SWITCH_STATEMENT, "<switch statement>");
+    r = consumeToken(b, "switch");
+    r = r && consumeToken(b, LPAREN);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && SwitchCodeBlock(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -1483,42 +1357,42 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Statements 'catch' '(' IDENTIFIER ')' Statements
+  // 'try' Statement 'catch' '(' IDENTIFIER ')' Statement
   public static boolean TryStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TryStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, TRY_STATEMENT, "<try statement>");
-    r = Statements(b, l + 1);
+    r = consumeToken(b, "try");
+    r = r && Statement(b, l + 1);
     r = r && consumeToken(b, "catch");
-    r = r && consumeToken(b, "(");
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, ")");
-    r = r && Statements(b, l + 1);
+    r = r && consumeTokens(b, 0, LPAREN, IDENTIFIER, RPAREN);
+    r = r && Statement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // '(' Expression ')' Statements
+  // 'while' '(' Expression ')' Statement
   public static boolean WhileStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WhileStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, WHILE_STATEMENT, "<while statement>");
-    r = consumeToken(b, "(");
+    r = consumeToken(b, "while");
+    r = r && consumeToken(b, LPAREN);
     r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, ")");
-    r = r && Statements(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && Statement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // Statements *
+  // Statement *
   static boolean arucas(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arucas")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!Statements(b, l + 1)) break;
+      if (!Statement(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "arucas", c)) break;
     }
     return true;

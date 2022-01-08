@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasFunctionStatementImpl extends ASTWrapperPsiElement implements ArucasFunctionStatement {
+public class ArucasFunctionStatementImpl extends ArucasStatementImpl implements ArucasFunctionStatement {
 
   public ArucasFunctionStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitFunctionStatement(this);
   }
@@ -35,8 +35,8 @@ public class ArucasFunctionStatementImpl extends ASTWrapperPsiElement implements
 
   @Override
   @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  public ArucasCodeBlock getCodeBlock() {
+    return findNotNullChildByClass(ArucasCodeBlock.class);
   }
 
   @Override
