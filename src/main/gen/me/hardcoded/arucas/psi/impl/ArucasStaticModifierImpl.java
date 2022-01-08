@@ -11,32 +11,20 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasClassVariableImpl extends ASTWrapperPsiElement implements ArucasClassVariable {
+public class ArucasStaticModifierImpl extends ASTWrapperPsiElement implements ArucasStaticModifier {
 
-  public ArucasClassVariableImpl(@NotNull ASTNode node) {
+  public ArucasStaticModifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitClassVariable(this);
+    visitor.visitStaticModifier(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ArucasVisitor) accept((ArucasVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ArucasExpression getExpression() {
-    return findChildByClass(ArucasExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

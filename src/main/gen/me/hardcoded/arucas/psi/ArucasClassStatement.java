@@ -8,7 +8,16 @@ import com.intellij.psi.PsiElement;
 public interface ArucasClassStatement extends PsiElement {
 
   @NotNull
-  List<ArucasClassBodyStatement> getClassBodyStatementList();
+  List<ArucasClassConstructor> getClassConstructorList();
+
+  @NotNull
+  List<ArucasClassMember> getClassMemberList();
+
+  @NotNull
+  List<ArucasClassMethod> getClassMethodList();
+
+  @NotNull
+  List<ArucasClassOperator> getClassOperatorList();
 
   @NotNull
   PsiElement getIdentifier();

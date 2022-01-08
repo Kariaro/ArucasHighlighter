@@ -7,11 +7,15 @@ import com.intellij.psi.PsiElement;
 
 public class ArucasVisitor extends PsiElementVisitor {
 
-  public void visitAtomExpression(@NotNull ArucasAtomExpression o) {
+  public void visitArgument(@NotNull ArucasArgument o) {
     visitPsiElement(o);
   }
 
-  public void visitClassBodyStatement(@NotNull ArucasClassBodyStatement o) {
+  public void visitArguments(@NotNull ArucasArguments o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAtom(@NotNull ArucasAtom o) {
     visitPsiElement(o);
   }
 
@@ -19,7 +23,11 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitClassFunction(@NotNull ArucasClassFunction o) {
+  public void visitClassMember(@NotNull ArucasClassMember o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassMethod(@NotNull ArucasClassMethod o) {
     visitPsiElement(o);
   }
 
@@ -28,10 +36,6 @@ public class ArucasVisitor extends PsiElementVisitor {
   }
 
   public void visitClassStatement(@NotNull ArucasClassStatement o) {
-    visitPsiElement(o);
-  }
-
-  public void visitClassVariable(@NotNull ArucasClassVariable o) {
     visitPsiElement(o);
   }
 
@@ -47,6 +51,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFunctionLambda(@NotNull ArucasFunctionLambda o) {
+    visitPsiElement(o);
+  }
+
   public void visitFunctionStatement(@NotNull ArucasFunctionStatement o) {
     visitPsiElement(o);
   }
@@ -59,7 +67,7 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitStatements(@NotNull ArucasStatements o) {
+  public void visitStaticModifier(@NotNull ArucasStaticModifier o) {
     visitPsiElement(o);
   }
 

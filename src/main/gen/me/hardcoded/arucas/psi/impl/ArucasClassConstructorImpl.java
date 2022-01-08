@@ -28,9 +28,21 @@ public class ArucasClassConstructorImpl extends ASTWrapperPsiElement implements 
   }
 
   @Override
+  @Nullable
+  public ArucasArguments getArguments() {
+    return findChildByClass(ArucasArguments.class);
+  }
+
+  @Override
   @NotNull
   public List<ArucasStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

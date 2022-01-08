@@ -22,6 +22,7 @@
         <lang.syntaxHighlighterFactory language="Arucas"
                   implementationClass="me.hardcoded.arucas.language.ArucasSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="me.hardcoded.arucas.language.ArucasColorSettingsPage"/>
+        <annotator language="Arucas" implementationClass="me.hardcoded.arucas.language.ArucasAnnotator"/>
     </extensions>
 
     <actions>

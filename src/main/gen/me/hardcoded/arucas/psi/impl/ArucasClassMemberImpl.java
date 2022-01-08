@@ -11,14 +11,14 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasClassBodyStatementImpl extends ASTWrapperPsiElement implements ArucasClassBodyStatement {
+public class ArucasClassMemberImpl extends ASTWrapperPsiElement implements ArucasClassMember {
 
-  public ArucasClassBodyStatementImpl(@NotNull ASTNode node) {
+  public ArucasClassMemberImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitClassBodyStatement(this);
+    visitor.visitClassMember(this);
   }
 
   @Override
@@ -29,26 +29,20 @@ public class ArucasClassBodyStatementImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public ArucasClassConstructor getClassConstructor() {
-    return findChildByClass(ArucasClassConstructor.class);
+  public ArucasExpression getExpression() {
+    return findChildByClass(ArucasExpression.class);
   }
 
   @Override
   @Nullable
-  public ArucasClassFunction getClassFunction() {
-    return findChildByClass(ArucasClassFunction.class);
+  public ArucasStaticModifier getStaticModifier() {
+    return findChildByClass(ArucasStaticModifier.class);
   }
 
   @Override
-  @Nullable
-  public ArucasClassOperator getClassOperator() {
-    return findChildByClass(ArucasClassOperator.class);
-  }
-
-  @Override
-  @Nullable
-  public ArucasClassVariable getClassVariable() {
-    return findChildByClass(ArucasClassVariable.class);
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

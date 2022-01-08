@@ -35,8 +35,8 @@ public class ArucasIfStatementImpl extends ASTWrapperPsiElement implements Aruca
 
   @Override
   @NotNull
-  public List<ArucasStatements> getStatementsList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatements.class);
+  public List<ArucasStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
   }
 
 }

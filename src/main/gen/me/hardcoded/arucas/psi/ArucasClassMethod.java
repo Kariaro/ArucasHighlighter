@@ -5,24 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasAtomExpression extends PsiElement {
+public interface ArucasClassMethod extends PsiElement {
 
   @Nullable
-  ArucasExpression getExpression();
+  ArucasArguments getArguments();
 
   @NotNull
   List<ArucasStatement> getStatementList();
 
   @Nullable
+  ArucasStaticModifier getStaticModifier();
+
+  @NotNull
   PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getNumber();
-
-  @Nullable
-  PsiElement getString();
-
-  @Nullable
-  PsiElement getValueKeyword();
 
 }

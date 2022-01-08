@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ArucasStatement extends PsiElement {
 
   @NotNull
-  List<ArucasAtomExpression> getAtomExpressionList();
+  List<ArucasAtom> getAtomList();
 
   @Nullable
   ArucasClassStatement getClassStatement();
@@ -22,14 +22,17 @@ public interface ArucasStatement extends PsiElement {
   @Nullable
   ArucasForStatement getForStatement();
 
+  @NotNull
+  List<ArucasFunctionLambda> getFunctionLambdaList();
+
   @Nullable
   ArucasFunctionStatement getFunctionStatement();
 
   @Nullable
   ArucasIfStatement getIfStatement();
 
-  @Nullable
-  ArucasStatements getStatements();
+  @NotNull
+  List<ArucasStatement> getStatementList();
 
   @Nullable
   ArucasSwitchStatement getSwitchStatement();

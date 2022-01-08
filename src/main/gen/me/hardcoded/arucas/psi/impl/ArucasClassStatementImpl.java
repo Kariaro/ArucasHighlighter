@@ -29,8 +29,26 @@ public class ArucasClassStatementImpl extends ASTWrapperPsiElement implements Ar
 
   @Override
   @NotNull
-  public List<ArucasClassBodyStatement> getClassBodyStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasClassBodyStatement.class);
+  public List<ArucasClassConstructor> getClassConstructorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasClassConstructor.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ArucasClassMember> getClassMemberList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasClassMember.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ArucasClassMethod> getClassMethodList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasClassMethod.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ArucasClassOperator> getClassOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasClassOperator.class);
   }
 
   @Override

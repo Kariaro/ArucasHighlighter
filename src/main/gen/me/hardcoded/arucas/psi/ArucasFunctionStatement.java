@@ -7,7 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasFunctionStatement extends PsiElement {
 
+  @Nullable
+  ArucasArguments getArguments();
+
   @NotNull
   List<ArucasStatement> getStatementList();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

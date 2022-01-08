@@ -11,6 +11,6 @@ public interface ArucasWhileStatement extends PsiElement {
   ArucasExpression getExpression();
 
   @NotNull
-  ArucasStatements getStatements();
+  List<ArucasStatement> getStatementList();
 
 }

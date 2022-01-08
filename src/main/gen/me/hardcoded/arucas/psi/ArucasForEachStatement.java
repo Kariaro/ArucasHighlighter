@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface ArucasForEachStatement extends PsiElement {
 
   @NotNull
-  ArucasAtomExpression getAtomExpression();
+  List<ArucasAtom> getAtomList();
 
   @NotNull
   List<ArucasExpression> getExpressionList();
 
   @NotNull
-  ArucasStatements getStatements();
+  List<ArucasFunctionLambda> getFunctionLambdaList();
 
   @NotNull
-  PsiElement getIdentifier();
+  List<ArucasStatement> getStatementList();
 
 }

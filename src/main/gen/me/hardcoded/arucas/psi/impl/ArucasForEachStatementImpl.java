@@ -29,8 +29,8 @@ public class ArucasForEachStatementImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public ArucasAtomExpression getAtomExpression() {
-    return findNotNullChildByClass(ArucasAtomExpression.class);
+  public List<ArucasAtom> getAtomList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasAtom.class);
   }
 
   @Override
@@ -41,14 +41,14 @@ public class ArucasForEachStatementImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public ArucasStatements getStatements() {
-    return findNotNullChildByClass(ArucasStatements.class);
+  public List<ArucasFunctionLambda> getFunctionLambdaList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasFunctionLambda.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<ArucasStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
   }
 
 }

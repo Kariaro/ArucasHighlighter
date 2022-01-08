@@ -35,8 +35,8 @@ public class ArucasWhileStatementImpl extends ASTWrapperPsiElement implements Ar
 
   @Override
   @NotNull
-  public ArucasStatements getStatements() {
-    return findNotNullChildByClass(ArucasStatements.class);
+  public List<ArucasStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
   }
 
 }

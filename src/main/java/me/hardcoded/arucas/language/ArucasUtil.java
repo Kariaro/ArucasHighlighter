@@ -19,13 +19,13 @@ public class ArucasUtil {
 		List<ArucasClassStatement> result = new ArrayList<>();
 		Collection<VirtualFile> virtualFiles =
 			FileTypeIndex.getFiles(ArucasFileType.INSTANCE, GlobalSearchScope.allScope(project));
-		for(VirtualFile virtualFile : virtualFiles) {
+		for (VirtualFile virtualFile : virtualFiles) {
 			ArucasFile simpleFile = (ArucasFile) PsiManager.getInstance(project).findFile(virtualFile);
-			if(simpleFile != null) {
+			if (simpleFile != null) {
 				ArucasClassStatement[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, ArucasClassStatement.class);
-				if(properties != null) {
-					for(ArucasClassStatement property : properties) {
-						if(key.equals(property.getIdentifier().getText())) {
+				if (properties != null) {
+					for (ArucasClassStatement property : properties) {
+						if (key.equals(property.getIdentifier().getText())) {
 							result.add(property);
 						}
 					}
@@ -39,11 +39,11 @@ public class ArucasUtil {
 		List<ArucasClassStatement> result = new ArrayList<>();
 		Collection<VirtualFile> virtualFiles =
 			FileTypeIndex.getFiles(ArucasFileType.INSTANCE, GlobalSearchScope.allScope(project));
-		for(VirtualFile virtualFile : virtualFiles) {
+		for (VirtualFile virtualFile : virtualFiles) {
 			ArucasFile simpleFile = (ArucasFile) PsiManager.getInstance(project).findFile(virtualFile);
-			if(simpleFile != null) {
+			if (simpleFile != null) {
 				ArucasClassStatement[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, ArucasClassStatement.class);
-				if(properties != null) {
+				if (properties != null) {
 					Collections.addAll(result, properties);
 				}
 			}

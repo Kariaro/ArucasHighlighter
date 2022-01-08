@@ -29,8 +29,8 @@ public class ArucasTryStatementImpl extends ASTWrapperPsiElement implements Aruc
 
   @Override
   @NotNull
-  public List<ArucasStatements> getStatementsList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatements.class);
+  public List<ArucasStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
   }
 
   @Override

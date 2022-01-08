@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasStatements extends PsiElement {
+public interface ArucasArgument extends PsiElement {
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  PsiElement getIdentifier();
 
 }

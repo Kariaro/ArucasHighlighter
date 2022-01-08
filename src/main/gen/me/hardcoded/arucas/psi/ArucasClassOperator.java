@@ -7,11 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasClassOperator extends PsiElement {
 
+  @Nullable
+  ArucasArguments getArguments();
+
   @NotNull
   List<ArucasStatement> getStatementList();
-
-  @Nullable
-  PsiElement getIdentifier();
 
   @NotNull
   PsiElement getOperator();

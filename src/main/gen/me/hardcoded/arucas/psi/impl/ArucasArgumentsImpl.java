@@ -11,14 +11,14 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasForStatementImpl extends ASTWrapperPsiElement implements ArucasForStatement {
+public class ArucasArgumentsImpl extends ASTWrapperPsiElement implements ArucasArguments {
 
-  public ArucasForStatementImpl(@NotNull ASTNode node) {
+  public ArucasArgumentsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitForStatement(this);
+    visitor.visitArguments(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class ArucasForStatementImpl extends ASTWrapperPsiElement implements Aruc
 
   @Override
   @NotNull
-  public List<ArucasExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  public List<ArucasArgument> getArgumentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasArgument.class);
   }
 
 }

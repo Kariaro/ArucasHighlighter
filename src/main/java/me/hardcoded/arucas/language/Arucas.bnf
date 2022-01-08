@@ -15,7 +15,7 @@
   tokens = [
     COMMENT='regexp://.*|/\*(.|[\r\n\f])*?\*/'
     WHITESPACE='regexp:\s+'
-    NUMBER='regexp:-?[0-9]+(\\.[0-9]+)?'
+    NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
     VALUE_KEYWORD='regexp:true|false|null|this'
     KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|return|break|continue'
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
@@ -29,7 +29,7 @@
 // ROOT
 arucas ::= Statements *
 
-Statements ::= '{' ('}' | Statement* '}') | Statement
+private Statements ::= '{' ('}' | Statement* '}') | Statement
 Statement ::= '{' Statements '}'
   | 'if' IfStatement
   | 'while' WhileStatement
@@ -49,20 +49,23 @@ WhileStatement ::= '(' Expression ')' Statements
 
 /* Class Statement */
 ClassStatement ::= IDENTIFIER '{' ClassBodyStatement* '}'
-ClassBodyStatement ::= ClassVariable
+private ClassBodyStatement ::= ClassMember
   | ClassConstructor
-  | ClassFunction
+  | ClassMethod
   | ClassOperator
 
-ClassConstructor ::= IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
-ClassOperator ::= 'operator' OPERATOR '(' [FunctionArguments] ')' '{' Statement* '}'
-ClassFunction ::= ['static'] 'fun' IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
-ClassVariable ::= ['static'] 'var' IDENTIFIER ['=' Expression] ';'
+ClassConstructor ::= IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+ClassOperator ::= 'operator' OPERATOR '(' [Arguments] ')' '{' Statement* '}' { methods=[operator="OPERATOR[1]"] }
+ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
+ClassMember ::= [StaticModifier] 'var' IDENTIFIER ['=' Expression] ';'
 
-private FunctionArguments ::= IDENTIFIER [',' FunctionArguments]
+StaticModifier ::= 'static'
+
+Arguments ::= Argument (',' Argument)*
+Argument ::= IDENTIFIER
 
 /* Function Statement */
-FunctionStatement ::= IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+FunctionStatement ::= IDENTIFIER '(' [Arguments] ')' '{' Statement* '}'
 TryStatement ::= Statements 'catch' '(' IDENTIFIER ')' Statements
 ForEachStatement ::= '(' IDENTIFIER ':' MemberExpression ')' Statements
 ForStatement ::= '(' [Expression] ';' [Expression] ';' [Expression] ')' Statements
@@ -98,18 +101,30 @@ private FactorOp ::= '+' | '-'
 
 private PowerExpression ::= CallExpression ['^' FactorExpression]
 private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
-private CallArguments ::= Expression [',' CallArguments]
+private CallArguments ::= Expression (',' Expression)*
+/*
 private MemberExpression ::= AtomExpression [['(' [CallArguments] ')'] '.' MemberExpression]
+*/
+private MemberExpression ::= AtomExpression [MemberLoop]
+private MemberLoop ::= '.' AtomExpression MemberOp
+private MemberOp ::= '(' [CallArguments] ')' [MemberLoop]
+  | '=' Expression
+  | '++'
+  | '--'
+  |
 
-AtomExpression ::= IDENTIFIER
+private AtomExpression ::= Atom
+  | '[' [ListElements] ']'
+  | '{' [MapElements] '}'
+  | FunctionLambda
+  | 'new' IDENTIFIER '(' [CallArguments] ')'
+  | '(' Expression ')'
+
+FunctionLambda ::= 'fun' '(' [Arguments] ')' '{' Statement* '}'
+Atom ::= IDENTIFIER
   | VALUE_KEYWORD
   | STRING
   | NUMBER
-  | '[' [ListElements] ']'
-  | '{' [MapElements] '}'
-  | 'fun' '(' [FunctionArguments] ')' '{' Statement* '}'
-  | 'new' IDENTIFIER '(' [FunctionArguments] ')'
-  | '(' Expression ')'
 
-private ListElements ::= Expression [',' ListElements]
-private MapElements ::= Expression ':' Expression [',' MapElements]
+private ListElements ::= Expression (',' Expression)*
+private MapElements ::= Expression ':' Expression (',' Expression ':' Expression)*
