@@ -51,16 +51,19 @@ public class ArucasParserDefinition implements ParserDefinition {
 		return new ArucasParser();
 	}
 	
+	@NotNull
 	@Override
 	public IFileElementType getFileNodeType() {
 		return FILE;
 	}
 	
+	@NotNull
 	@Override
-	public PsiFile createFile(FileViewProvider viewProvider) {
+	public PsiFile createFile(@NotNull FileViewProvider viewProvider) {
 		return new ArucasFile(viewProvider);
 	}
 	
+	@NotNull
 	@Override
 	public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
 		return SpaceRequirements.MAY;

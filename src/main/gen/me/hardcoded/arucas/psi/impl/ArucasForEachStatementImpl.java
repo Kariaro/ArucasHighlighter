@@ -35,6 +35,12 @@ public class ArucasForEachStatementImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
+  public List<ArucasExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
+  }
+
+  @Override
+  @NotNull
   public ArucasStatements getStatements() {
     return findNotNullChildByClass(ArucasStatements.class);
   }

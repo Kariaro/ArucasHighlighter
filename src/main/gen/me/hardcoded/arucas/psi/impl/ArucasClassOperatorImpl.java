@@ -11,26 +11,20 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasAtomExpressionImpl extends ASTWrapperPsiElement implements ArucasAtomExpression {
+public class ArucasClassOperatorImpl extends ASTWrapperPsiElement implements ArucasClassOperator {
 
-  public ArucasAtomExpressionImpl(@NotNull ASTNode node) {
+  public ArucasClassOperatorImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitAtomExpression(this);
+    visitor.visitClassOperator(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ArucasVisitor) accept((ArucasVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ArucasExpression getExpression() {
-    return findChildByClass(ArucasExpression.class);
   }
 
   @Override
@@ -46,21 +40,9 @@ public class ArucasAtomExpressionImpl extends ASTWrapperPsiElement implements Ar
   }
 
   @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getValueKeyword() {
-    return findChildByType(VALUE_KEYWORD);
+  @NotNull
+  public PsiElement getOperator() {
+    return findNotNullChildByType(OPERATOR);
   }
 
 }

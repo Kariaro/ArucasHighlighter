@@ -17,22 +17,27 @@ import com.intellij.psi.TokenType;
 
 
 Keyword = "if" | "else" | "foreach" | "for" | "while" | "try" | "catch"
-  | "fun" | "class" | "new" | "static" | "var" | "switch" | "case"
+  | "fun" | "class" | "operator" | "new" | "static" | "var" | "switch"
+  | "case" | "return" | "break" | "continue"
+
+ValueKeyword = "true" | "false" | "this" | "null"
 
 LineTerminator = \r|\n|\r\n
 WhiteSpace = [ \t\r\n\f]+
 
 /* literals */
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
-Number = [0-9]+(\.[0-9]+)?
+Number = -?[0-9]+(\.[0-9]+)?
 
 Operator = "--" | "++" | "+" | "-" | "*" | "/" | "^" | "!"
-Syntax = ";" | ":" | "." | "==" | "!=" | "(" | ")" | "[" | "]" | "{"
-  | "}" | ">=" | "<=" | "=" | ">" | "<" | "||" | "&&" | "," | "->"
+Syntax = ":" | "." | "==" | "!=" | "(" | ")" | "[" | "]" | "{"
+  | "}" | ">=" | "<=" | "=" | ">" | "<" | "||" | "&&" | "->"
+
+Delimiter = ";" | ","
 
 /* comments */
 Comment = {LineComment} | {TraditionalComment} | {EndOfLineComment}
-LineComment          = "/*" [^\r\n]* {LineTerminator}
+LineComment          = "//" [^\r\n]* {LineTerminator}
 TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
 
@@ -60,11 +65,17 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
   "var"                            { return ArucasTypes.KEYWORD; }
   "switch"                         { return ArucasTypes.KEYWORD; }
   "case"                           { return ArucasTypes.KEYWORD; }
+  "return"                         { return ArucasTypes.KEYWORD; }
+  "break"                          { return ArucasTypes.KEYWORD; }
+  "continue"                       { return ArucasTypes.KEYWORD; }
+  "operator"                       { return ArucasTypes.KEYWORD; }
 */
 
   /* keywords */
   {Keyword}                        { return ArucasTypes.KEYWORD; }
+  {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
   {Syntax}                         { return ArucasTypes.SYNTAX; }
+  {Delimiter}                      { return ArucasTypes.DELIMITER; }
   {Operator}                       { return ArucasTypes.OPERATOR; }
 
   /* literals */
@@ -72,7 +83,7 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
   {Identifier}                     { return ArucasTypes.IDENTIFIER; }
 
   /* comments */
-  {Comment}                        { return TokenType.WHITE_SPACE; }
+  {Comment}                        { return ArucasTypes.COMMENT; }
 
   /* whitespaces */
   {WhiteSpace}                     { return TokenType.WHITE_SPACE; }
@@ -86,6 +97,7 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
 
   \\r                            { }
   \\\"                           { }
+  \\\\                           { }
   \\                             { }
 }
 
@@ -97,8 +109,8 @@ EndOfLineComment     = "//" [^\r\n]* {LineTerminator}?
 
   \\r                            { }
   \\\'                           { }
+  \\\\                           { }
   \\                             { }
 }
 
-[^]                              { throw new Error("Illegal character <"+yytext()+">"); }
-//[^]                              { return TokenType.BAD_CHARACTER; }
+[^]                              { return TokenType.BAD_CHARACTER; }

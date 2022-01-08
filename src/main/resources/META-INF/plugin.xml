@@ -19,6 +19,9 @@
                   extensions="arucas"/>
         <lang.parserDefinition language="Arucas"
                   implementationClass="me.hardcoded.arucas.language.ArucasParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Arucas"
+                  implementationClass="me.hardcoded.arucas.language.ArucasSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="me.hardcoded.arucas.language.ArucasColorSettingsPage"/>
     </extensions>
 
     <actions>

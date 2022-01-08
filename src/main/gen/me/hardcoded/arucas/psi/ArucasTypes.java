@@ -10,7 +10,11 @@ public interface ArucasTypes {
 
   IElementType ATOM_EXPRESSION = new ArucasElementType("ATOM_EXPRESSION");
   IElementType CLASS_BODY_STATEMENT = new ArucasElementType("CLASS_BODY_STATEMENT");
+  IElementType CLASS_CONSTRUCTOR = new ArucasElementType("CLASS_CONSTRUCTOR");
+  IElementType CLASS_FUNCTION = new ArucasElementType("CLASS_FUNCTION");
+  IElementType CLASS_OPERATOR = new ArucasElementType("CLASS_OPERATOR");
   IElementType CLASS_STATEMENT = new ArucasElementType("CLASS_STATEMENT");
+  IElementType CLASS_VARIABLE = new ArucasElementType("CLASS_VARIABLE");
   IElementType EXPRESSION = new ArucasElementType("EXPRESSION");
   IElementType FOR_EACH_STATEMENT = new ArucasElementType("FOR_EACH_STATEMENT");
   IElementType FOR_STATEMENT = new ArucasElementType("FOR_STATEMENT");
@@ -23,12 +27,14 @@ public interface ArucasTypes {
   IElementType WHILE_STATEMENT = new ArucasElementType("WHILE_STATEMENT");
 
   IElementType COMMENT = new ArucasTokenType("COMMENT");
+  IElementType DELIMITER = new ArucasTokenType("DELIMITER");
   IElementType IDENTIFIER = new ArucasTokenType("IDENTIFIER");
   IElementType KEYWORD = new ArucasTokenType("KEYWORD");
   IElementType NUMBER = new ArucasTokenType("NUMBER");
   IElementType OPERATOR = new ArucasTokenType("OPERATOR");
   IElementType STRING = new ArucasTokenType("STRING");
   IElementType SYNTAX = new ArucasTokenType("SYNTAX");
+  IElementType VALUE_KEYWORD = new ArucasTokenType("VALUE_KEYWORD");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -39,8 +45,20 @@ public interface ArucasTypes {
       else if (type == CLASS_BODY_STATEMENT) {
         return new ArucasClassBodyStatementImpl(node);
       }
+      else if (type == CLASS_CONSTRUCTOR) {
+        return new ArucasClassConstructorImpl(node);
+      }
+      else if (type == CLASS_FUNCTION) {
+        return new ArucasClassFunctionImpl(node);
+      }
+      else if (type == CLASS_OPERATOR) {
+        return new ArucasClassOperatorImpl(node);
+      }
       else if (type == CLASS_STATEMENT) {
         return new ArucasClassStatementImpl(node);
+      }
+      else if (type == CLASS_VARIABLE) {
+        return new ArucasClassVariableImpl(node);
       }
       else if (type == EXPRESSION) {
         return new ArucasExpressionImpl(node);

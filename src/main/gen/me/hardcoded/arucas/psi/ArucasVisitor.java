@@ -15,7 +15,23 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassConstructor(@NotNull ArucasClassConstructor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassFunction(@NotNull ArucasClassFunction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassOperator(@NotNull ArucasClassOperator o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassStatement(@NotNull ArucasClassStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassVariable(@NotNull ArucasClassVariable o) {
     visitPsiElement(o);
   }
 

@@ -11,6 +11,6 @@ public class ArucasTokenType extends IElementType {
 	
 	@Override
 	public String toString() {
-		return "SimpleTokenType." + super.toString();
+		return "ArucasTokenType." + super.toString();
 	}
 }

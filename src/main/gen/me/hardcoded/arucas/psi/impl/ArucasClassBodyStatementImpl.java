@@ -29,14 +29,26 @@ public class ArucasClassBodyStatementImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public ArucasExpression getExpression() {
-    return findChildByClass(ArucasExpression.class);
+  public ArucasClassConstructor getClassConstructor() {
+    return findChildByClass(ArucasClassConstructor.class);
   }
 
   @Override
-  @NotNull
-  public List<ArucasStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  @Nullable
+  public ArucasClassFunction getClassFunction() {
+    return findChildByClass(ArucasClassFunction.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasClassOperator getClassOperator() {
+    return findChildByClass(ArucasClassOperator.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasClassVariable getClassVariable() {
+    return findChildByClass(ArucasClassVariable.class);
   }
 
 }

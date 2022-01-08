@@ -15,11 +15,13 @@
   tokens = [
     COMMENT='regexp://.*|/\*(.|[\r\n\f])*?\*/'
     WHITESPACE='regexp:\s+'
-    NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
-    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|new|static|var|switch|case'
+    NUMBER='regexp:-?[0-9]+(\\.[0-9]+)?'
+    VALUE_KEYWORD='regexp:true|false|null|this'
+    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|return|break|continue'
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
-    SYNTAX='regexp:;|:|\.|==|!=|\(|\)|\[|]|\{|}|>=|<=|=|>|<|\|\||&&|,|->'
+    SYNTAX='regexp::|\.|==|!=|\(|\)|\[|]|\{|}|>=|<=|=|>|<|\|\||&&|->'
+    DELIMITER='regexp:[;,]'
     OPERATOR='regexp:--|\+\+|\+|-|\*|/|\^|!'
   ]
 }
@@ -27,7 +29,7 @@
 // ROOT
 arucas ::= Statements *
 
-Statements ::= '{' '}' | '{' Statement* '}' | Statement
+Statements ::= '{' ('}' | Statement* '}') | Statement
 Statement ::= '{' Statements '}'
   | 'if' IfStatement
   | 'while' WhileStatement
@@ -44,11 +46,22 @@ Statement ::= '{' Statements '}'
 
 IfStatement ::= '(' Expression ')' Statements ['else' Statements]
 WhileStatement ::= '(' Expression ')' Statements
+
+/* Class Statement */
 ClassStatement ::= IDENTIFIER '{' ClassBodyStatement* '}'
-ClassBodyStatement ::= ['static'] 'var' IDENTIFIER ['=' Expression] ';'
-  | ['static'] ['fun'] IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+ClassBodyStatement ::= ClassVariable
+  | ClassConstructor
+  | ClassFunction
+  | ClassOperator
+
+ClassConstructor ::= IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+ClassOperator ::= 'operator' OPERATOR '(' [FunctionArguments] ')' '{' Statement* '}'
+ClassFunction ::= ['static'] 'fun' IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
+ClassVariable ::= ['static'] 'var' IDENTIFIER ['=' Expression] ';'
+
 private FunctionArguments ::= IDENTIFIER [',' FunctionArguments]
 
+/* Function Statement */
 FunctionStatement ::= IDENTIFIER '(' [FunctionArguments] ')' '{' Statement* '}'
 TryStatement ::= Statements 'catch' '(' IDENTIFIER ')' Statements
 ForEachStatement ::= '(' IDENTIFIER ':' MemberExpression ')' Statements
@@ -86,9 +99,10 @@ private FactorOp ::= '+' | '-'
 private PowerExpression ::= CallExpression ['^' FactorExpression]
 private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
 private CallArguments ::= Expression [',' CallArguments]
-private MemberExpression ::= AtomExpression ['.' MemberExpression]
+private MemberExpression ::= AtomExpression [['(' [CallArguments] ')'] '.' MemberExpression]
 
 AtomExpression ::= IDENTIFIER
+  | VALUE_KEYWORD
   | STRING
   | NUMBER
   | '[' [ListElements] ']'
