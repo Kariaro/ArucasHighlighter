@@ -1,11 +1,7 @@
-<idea-plugin>
+<idea-plugin url="https://github.com/Kariaro/ArucasHighlighter">
     <id>me.hardcoded.arucas.ArucasHighlighter</id>
     <name>Arucas Syntax Highlighter</name>
-    <vendor/>
-
-    <description>
-        This is a color syntax highlighter for the language Arucas
-    </description>
+    <vendor url="https://github.com/Kariaro/ArucasHighlighter">HardCoded</vendor>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->

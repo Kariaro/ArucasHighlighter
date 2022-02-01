@@ -150,6 +150,7 @@ private AtomExpression ::= Atom
   | NewExpression
   | '(' Expression ')'
 
+// TODO: Add recovery tokens
 ListExpression ::= '[' [ListElements] ']' {extends=Expression}
 private ListElements ::= Expression (',' Expression)*
 MapExpression ::= '{' [MapElements] '}' {extends=Expression}

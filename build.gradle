@@ -3,8 +3,13 @@ plugins {
     id 'java'
 }
 
+project.ext {
+    majorVersion = '1'
+    minorVersion = '0'
+}
+
 group 'me.hardcoded.arucashighlight'
-version '1.0-SNAPSHOT'
+version = "${majorVersion}.${minorVersion}.${getBuildId()}"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -15,6 +20,31 @@ repositories {
     mavenCentral()
 }
 
+def incrementBuildId() {
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def code = versionProps['build_id'].toInteger() + 1
+        versionProps['build_id'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+}
+
+def getBuildId() {
+    def versionPropsFile = file('version.properties')
+    print('test?')
+    print('versionPropsFile')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        return versionProps['build_id'].toInteger()
+    }
+    return 0
+}
+
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     runtimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -23,12 +53,21 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = '2021.2.3'
+    updateSinceUntilBuild = false
 }
+
+task incrementBuild {
+    println "AutoIncrement"
+    incrementBuildId()
+}
+
+build.dependsOn incrementBuild
 
 patchPluginXml {
     changeNotes = """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+        Implemented the syntax highlighter and added some semantic analysis"""
+    pluginDescription = """
+        This is a color syntax highlighter for the language Arucas."""
 }
 
 test {
