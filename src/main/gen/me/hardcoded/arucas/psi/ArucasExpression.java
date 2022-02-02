@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface ArucasExpression extends PsiElement {
 
   @NotNull
-  List<ArucasExpression> getExpressionList();
+  List<ArucasArithmeticExpression> getArithmeticExpressionList();
+
+  @Nullable
+  ArucasExpression getExpression();
 
   @Nullable
   PsiElement getIdentifier();

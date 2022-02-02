@@ -68,6 +68,24 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   "operator"                       { return ArucasTypes.KEYWORD; }
 */
 
+  "+"                              { return ArucasTypes.OP_PLUS; }
+  "-"                              { return ArucasTypes.OP_MINUS; }
+  "*"                              { return ArucasTypes.OP_MUL; }
+  "/"                              { return ArucasTypes.OP_DIV; }
+  "^"                              { return ArucasTypes.OP_POW; }
+  "!"                              { return ArucasTypes.OP_NOT; }
+  "++"                             { return ArucasTypes.OP_PP; }
+  "--"                             { return ArucasTypes.OP_MM; }
+
+  "||"                             { return ArucasTypes.OP_LOGICAL_OR; }
+  "&&"                             { return ArucasTypes.OP_LOGICAL_AND; }
+  "=="                             { return ArucasTypes.OP_EQUALS; }
+  "!="                             { return ArucasTypes.OP_NOTEQUALS; }
+  ">="                             { return ArucasTypes.OP_MORETHANEQ; }
+  ">"                              { return ArucasTypes.OP_MORETHAN; }
+  "<="                             { return ArucasTypes.OP_LESSTHANEQ; }
+  "<"                              { return ArucasTypes.OP_LESSTHAN; }
+
   "("                              { return ArucasTypes.LPAREN; }
   ")"                              { return ArucasTypes.RPAREN; }
   "["                              { return ArucasTypes.LBRACK; }
@@ -84,8 +102,8 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   /* keywords */
   {Keyword}                        { return ArucasTypes.KEYWORD; }
   {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
-  {Syntax}                         { return ArucasTypes.SYNTAX; }
-  {Operator}                       { return ArucasTypes.OPERATOR; }
+  //{Syntax}                         { return ArucasTypes.SYNTAX; }
+  //{Operator}                       { return ArucasTypes.OPERATOR; }
 
   /* literals */
   {Number}                         { return ArucasTypes.NUMBER; }

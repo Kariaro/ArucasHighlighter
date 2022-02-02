@@ -15,6 +15,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArithmeticExpression(@NotNull ArucasArithmeticExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitAtom(@NotNull ArucasAtom o) {
     visitExpression(o);
   }
@@ -137,6 +141,10 @@ public class ArucasVisitor extends PsiElementVisitor {
 
   public void visitTryStatement(@NotNull ArucasTryStatement o) {
     visitStatement(o);
+  }
+
+  public void visitUnaryFactorExpression(@NotNull ArucasUnaryFactorExpression o) {
+    visitPsiElement(o);
   }
 
   public void visitWhileStatement(@NotNull ArucasWhileStatement o) {

@@ -20,9 +20,23 @@
     KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|default|return|break|continue'
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
-    SYNTAX='regexp:|==|!=|>=|<=|>|<|\|\||&&'
-    OPERATOR='regexp:--|\+\+|\+|-|\*|/|\^|!'
-    COMMA=','
+    OP_LOGICAL_OR="||"
+    OP_LOGICAL_AND="&&"
+    OP_EQUALS="=="
+    OP_NOTEQUALS="!="
+    OP_MORETHANEQ=">="
+    OP_MORETHAN=">"
+    OP_LESSTHANEQ="<="
+    OP_LESSTHAN="<"
+    OP_PLUS="+"
+    OP_MINUS="-"
+    OP_MUL="*"
+    OP_DIV="/"
+    OP_POW="^"
+    OP_NOT="!"
+    OP_MM="--"
+    OP_PP="++"
+    COMMA=","
     SEMICOLON=";"
     ASSIGNMENT="="
     POINTER="->"
@@ -73,17 +87,17 @@ private ClassBodyStatement ::= ClassMember
   | ClassMethod
   | ClassOperator {extends=Statement}
 
-ClassConstructor ::= IDENTIFIER '(' [Arguments] ')' CodeBlock
-ClassOperator ::= 'operator' OPERATOR '(' [Arguments] ')' CodeBlock { methods=[operator="OPERATOR[0]"] }
-ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER '(' [Arguments] ')' CodeBlock
+ClassConstructor ::= IDENTIFIER Arguments CodeBlock
+ClassOperator ::= 'operator' OPERATOR Arguments CodeBlock { methods=[operator="OPERATOR[0]"] }
+ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER Arguments CodeBlock
 ClassMember ::= [StaticModifier] 'var' IDENTIFIER ['=' Expression] ';'
 StaticModifier ::= 'static'
 
-Arguments ::= Argument (',' Argument)*
+Arguments ::= '(' [ Argument (',' Argument)* ] ')'
 Argument ::= IDENTIFIER
 
 /* Function Statement */
-FunctionStatement ::= 'fun' IDENTIFIER '(' Arguments? ')' CodeBlock {extends=Statement}
+FunctionStatement ::= 'fun' IDENTIFIER Arguments CodeBlock {extends=Statement}
 TryStatement ::= 'try' Statement 'catch' '(' IDENTIFIER ')' Statement {
   extends=Statement
   methods=[
@@ -121,15 +135,16 @@ private ComparisonExpression ::= '!' ComparisonExpression
   | ArithmeticExpression [ComparisonOp ArithmeticExpression]
 private ComparisonOp ::= '==' | '!=' | '<' | '>' | '<=' | '>='
 
-private ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression]
+ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression]
 private ArithmeticOp ::= '+' | '-'
 
 private TermExpression ::= FactorExpression [TermOp TermExpression]
 private TermOp ::= '*' | '/'
 
-private FactorExpression ::= FactorOp FactorExpression
+private FactorExpression ::= UnaryFactorExpression
   | PowerExpression
 private FactorOp ::= '+' | '-'
+UnaryFactorExpression ::= FactorOp FactorExpression
 
 private PowerExpression ::= CallExpression ['^' FactorExpression]
 private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
@@ -163,7 +178,7 @@ MapEntry ::= Expression ':' Expression {
 }
 
 NewExpression ::= 'new' IDENTIFIER '(' [CallArguments] ')' {extends=Expression}
-FunctionLambda ::= 'fun' '(' [Arguments] ')' CodeBlock {extends=Expression}
+FunctionLambda ::= 'fun' Arguments CodeBlock {extends=Expression}
 Atom ::= IDENTIFIER
   | VALUE_KEYWORD
   | STRING

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasClassMethod extends PsiElement {
 
-  @Nullable
+  @NotNull
   ArucasArguments getArguments();
 
   @NotNull

@@ -28,6 +28,8 @@
         <codeStyleSettingsProvider implementation="me.hardcoded.arucas.language.formatting.ArucasCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider
                   implementation="me.hardcoded.arucas.language.formatting.ArucasLanguageCodeStyleSettingsProvider"/>
+        <defaultLiveTemplates file="/liveTemplates/Arucas.xml"/>
+        <liveTemplateContext implementation="me.hardcoded.arucas.liveTemplates.ArucasContext"/>
     </extensions>
 
     <actions>

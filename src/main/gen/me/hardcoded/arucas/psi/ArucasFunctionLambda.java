@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasFunctionLambda extends ArucasExpression {
 
-  @Nullable
+  @NotNull
   ArucasArguments getArguments();
 
   @NotNull

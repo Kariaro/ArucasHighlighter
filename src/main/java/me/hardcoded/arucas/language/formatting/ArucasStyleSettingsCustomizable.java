@@ -1,0 +1,44 @@
+package me.hardcoded.arucas.language.formatting;
+
+public class ArucasStyleSettingsCustomizable {
+	public enum Type {
+		// Basic operators
+		SPACE_AROUND_UNARY_OPERATORS,
+		SPACE_AROUND_UNARY_MODIFY_OPERATORS,
+		SPACE_AROUND_BINARY_OPERATORS,
+		SPACE_AROUND_RELATIONAL_OPERATORS,
+		SPACE_AROUND_LOGICAL_OPERATORS,
+		SPACE_AROUND_EQUALITY_OPERATORS,
+		SPACE_AROUND_ASSIGNMENT_OPERATORS,
+		
+		SPACE_BEFORE_CLASS_BODY,
+		SPACE_BEFORE_METHOD_BODY,
+		
+		// List expression
+		SPACE_INSIDE_EMPTY_LIST,
+		SPACE_AROUND_INSIDE_LIST,
+		SPACE_BEFORE_LIST_COMMA,
+		SPACE_AFTER_LIST_COMMA,
+		
+		// Map expression
+		SPACE_INSIDE_EMPTY_MAP,
+		SPACE_AROUND_INSIDE_MAP,
+		SPACE_BEFORE_MAP_COLON,
+		SPACE_AFTER_MAP_COLON,
+		SPACE_BEFORE_MAP_COMMA,
+		SPACE_AFTER_MAP_COMMA,
+		
+		// Methods
+		SPACE_INSIDE_EMPTY_PARAMETERS,
+		SPACE_AFTER_METHOD_NAME,
+		SPACE_AROUND_INSIDE_PARAMETERS,
+		SPACE_BEFORE_PARAMETER_COMMA,
+		SPACE_AFTER_PARAMETER_COMMA,
+	}
+	
+	public static final String SPACE_AROUND_OPERATORS = "Around operators";
+	public static final String SPACE_BEFORE_LBRACE = "Before left brace";
+	public static final String SPACE_LIST = "List";
+	public static final String SPACE_MAP = "Map";
+	public static final String SPACE_METHOD_PARAMETERS = "Method parameters";
+}

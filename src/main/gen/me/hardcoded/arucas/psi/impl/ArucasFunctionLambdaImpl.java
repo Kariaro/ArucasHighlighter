@@ -28,9 +28,9 @@ public class ArucasFunctionLambdaImpl extends ArucasExpressionImpl implements Ar
   }
 
   @Override
-  @Nullable
+  @NotNull
   public ArucasArguments getArguments() {
-    return findChildByClass(ArucasArguments.class);
+    return findNotNullChildByClass(ArucasArguments.class);
   }
 
   @Override

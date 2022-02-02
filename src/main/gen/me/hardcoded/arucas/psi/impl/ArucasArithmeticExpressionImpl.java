@@ -11,14 +11,14 @@ import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasClassMethodImpl extends ASTWrapperPsiElement implements ArucasClassMethod {
+public class ArucasArithmeticExpressionImpl extends ASTWrapperPsiElement implements ArucasArithmeticExpression {
 
-  public ArucasClassMethodImpl(@NotNull ASTNode node) {
+  public ArucasArithmeticExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitClassMethod(this);
+    visitor.visitArithmeticExpression(this);
   }
 
   @Override
@@ -28,27 +28,21 @@ public class ArucasClassMethodImpl extends ASTWrapperPsiElement implements Aruca
   }
 
   @Override
-  @NotNull
-  public ArucasArguments getArguments() {
-    return findNotNullChildByClass(ArucasArguments.class);
-  }
-
-  @Override
-  @NotNull
-  public ArucasCodeBlock getCodeBlock() {
-    return findNotNullChildByClass(ArucasCodeBlock.class);
-  }
-
-  @Override
   @Nullable
-  public ArucasStaticModifier getStaticModifier() {
-    return findChildByClass(ArucasStaticModifier.class);
+  public ArucasArithmeticExpression getArithmeticExpression() {
+    return findChildByClass(ArucasArithmeticExpression.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<ArucasExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ArucasUnaryFactorExpression> getUnaryFactorExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasUnaryFactorExpression.class);
   }
 
 }

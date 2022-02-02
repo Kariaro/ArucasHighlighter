@@ -28,9 +28,9 @@ public class ArucasFunctionStatementImpl extends ArucasStatementImpl implements 
   }
 
   @Override
-  @Nullable
+  @NotNull
   public ArucasArguments getArguments() {
-    return findChildByClass(ArucasArguments.class);
+    return findNotNullChildByClass(ArucasArguments.class);
   }
 
   @Override

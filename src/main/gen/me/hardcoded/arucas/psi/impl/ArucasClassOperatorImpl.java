@@ -28,21 +28,15 @@ public class ArucasClassOperatorImpl extends ASTWrapperPsiElement implements Aru
   }
 
   @Override
-  @Nullable
+  @NotNull
   public ArucasArguments getArguments() {
-    return findChildByClass(ArucasArguments.class);
+    return findNotNullChildByClass(ArucasArguments.class);
   }
 
   @Override
   @NotNull
   public ArucasCodeBlock getCodeBlock() {
     return findNotNullChildByClass(ArucasCodeBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getOperator() {
-    return findNotNullChildByType(OPERATOR);
   }
 
 }

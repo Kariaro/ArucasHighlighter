@@ -1,0 +1,35 @@
+<templateSet group="Arucas">
+    <template name="fori"
+              value="for ($VAR$ = 0; $VAR$ &lt; $LIMIT$; $VAR$++) {&#013;$END$&#013;}"
+              description="For index loop"
+              toReformat="false"
+              toShortenFQNames="false">
+        <variable name="VAR" expression="suggestIndexName()" defaultValue="i" alwaysStopAt="true" />
+        <variable name="LIMIT" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="ARUCAS" value="true" />
+        </context>
+    </template>
+    <template name="forr"
+              value="for ($VAR$ = $LIMIT$; $VAR$ &gt;= 0; $VAR$--) {&#013;$END$&#013;}"
+              description="For reversed index loop"
+              toReformat="false"
+              toShortenFQNames="false">
+        <variable name="VAR" expression="suggestIndexName()" defaultValue="i" alwaysStopAt="true" />
+        <variable name="LIMIT" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="ARUCAS" value="true" />
+        </context>
+    </template>
+    <template name="foreach"
+              value="foreach ($VAR$ : $LIST$) {&#013;$END$&#013;}"
+              description="For range loop"
+              toReformat="false"
+              toShortenFQNames="false">
+        <variable name="VAR" expression="suggestIndexName()" defaultValue="item" alwaysStopAt="true" />
+        <variable name="LIST" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="ARUCAS" value="true" />
+        </context>
+    </template>
+</templateSet>

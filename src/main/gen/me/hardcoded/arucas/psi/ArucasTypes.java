@@ -10,6 +10,7 @@ public interface ArucasTypes {
 
   IElementType ARGUMENT = new ArucasElementType("ARGUMENT");
   IElementType ARGUMENTS = new ArucasElementType("ARGUMENTS");
+  IElementType ARITHMETIC_EXPRESSION = new ArucasElementType("ARITHMETIC_EXPRESSION");
   IElementType ATOM = new ArucasElementType("ATOM");
   IElementType BREAK_STATEMENT = new ArucasElementType("BREAK_STATEMENT");
   IElementType CASE_STATEMENT = new ArucasElementType("CASE_STATEMENT");
@@ -41,6 +42,7 @@ public interface ArucasTypes {
   IElementType SWITCH_CODE_BLOCK = new ArucasElementType("SWITCH_CODE_BLOCK");
   IElementType SWITCH_STATEMENT = new ArucasElementType("SWITCH_STATEMENT");
   IElementType TRY_STATEMENT = new ArucasElementType("TRY_STATEMENT");
+  IElementType UNARY_FACTOR_EXPRESSION = new ArucasElementType("UNARY_FACTOR_EXPRESSION");
   IElementType WHILE_STATEMENT = new ArucasElementType("WHILE_STATEMENT");
 
   IElementType ASSIGNMENT = new ArucasTokenType("=");
@@ -55,13 +57,28 @@ public interface ArucasTypes {
   IElementType LPAREN = new ArucasTokenType("(");
   IElementType NUMBER = new ArucasTokenType("NUMBER");
   IElementType OPERATOR = new ArucasTokenType("OPERATOR");
+  IElementType OP_DIV = new ArucasTokenType("/");
+  IElementType OP_EQUALS = new ArucasTokenType("==");
+  IElementType OP_LESSTHAN = new ArucasTokenType("<");
+  IElementType OP_LESSTHANEQ = new ArucasTokenType("<=");
+  IElementType OP_LOGICAL_AND = new ArucasTokenType("&&");
+  IElementType OP_LOGICAL_OR = new ArucasTokenType("||");
+  IElementType OP_MINUS = new ArucasTokenType("-");
+  IElementType OP_MM = new ArucasTokenType("--");
+  IElementType OP_MORETHAN = new ArucasTokenType(">");
+  IElementType OP_MORETHANEQ = new ArucasTokenType(">=");
+  IElementType OP_MUL = new ArucasTokenType("*");
+  IElementType OP_NOT = new ArucasTokenType("!");
+  IElementType OP_NOTEQUALS = new ArucasTokenType("!=");
+  IElementType OP_PLUS = new ArucasTokenType("+");
+  IElementType OP_POW = new ArucasTokenType("^");
+  IElementType OP_PP = new ArucasTokenType("++");
   IElementType POINTER = new ArucasTokenType("->");
   IElementType RBRACE = new ArucasTokenType("}");
   IElementType RBRACK = new ArucasTokenType("]");
   IElementType RPAREN = new ArucasTokenType(")");
   IElementType SEMICOLON = new ArucasTokenType(";");
   IElementType STRING = new ArucasTokenType("STRING");
-  IElementType SYNTAX = new ArucasTokenType("SYNTAX");
   IElementType VALUE_KEYWORD = new ArucasTokenType("VALUE_KEYWORD");
 
   class Factory {
@@ -72,6 +89,9 @@ public interface ArucasTypes {
       }
       else if (type == ARGUMENTS) {
         return new ArucasArgumentsImpl(node);
+      }
+      else if (type == ARITHMETIC_EXPRESSION) {
+        return new ArucasArithmeticExpressionImpl(node);
       }
       else if (type == ATOM) {
         return new ArucasAtomImpl(node);
@@ -165,6 +185,9 @@ public interface ArucasTypes {
       }
       else if (type == TRY_STATEMENT) {
         return new ArucasTryStatementImpl(node);
+      }
+      else if (type == UNARY_FACTOR_EXPRESSION) {
+        return new ArucasUnaryFactorExpressionImpl(node);
       }
       else if (type == WHILE_STATEMENT) {
         return new ArucasWhileStatementImpl(node);

@@ -98,6 +98,18 @@ public class ArucasBlock extends AbstractBlock {
 	@Nullable
 	@Override
 	public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
+		if (child1 instanceof ArucasBlock && child2 instanceof ArucasBlock) {
+			String c1s = ((ArucasBlock)child1).myNode.getText();
+			String c2s = ((ArucasBlock)child2).myNode.getText();
+			
+			// TODO: Figure out a better way for this to works
+			//       + Make this only use 1 space between these operators
+			if (c1s.endsWith("+") && c2s.startsWith("+")
+			|| c1s.endsWith("-") && c2s.startsWith("-")) {
+				return Spacing.getReadOnlySpacing();
+			}
+		}
+		
 		return spacingBuilder.getSpacing(this, child1, child2);
 	}
 	
