@@ -11,6 +11,40 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class ArucasAnnotator implements Annotator {
+	private static final Map<String, Set<Integer>> ALLOWED_OPERATORS;
+	private static void addOperator(String operator, int... allowedParameters) {
+		Set<Integer> set = new HashSet<>();
+		for (int value : allowedParameters) {
+			set.add(value);
+		}
+		
+		ALLOWED_OPERATORS.put(operator, set);
+	}
+	
+	private static boolean hasOperator(String operator, int parameters) {
+		Set<Integer> allowedParameters = ALLOWED_OPERATORS.get(operator);
+		return allowedParameters != null && allowedParameters.contains(parameters);
+	}
+	
+	static {
+		ALLOWED_OPERATORS = new HashMap<>();
+		addOperator("+", 0, 1);
+		addOperator("-", 0, 1);
+		addOperator("==", 1);
+		addOperator("!=", 1);
+		addOperator("&&", 1);
+		addOperator("||", 1);
+		addOperator(">=", 1);
+		addOperator("<=", 1);
+		addOperator(">", 1);
+		addOperator("<", 1);
+		addOperator("/", 1);
+		addOperator("*", 1);
+		addOperator("^", 1);
+		addOperator("!", 0);
+		addOperator("++", 0);
+		addOperator("--", 0);
+	}
 	
 	@Override
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -135,22 +169,22 @@ public class ArucasAnnotator implements Annotator {
 		ArucasClassCodeBlock codeBlock = arucasClass.getClassCodeBlock();
 		
 		/* Constructors */ {
-			String className = arucasClass.getIdentifier().getText();
+			String className = arucasClass.getIdentifierName().getIdentifier().getText();
 			Set<Integer> argumentCount = new HashSet<>();
 			
 			for (ArucasClassConstructor constructor : codeBlock.getClassConstructorList()) {
 				ArucasArguments arguments = constructor.getArguments();
 				int parameters = getNumberOfArguments(arguments);
 				
-				if (!className.equals(constructor.getIdentifier().getText())) {
+				if (!className.equals(constructor.getIdentifierName().getIdentifier().getText())) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "Constructor name is different from class name")
-						.range(constructor.getIdentifier().getTextRange())
+						.range(constructor.getIdentifierName().getIdentifier().getTextRange())
 						.create();
 				}
 				
 				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with " + getParameterString(parameters) + " has already been defined")
-						.range(constructor.getIdentifier().getTextRange())
+						.range(constructor.getIdentifierName().getIdentifier().getTextRange())
 						.create();
 				}
 				
@@ -165,7 +199,7 @@ public class ArucasAnnotator implements Annotator {
 			for (ArucasClassMethod method : codeBlock.getClassMethodList()) {
 				boolean isStatic = method.getStaticModifier() != null;
 				
-				String name = method.getIdentifier().getText();
+				String name = method.getIdentifierName().getIdentifier().getText();
 				Set<Integer> argumentCount = (isStatic ? staticMethods : methods)
 					.computeIfAbsent(name, v -> new HashSet<>());
 				
@@ -174,7 +208,7 @@ public class ArucasAnnotator implements Annotator {
 				
 				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " method with " + getParameterString(parameters) + " has already been defined")
-						.range(method.getIdentifier().getTextRange())
+						.range(method.getIdentifierName().getIdentifier().getTextRange())
 						.create();
 				}
 				
@@ -186,19 +220,41 @@ public class ArucasAnnotator implements Annotator {
 			Set<String> members = new HashSet<>();
 			
 			for (ArucasClassMember member : codeBlock.getClassMemberList()) {
-				String name = member.getIdentifier().getText();
+				String name = member.getIdentifierName().getIdentifier().getText();
 				
 				if (!members.add(name)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A member the name '" + name + "' has already been defined")
-						.range(member.getIdentifier().getTextRange())
+						.range(member.getIdentifierName().getIdentifier().getTextRange())
 						.create();
 				}
 			}
 		}
 		
 		/* Operators */ {
-			// TODO: Implement operator overload checking and size checking
-			//       some operators only have a set amount of parameters
+			Map<String, Set<Integer>> operators = new HashMap<>();
+			
+			for (ArucasClassOperator operator : codeBlock.getClassOperatorList()) {
+				String operatorName = operator.getOperator().getText();
+				Set<Integer> argumentCount = operators
+					.computeIfAbsent(operatorName, v -> new HashSet<>());
+				
+				ArucasArguments arguments = operator.getOperatorArguments().getArguments();
+				int parameters = getNumberOfArguments(arguments);
+				
+				if (!hasOperator(operatorName, parameters)) {
+					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > does not exist with " + getParameterString(parameters))
+						.range(operator.getOperator().getTextRange())
+						.create();
+				}
+				
+				if (!argumentCount.add(parameters)) {
+					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > method with " + getParameterString(parameters) + " has already been defined")
+						.range(operator.getOperator().getTextRange())
+						.create();
+				}
+				
+				validateArguments(arguments, holder);
+			}
 		}
 	}
 	
@@ -206,10 +262,10 @@ public class ArucasAnnotator implements Annotator {
 		if (arguments != null) {
 			Set<String> names = new HashSet<>();
 			for (ArucasArgument argument : arguments.getArgumentList()) {
-				String name = argument.getIdentifier().getText();
+				String name = argument.getIdentifierName().getIdentifier().getText();
 				if (!names.add(name)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A parameter with the name '" + name + "' already exists")
-						.range(argument.getIdentifier().getTextRange())
+						.range(argument.getIdentifierName().getIdentifier().getTextRange())
 						.create();
 				}
 			}

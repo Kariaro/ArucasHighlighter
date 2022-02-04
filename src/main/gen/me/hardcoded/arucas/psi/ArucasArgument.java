@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ArucasArgument extends PsiElement {
 
   @NotNull
-  PsiElement getIdentifier();
+  ArucasIdentifierName getIdentifierName();
 
 }

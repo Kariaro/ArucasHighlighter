@@ -13,6 +13,7 @@ public interface ArucasTypes {
   IElementType ARITHMETIC_EXPRESSION = new ArucasElementType("ARITHMETIC_EXPRESSION");
   IElementType ATOM = new ArucasElementType("ATOM");
   IElementType BREAK_STATEMENT = new ArucasElementType("BREAK_STATEMENT");
+  IElementType CALL_ARGUMENTS = new ArucasElementType("CALL_ARGUMENTS");
   IElementType CASE_STATEMENT = new ArucasElementType("CASE_STATEMENT");
   IElementType CASE_VALUE = new ArucasElementType("CASE_VALUE");
   IElementType CASE_VALUES = new ArucasElementType("CASE_VALUES");
@@ -31,11 +32,14 @@ public interface ArucasTypes {
   IElementType FOR_STATEMENT = new ArucasElementType("FOR_STATEMENT");
   IElementType FUNCTION_LAMBDA = new ArucasElementType("FUNCTION_LAMBDA");
   IElementType FUNCTION_STATEMENT = new ArucasElementType("FUNCTION_STATEMENT");
+  IElementType IDENTIFIER_NAME = new ArucasElementType("IDENTIFIER_NAME");
   IElementType IF_STATEMENT = new ArucasElementType("IF_STATEMENT");
   IElementType LIST_EXPRESSION = new ArucasElementType("LIST_EXPRESSION");
   IElementType MAP_ENTRY = new ArucasElementType("MAP_ENTRY");
   IElementType MAP_EXPRESSION = new ArucasElementType("MAP_EXPRESSION");
   IElementType NEW_EXPRESSION = new ArucasElementType("NEW_EXPRESSION");
+  IElementType OPERATOR = new ArucasElementType("OPERATOR");
+  IElementType OPERATOR_ARGUMENTS = new ArucasElementType("OPERATOR_ARGUMENTS");
   IElementType RETURN_STATEMENT = new ArucasElementType("RETURN_STATEMENT");
   IElementType STATEMENT = new ArucasElementType("STATEMENT");
   IElementType STATIC_MODIFIER = new ArucasElementType("STATIC_MODIFIER");
@@ -51,12 +55,29 @@ public interface ArucasTypes {
   IElementType COMMENT = new ArucasTokenType("COMMENT");
   IElementType DOT = new ArucasTokenType(".");
   IElementType IDENTIFIER = new ArucasTokenType("IDENTIFIER");
-  IElementType KEYWORD = new ArucasTokenType("KEYWORD");
+  IElementType KW_BREAK = new ArucasTokenType("break");
+  IElementType KW_CASE = new ArucasTokenType("case");
+  IElementType KW_CATCH = new ArucasTokenType("catch");
+  IElementType KW_CLASS = new ArucasTokenType("class");
+  IElementType KW_CONTINUE = new ArucasTokenType("continue");
+  IElementType KW_DEFAULT = new ArucasTokenType("default");
+  IElementType KW_ELSE = new ArucasTokenType("else");
+  IElementType KW_FOR = new ArucasTokenType("for");
+  IElementType KW_FOREACH = new ArucasTokenType("foreach");
+  IElementType KW_FUN = new ArucasTokenType("fun");
+  IElementType KW_IF = new ArucasTokenType("if");
+  IElementType KW_NEW = new ArucasTokenType("new");
+  IElementType KW_OPERATOR = new ArucasTokenType("operator");
+  IElementType KW_RETURN = new ArucasTokenType("return");
+  IElementType KW_STATIC = new ArucasTokenType("static");
+  IElementType KW_SWITCH = new ArucasTokenType("switch");
+  IElementType KW_TRY = new ArucasTokenType("try");
+  IElementType KW_VAR = new ArucasTokenType("var");
+  IElementType KW_WHILE = new ArucasTokenType("while");
   IElementType LBRACE = new ArucasTokenType("{");
   IElementType LBRACK = new ArucasTokenType("[");
   IElementType LPAREN = new ArucasTokenType("(");
   IElementType NUMBER = new ArucasTokenType("NUMBER");
-  IElementType OPERATOR = new ArucasTokenType("OPERATOR");
   IElementType OP_DIV = new ArucasTokenType("/");
   IElementType OP_EQUALS = new ArucasTokenType("==");
   IElementType OP_LESSTHAN = new ArucasTokenType("<");
@@ -98,6 +119,9 @@ public interface ArucasTypes {
       }
       else if (type == BREAK_STATEMENT) {
         return new ArucasBreakStatementImpl(node);
+      }
+      else if (type == CALL_ARGUMENTS) {
+        return new ArucasCallArgumentsImpl(node);
       }
       else if (type == CASE_STATEMENT) {
         return new ArucasCaseStatementImpl(node);
@@ -153,6 +177,9 @@ public interface ArucasTypes {
       else if (type == FUNCTION_STATEMENT) {
         return new ArucasFunctionStatementImpl(node);
       }
+      else if (type == IDENTIFIER_NAME) {
+        return new ArucasIdentifierNameImpl(node);
+      }
       else if (type == IF_STATEMENT) {
         return new ArucasIfStatementImpl(node);
       }
@@ -167,6 +194,12 @@ public interface ArucasTypes {
       }
       else if (type == NEW_EXPRESSION) {
         return new ArucasNewExpressionImpl(node);
+      }
+      else if (type == OPERATOR) {
+        return new ArucasOperatorImpl(node);
+      }
+      else if (type == OPERATOR_ARGUMENTS) {
+        return new ArucasOperatorArgumentsImpl(node);
       }
       else if (type == RETURN_STATEMENT) {
         return new ArucasReturnStatementImpl(node);

@@ -2,6 +2,7 @@ package me.hardcoded.arucas.language.formatting;
 
 import com.intellij.lang.Language;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
+import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizableOptions;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import me.hardcoded.arucas.language.ArucasLanguage;
 import org.jetbrains.annotations.NotNull;
@@ -18,18 +19,35 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 	@Override
 	public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
 		if (settingsType == SettingsType.SPACING_SETTINGS) {
+			String groupName;
+			
+			// Before parentheses
+			groupName = CodeStyleSettingsCustomizableOptions.getInstance().SPACES_BEFORE_PARENTHESES;
+			showSpacingOption(consumer, Type.SPACE_BEFORE_METHOD_PARENTHESES, "Method declaration parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_OPERATOR_PARENTHESES, "Operator declaration parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_NEW_PARENTHESES, "New parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_CALL_PARENTHESES, "Method call parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_FOR_PARENTHESES, "'for' parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_FOREACH_PARENTHESES, "'foreach' parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_SWITCH_PARENTHESES, "'switch' parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_IF_PARENTHESES, "'if' parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_WHILE_PARENTHESES, "'while' parentheses", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_CATCH_PARENTHESES, "'catch' parentheses", groupName);
+			
 			// Basic operators
-			showSpacingOption(consumer, Type.SPACE_AROUND_ASSIGNMENT_OPERATORS, "Assignment", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_UNARY_OPERATORS, "Unary operators", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_UNARY_MODIFY_OPERATORS, "Unary modify operators", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_BINARY_OPERATORS, "Binary operators", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_LOGICAL_OPERATORS, "Logical operators", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_RELATIONAL_OPERATORS, "Relational operators", SPACE_AROUND_OPERATORS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_EQUALITY_OPERATORS, "Equality operators", SPACE_AROUND_OPERATORS);
+			groupName = CodeStyleSettingsCustomizableOptions.getInstance().SPACES_AROUND_OPERATORS;
+			showSpacingOption(consumer, Type.SPACE_AROUND_ASSIGNMENT_OPERATORS, "Assignment", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_UNARY_OPERATORS, "Unary operators", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_UNARY_MODIFY_OPERATORS, "Unary modify operators", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_BINARY_OPERATORS, "Binary operators", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_LOGICAL_OPERATORS, "Logical operators", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_RELATIONAL_OPERATORS, "Relational operators", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_EQUALITY_OPERATORS, "Equality operators", groupName);
 			
 			// Code blocks
-			showSpacingOption(consumer, Type.SPACE_BEFORE_CLASS_BODY, "Class body", SPACE_BEFORE_LBRACE);
-			showSpacingOption(consumer, Type.SPACE_BEFORE_METHOD_BODY, "Method body", SPACE_BEFORE_LBRACE);
+			groupName = CodeStyleSettingsCustomizableOptions.getInstance().SPACES_BEFORE_LEFT_BRACE;
+			showSpacingOption(consumer, Type.SPACE_BEFORE_CLASS_BODY, "Class body", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_METHOD_BODY, "Method body", groupName);
 			
 			// List expression
 			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_LIST, "Empty space", SPACE_LIST);
@@ -47,7 +65,6 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			
 			// Method parameters
 			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_PARAMETERS, "Empty space", SPACE_METHOD_PARAMETERS);
-			showSpacingOption(consumer, Type.SPACE_AFTER_METHOD_NAME, "After method name", SPACE_METHOD_PARAMETERS);
 			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_PARAMETERS, "Around walls", SPACE_METHOD_PARAMETERS);
 			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_COMMA, "Before comma", SPACE_METHOD_PARAMETERS);
 			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_COMMA, "After comma", SPACE_METHOD_PARAMETERS);
@@ -64,28 +81,50 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 	public String getCodeSample(@NotNull SettingsType settingsType) {
 		return "/* This is an example class */\n" +
 			"class Example {\n" +
-			"    static var staticVariable = 'string';\n" +
-			"    var memberVariable = 321;\n" +
-			"    var eq = (a == b) != c;\n" +
-			"    var rl = (((a <= b) >= c) < d) > e;\n" +
-			"    var lc = (a && b) || c;\n" +
-			"    var as = (a = b);\n" +
-			"    var bi = (a + b - c * d ^ e);\n" +
-			"    var un = (-a + +b - (!c) + (d++) - (e--));\n" +
+			"    static var staticVariable = 'literal';\n" +
+			"    var memberVariable;\n" +
 			"\n" +
-			"    Example() {\n" +
-			"        this.memberVariable = true;\n" +
-			"        localVariable = [ 'a', 1, { 1: '321', 2: {} }, [] ];\n" +
+			"    Example(value) {\n" +
+			"        local = ['a', { 1: 'b', 2: {} }, []];\n" +
+			"        foreach (item : local) {\n" +
+			"            len = length(item);\n" +
+			"            if (!(len > 0 && len <= value) || value > 100) {\n" +
+			"                for (i = 0; i < 10; i++) {\n" +
+			"                    local.append('text' + (i * 3 / 2.0));\n" +
+			"                }\n" +
+			"            } else {\n" +
+			"                i = 10;\n" +
+			"                while (i >= len) {\n" +
+			"                    switch (i--) {\n" +
+			"                        case 1, 2, 3 -> {\n" +
+			"                            {\n" +
+			"                                local.append('text' + i);\n" +
+			"                            }\n" +
+			"                        }\n" +
+			"                        default -> {}\n" +
+			"                    }\n" +
+			"                }\n" +
+			"            }\n" +
+			"        }\n" +
+			"\n" +
+			"        try {\n" +
+			"            complex = (0.5 ^ (0 - -1) + +1);\n" +
+			"        } catch (message) {\n" +
+			"            // Single line comment\n" +
+			"        }\n" +
 			"    }\n" +
 			"\n" +
-			"    static fun staticMethod(obj, b, c) {\n" +
-			"        return obj == null;\n" +
+			"    operator +(right) {\n" +
+			"        return this.local + right;\n" +
+			"    }\n" +
+			"\n" +
+			"    static fun testInequality(a, b, expected) {\n" +
+			"        return (a != b) == expected;\n" +
 			"    }\n" +
 			"}\n" +
 			"\n" +
-			"// Create a delegate\n" +
-			"delegate = fun() {\n" +
-			"    return new Example();\n" +
+			"obj = fun() {\n" +
+			"    return new Example(50);\n" +
 			"}();";
 	}
 }

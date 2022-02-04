@@ -8,7 +8,19 @@ public class ArucasCodeStyleSettings extends CustomCodeStyleSettings {
 		super("ArucasCodeStyleSettings", settings);
 	}
 	
-	// Custom settings
+	// Before parentheses
+	public boolean SPACE_BEFORE_METHOD_PARENTHESES = false;
+	public boolean SPACE_BEFORE_OPERATOR_PARENTHESES = true;
+	public boolean SPACE_BEFORE_NEW_PARENTHESES = false;
+	public boolean SPACE_BEFORE_FOR_PARENTHESES = true;
+	public boolean SPACE_BEFORE_FOREACH_PARENTHESES = true;
+	public boolean SPACE_BEFORE_SWITCH_PARENTHESES = true;
+	public boolean SPACE_BEFORE_IF_PARENTHESES = true;
+	public boolean SPACE_BEFORE_WHILE_PARENTHESES = true;
+	public boolean SPACE_BEFORE_CATCH_PARENTHESES = true;
+	public boolean SPACE_BEFORE_CALL_PARENTHESES = false;
+	
+	// Operators
 	public boolean SPACE_BEFORE_CLASS_BODY = true;
 	public boolean SPACE_BEFORE_METHOD_BODY = true;
 	
@@ -49,7 +61,6 @@ public class ArucasCodeStyleSettings extends CustomCodeStyleSettings {
 	
 	// Method parameters
 	public boolean SPACE_INSIDE_EMPTY_PARAMETERS = false;
-	public boolean SPACE_AFTER_METHOD_NAME = false;
 	public boolean SPACE_AROUND_INSIDE_PARAMETERS = false;
 	public boolean SPACE_BEFORE_PARAMETER_COMMA = false;
 	public boolean SPACE_AFTER_PARAMETER_COMMA = true;

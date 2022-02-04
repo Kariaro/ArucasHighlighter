@@ -11,6 +11,9 @@ public interface ArucasArithmeticExpression extends PsiElement {
   ArucasArithmeticExpression getArithmeticExpression();
 
   @NotNull
+  List<ArucasCallArguments> getCallArgumentsList();
+
+  @NotNull
   List<ArucasExpression> getExpressionList();
 
   @NotNull

@@ -2,8 +2,7 @@ package me.hardcoded.arucas.language.formatting;
 
 import com.intellij.formatting.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.formatter.common.AbstractBlock;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import me.hardcoded.arucas.language.ArucasLanguage;
 import me.hardcoded.arucas.psi.ArucasTypes;
@@ -20,20 +19,47 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 	private static final TokenSet UNARY_FACTOR_OP = TokenSet.create(ArucasTypes.OP_PLUS, ArucasTypes.OP_MINUS);
 	private static final TokenSet UNARY_MEMBER_OP = TokenSet.create(ArucasTypes.OP_PP, ArucasTypes.OP_MM);
 	
-	
-	private static final TokenSet UNARY_EXPR = TokenSet.create(ArucasTypes.UNARY_FACTOR_EXPRESSION);
-	
 	private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
 		ArucasCodeStyleSettings data = settings.getCustomSettings(ArucasCodeStyleSettings.class);
+		CommonCodeStyleSettings commonSettings = settings.getCommonSettings(ArucasLanguage.INSTANCE);
+		
 		return new SpacingBuilder(settings, ArucasLanguage.INSTANCE) {
 			@Override
 			public @Nullable Spacing getSpacing(@Nullable Block parent, @Nullable Block child1, @Nullable Block child2) {
-				
-				
+				if (child1 instanceof ArucasBlock && child2 instanceof ArucasBlock) {
+					String c1s = ((ArucasBlock)child1).getNode().getText();
+					String c2s = ((ArucasBlock)child2).getNode().getText();
+					
+					if (c1s.endsWith("+") && c2s.startsWith("+") || c1s.endsWith("-") && c2s.startsWith("-")) {
+						return Spacing.createSpacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, commonSettings.KEEP_BLANK_LINES_IN_CODE);
+					}
+				}
 				
 				return super.getSpacing(parent, child1, child2);
 			}
 		}
+			// Before parentheses
+			.before(ArucasTypes.ARGUMENTS)
+			.spaceIf(data.SPACE_BEFORE_METHOD_PARENTHESES)
+			.before(ArucasTypes.OPERATOR_ARGUMENTS)
+			.spaceIf(data.SPACE_BEFORE_OPERATOR_PARENTHESES)
+			.beforeInside(ArucasTypes.CALL_ARGUMENTS, ArucasTypes.NEW_EXPRESSION)
+			.spaceIf(data.SPACE_BEFORE_NEW_PARENTHESES)
+			.before(ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_BEFORE_CALL_PARENTHESES)
+			.after(ArucasTypes.KW_FOR)
+			.spaceIf(data.SPACE_BEFORE_FOR_PARENTHESES)
+			.after(ArucasTypes.KW_FOREACH)
+			.spaceIf(data.SPACE_BEFORE_FOREACH_PARENTHESES)
+			.after(ArucasTypes.KW_SWITCH)
+			.spaceIf(data.SPACE_BEFORE_SWITCH_PARENTHESES)
+			.after(ArucasTypes.KW_IF)
+			.spaceIf(data.SPACE_BEFORE_IF_PARENTHESES)
+			.after(ArucasTypes.KW_WHILE)
+			.spaceIf(data.SPACE_BEFORE_WHILE_PARENTHESES)
+			.after(ArucasTypes.KW_CATCH)
+			.spaceIf(data.SPACE_BEFORE_CATCH_PARENTHESES)
+			
 			// Binary spaces
 			.aroundInside(BINARY_FACTOR_OP, ArucasTypes.ARITHMETIC_EXPRESSION)
 			.spaceIf(data.SPACE_AROUND_BINARY_OPERATORS)
@@ -95,20 +121,12 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 			.spaceIf(data.SPACE_INSIDE_EMPTY_PARAMETERS)
 			.afterInside(ArucasTypes.LPAREN, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_AROUND_INSIDE_PARAMETERS)
-			.before(ArucasTypes.ARGUMENTS)
-			.spaceIf(data.SPACE_AFTER_METHOD_NAME)
 			.beforeInside(ArucasTypes.RPAREN, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_AROUND_INSIDE_PARAMETERS)
 			.afterInside(ArucasTypes.COMMA, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_AFTER_PARAMETER_COMMA)
 			.beforeInside(ArucasTypes.COMMA, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_BEFORE_PARAMETER_COMMA)
-			
-			
-//			// Make sure unary and binary operators do not merge
-//			.betweenInside(BINARY_FACTOR_OP, UNARY_EXPR, ArucasTypes.ARITHMETIC_EXPRESSION)
-//			.spaceIf(true)
-			
 			;
 	}
 	

@@ -34,9 +34,6 @@ def incrementBuildId() {
 
 def getBuildId() {
     def versionPropsFile = file('version.properties')
-    print('test?')
-    print('versionPropsFile')
-
     if (versionPropsFile.canRead()) {
         def Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionPropsFile))
@@ -46,8 +43,8 @@ def getBuildId() {
 }
 
 dependencies {
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    runtimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
@@ -57,7 +54,7 @@ intellij {
 }
 
 task incrementBuild {
-    println "AutoIncrement"
+    print '> Task :incrementBuild'
     incrementBuildId()
 }
 
@@ -72,4 +69,9 @@ patchPluginXml {
 
 test {
     useJUnitPlatform()
+    jvmArgs '--illegal-access=permit'
+    failFast false
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
 }

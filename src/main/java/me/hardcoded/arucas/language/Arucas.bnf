@@ -17,7 +17,25 @@
     WHITESPACE='regexp:\s+'
     NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
     VALUE_KEYWORD='regexp:true|false|null|this'
-    KEYWORD='regexp:if|else|foreach|for|while|try|catch|fun|class|operator|new|static|var|switch|case|default|return|break|continue'
+    KW_IF="if"
+    KW_ELSE="else"
+    KW_FOR="for"
+    KW_FOREACH="foreach"
+    KW_WHILE="while"
+    KW_TRY="try"
+    KW_CATCH="catch"
+    KW_FUN="fun"
+    KW_CLASS="class"
+    KW_OPERATOR="operator"
+    KW_NEW="new"
+    KW_STATIC="static"
+    KW_VAR="var"
+    KW_SWITCH="switch"
+    KW_CASE="case"
+    KW_DEFAULT="default"
+    KW_RETURN="return"
+    KW_BREAK="break"
+    KW_CONTINUE="continue"
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
     OP_LOGICAL_OR="||"
@@ -70,6 +88,12 @@ Statement ::= CodeBlock
   | BreakStatement
   | ExpressionStatement
 
+IdentifierName ::= IDENTIFIER {
+  mixin="me.hardcoded.arucas.psi.impl.ArucasNamedElementImpl"
+  implements="me.hardcoded.arucas.psi.ArucasNamedElement"
+  methods=[setName getNameIdentifier]
+}
+
 ReturnStatement ::= 'return' SizeExpression? ';' {extends=Statement}
 ContinueStatement ::= 'continue' ';' {extends=Statement}
 BreakStatement ::= 'break' ';' {extends=Statement}
@@ -80,25 +104,30 @@ ElseStatement ::= 'else' Statement {extends=Statement}
 WhileStatement ::= 'while' '(' Expression ')' Statement {extends=Statement}
 
 /* Class Statement */
-ClassDeclaration ::= 'class' IDENTIFIER ClassCodeBlock {extends=Statement}
+ClassDeclaration ::= 'class' IdentifierName ClassCodeBlock {extends=Statement}
 ClassCodeBlock ::= '{' ClassBodyStatement* '}' {extends=Statement}
 private ClassBodyStatement ::= ClassMember
   | ClassConstructor
   | ClassMethod
   | ClassOperator {extends=Statement}
 
-ClassConstructor ::= IDENTIFIER Arguments CodeBlock
-ClassOperator ::= 'operator' OPERATOR Arguments CodeBlock { methods=[operator="OPERATOR[0]"] }
-ClassMethod ::= [StaticModifier] 'fun' IDENTIFIER Arguments CodeBlock
-ClassMember ::= [StaticModifier] 'var' IDENTIFIER ['=' Expression] ';'
+Operator ::= '+' | '-' | '*' | '/' | '^' | '!' | '==' | '!='
+  | '++' | '--' | '&&' | '||' | '>=' | '<=' | '>' | '<'
+
+ClassConstructor ::= IdentifierName Arguments CodeBlock
+ClassOperator ::= 'operator' Operator OperatorArguments CodeBlock { methods=[operator="OPERATOR[0]"] }
+ClassMethod ::= [StaticModifier] 'fun' IdentifierName Arguments CodeBlock
+ClassMember ::= [StaticModifier] 'var' IdentifierName ['=' Expression] ';'
 StaticModifier ::= 'static'
 
 Arguments ::= '(' [ Argument (',' Argument)* ] ')'
-Argument ::= IDENTIFIER
+Argument ::= IdentifierName
+
+OperatorArguments ::= Arguments
 
 /* Function Statement */
-FunctionStatement ::= 'fun' IDENTIFIER Arguments CodeBlock {extends=Statement}
-TryStatement ::= 'try' Statement 'catch' '(' IDENTIFIER ')' Statement {
+FunctionStatement ::= 'fun' IdentifierName Arguments CodeBlock {extends=Statement}
+TryStatement ::= 'try' Statement 'catch' '(' IdentifierName ')' Statement {
   extends=Statement
   methods=[
     TRY_BODY="Statement[0]"
@@ -107,7 +136,7 @@ TryStatement ::= 'try' Statement 'catch' '(' IDENTIFIER ')' Statement {
 }
 
 /* For Statements */
-ForEachStatement ::= 'foreach' '(' IDENTIFIER ':' MemberExpression ')' Statement {extends=Statement}
+ForEachStatement ::= 'foreach' '(' IdentifierName ':' MemberExpression ')' Statement {extends=Statement}
 ForStatement ::= 'for' '(' Expression? ';' Expression? ';' Expression? ')' Statement {extends=Statement}
 
 /* Switch Statement */
@@ -125,7 +154,7 @@ Expression ::= ModifyVariable
   | SizeExpression
 
 // TODO: Make these into two groups Binary and Unary
-private ModifyVariable ::= IDENTIFIER ModifyOp
+private ModifyVariable ::= IdentifierName ModifyOp
 private ModifyOp ::= '++' | '--' | '=' Expression
 
 private SizeExpression ::= ComparisonExpression [SizeOp SizeExpression]
@@ -147,12 +176,12 @@ private FactorOp ::= '+' | '-'
 UnaryFactorExpression ::= FactorOp FactorExpression
 
 private PowerExpression ::= CallExpression ['^' FactorExpression]
-private CallExpression ::= MemberExpression ['(' [CallArguments] ')']
-private CallArguments ::= Expression (',' Expression)*
+private CallExpression ::= MemberExpression [CallArguments]
+CallArguments ::= '(' [ Expression (',' Expression)* ] ')'
 
 private MemberExpression ::= AtomExpression [MemberLoop]
 private MemberLoop ::= '.' AtomExpression MemberOp
-private MemberOp ::= '(' [CallArguments] ')' [MemberLoop]
+private MemberOp ::= CallArguments [MemberLoop]
   | '=' Expression
   | '++'
   | '--'
@@ -177,9 +206,9 @@ MapEntry ::= Expression ':' Expression {
   ]
 }
 
-NewExpression ::= 'new' IDENTIFIER '(' [CallArguments] ')' {extends=Expression}
+NewExpression ::= 'new' IdentifierName CallArguments {extends=Expression}
 FunctionLambda ::= 'fun' Arguments CodeBlock {extends=Expression}
-Atom ::= IDENTIFIER
+Atom ::= IdentifierName
   | VALUE_KEYWORD
   | STRING
   | NUMBER {extends=Expression}

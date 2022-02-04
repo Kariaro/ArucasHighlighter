@@ -53,8 +53,8 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 			"    }\n" +
 			"}\n" +
 			"\n" +
-			"// Create a delegate\n" +
-			"delegate = fun() {\n" +
+			"// Create a function lambda\n" +
+			"lambda = fun() {\n" +
 			"    return new Example();\n" +
 			"}();\n" +
 			"\n" +

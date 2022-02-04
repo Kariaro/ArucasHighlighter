@@ -41,8 +41,8 @@ public class ArucasExpressionImpl extends ASTWrapperPsiElement implements Arucas
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public ArucasIdentifierName getIdentifierName() {
+    return findChildByClass(ArucasIdentifierName.class);
   }
 
 }

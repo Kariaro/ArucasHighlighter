@@ -29,6 +29,12 @@ public class ArucasUnaryFactorExpressionImpl extends ASTWrapperPsiElement implem
 
   @Override
   @NotNull
+  public List<ArucasCallArguments> getCallArgumentsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasCallArguments.class);
+  }
+
+  @Override
+  @NotNull
   public List<ArucasExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }

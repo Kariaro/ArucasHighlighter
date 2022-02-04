@@ -15,7 +15,7 @@ public class ArucasLineMarkerProvider extends RelatedItemLineMarkerProvider {
 		if (element instanceof ArucasAtom) {
 			ArucasAtom atom = (ArucasAtom)element;
 			
-			if (atom.getIdentifier() != null) {
+			if (atom.getIdentifierName().getIdentifier() != null) {
 				// We found an identifier
 				
 				// If the parent is an atom we know that we

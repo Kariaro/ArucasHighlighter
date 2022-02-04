@@ -8,30 +8,62 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="Arucas File"
-                  implementationClass="me.hardcoded.arucas.language.ArucasFileType"
-                  fieldName="INSTANCE"
-                  language="Arucas"
-                  extensions="arucas"/>
-        <lang.parserDefinition language="Arucas"
-                  implementationClass="me.hardcoded.arucas.language.ArucasParserDefinition"/>
-        <lang.syntaxHighlighterFactory language="Arucas"
-                  implementationClass="me.hardcoded.arucas.language.ArucasSyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="me.hardcoded.arucas.language.color.ArucasColorSettingsPage"/>
-        <annotator language="Arucas" implementationClass="me.hardcoded.arucas.language.ArucasAnnotator"/>
-        <completion.contributor language="Arucas"
-                  implementationClass="me.hardcoded.arucas.language.ArucasCompletionContributor"/>
-        <lang.braceMatcher language="Arucas"
-                  implementationClass="me.hardcoded.arucas.language.ArucasPairedBraceMatcher"/>
-        <lang.formatter language="Arucas"
-                  implementationClass="me.hardcoded.arucas.language.formatting.ArucasFormattingModelBuilder"/>
-        <codeStyleSettingsProvider implementation="me.hardcoded.arucas.language.formatting.ArucasCodeStyleSettingsProvider"/>
+        <fileType
+            name="Arucas File"
+            implementationClass="me.hardcoded.arucas.language.ArucasFileType"
+            fieldName="INSTANCE"
+            language="Arucas"
+            extensions="arucas"
+        />
+        <lang.parserDefinition
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasParserDefinition"
+        />
+        <lang.syntaxHighlighterFactory
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasSyntaxHighlighterFactory"
+        />
+        <colorSettingsPage
+            implementation="me.hardcoded.arucas.language.color.ArucasColorSettingsPage"
+        />
+        <annotator
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasAnnotator"
+        />
+        <completion.contributor
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasCompletionContributor"
+        />
+        <lang.braceMatcher
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasPairedBraceMatcher"
+        />
+        <lang.formatter
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.formatting.ArucasFormattingModelBuilder"
+        />
+        <codeStyleSettingsProvider
+            implementation="me.hardcoded.arucas.language.formatting.ArucasCodeStyleSettingsProvider"
+        />
         <langCodeStyleSettingsProvider
-                  implementation="me.hardcoded.arucas.language.formatting.ArucasLanguageCodeStyleSettingsProvider"/>
-        <defaultLiveTemplates file="/liveTemplates/Arucas.xml"/>
-        <liveTemplateContext implementation="me.hardcoded.arucas.liveTemplates.ArucasContext"/>
+            implementation="me.hardcoded.arucas.language.formatting.ArucasLanguageCodeStyleSettingsProvider"
+        />
+        <defaultLiveTemplates
+            file="/liveTemplates/Arucas.xml"
+        />
+        <liveTemplateContext
+            implementation="me.hardcoded.arucas.liveTemplates.ArucasContext"
+        />
+        <!--
+        <psi.referenceContributor
+            implementation="me.hardcoded.arucas.language.ArucasReferenceContributor"
+        />
+        <lang.refactoringSupport
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.ArucasRefactoringSupportProvider"
+        />
+        -->
     </extensions>
-
     <actions>
         <!-- Add your actions here -->
     </actions>

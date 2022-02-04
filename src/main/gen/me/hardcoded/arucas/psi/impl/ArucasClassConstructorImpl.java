@@ -41,8 +41,8 @@ public class ArucasClassConstructorImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
 }

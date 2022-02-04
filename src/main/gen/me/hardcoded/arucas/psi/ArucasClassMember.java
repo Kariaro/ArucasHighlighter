@@ -10,10 +10,10 @@ public interface ArucasClassMember extends PsiElement {
   @Nullable
   ArucasExpression getExpression();
 
+  @NotNull
+  ArucasIdentifierName getIdentifierName();
+
   @Nullable
   ArucasStaticModifier getStaticModifier();
-
-  @NotNull
-  PsiElement getIdentifier();
 
 }

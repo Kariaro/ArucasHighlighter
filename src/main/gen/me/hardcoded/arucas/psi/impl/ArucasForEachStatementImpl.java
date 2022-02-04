@@ -29,20 +29,26 @@ public class ArucasForEachStatementImpl extends ArucasStatementImpl implements A
 
   @Override
   @NotNull
+  public List<ArucasCallArguments> getCallArgumentsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasCallArguments.class);
+  }
+
+  @Override
+  @NotNull
   public List<ArucasExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }
 
   @Override
   @NotNull
-  public ArucasStatement getStatement() {
-    return findNotNullChildByClass(ArucasStatement.class);
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public ArucasStatement getStatement() {
+    return findNotNullChildByClass(ArucasStatement.class);
   }
 
 }

@@ -14,6 +14,6 @@ public interface ArucasExpression extends PsiElement {
   ArucasExpression getExpression();
 
   @Nullable
-  PsiElement getIdentifier();
+  ArucasIdentifierName getIdentifierName();
 
 }

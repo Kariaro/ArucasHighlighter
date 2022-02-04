@@ -25,7 +25,7 @@ public class ArucasUtil {
 				ArucasClassDeclaration[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, ArucasClassDeclaration.class);
 				if (properties != null) {
 					for (ArucasClassDeclaration property : properties) {
-						if (key.equals(property.getIdentifier().getText())) {
+						if (key.equals(property.getIdentifierName().getIdentifier().getText())) {
 							result.add(property);
 						}
 					}

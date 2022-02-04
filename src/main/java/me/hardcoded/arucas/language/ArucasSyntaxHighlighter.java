@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import me.hardcoded.arucas.psi.ArucasTypes;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,28 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_STRING", DefaultLanguageHighlighterColors.STRING);
 	public static final TextAttributesKey BAD_CHARACTER
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+	
+	private static final TokenSet KEYWORDS = TokenSet.create(
+		ArucasTypes.KW_IF,
+		ArucasTypes.KW_ELSE,
+		ArucasTypes.KW_FOR,
+		ArucasTypes.KW_FOREACH,
+		ArucasTypes.KW_WHILE,
+		ArucasTypes.KW_TRY,
+		ArucasTypes.KW_CATCH,
+		ArucasTypes.KW_FUN,
+		ArucasTypes.KW_CLASS,
+		ArucasTypes.KW_OPERATOR,
+		ArucasTypes.KW_NEW,
+		ArucasTypes.KW_STATIC,
+		ArucasTypes.KW_VAR,
+		ArucasTypes.KW_SWITCH,
+		ArucasTypes.KW_CASE,
+		ArucasTypes.KW_DEFAULT,
+		ArucasTypes.KW_RETURN,
+		ArucasTypes.KW_BREAK,
+		ArucasTypes.KW_CONTINUE
+	);
 	
 	private static final TextAttributesKey[] BAD_CHAR_KEYS = { BAD_CHARACTER };
 	private static final TextAttributesKey[] DELIMITER_KEYS = { DELIMITER };
@@ -53,7 +76,7 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		if (tokenType.equals(ArucasTypes.NUMBER)) {
 			return NUMBER_KEYS;
 		}
-		if (tokenType.equals(ArucasTypes.KEYWORD)) {
+		if (KEYWORDS.contains(tokenType)) {
 			return KEYWORD_KEYS;
 		}
 		if (tokenType.equals(ArucasTypes.VALUE_KEYWORD)) {

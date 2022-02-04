@@ -2,6 +2,18 @@ package me.hardcoded.arucas.language.formatting;
 
 public class ArucasStyleSettingsCustomizable {
 	public enum Type {
+		// Before parentheses
+		SPACE_BEFORE_METHOD_PARENTHESES,
+		SPACE_BEFORE_OPERATOR_PARENTHESES,
+		SPACE_BEFORE_NEW_PARENTHESES,
+		SPACE_BEFORE_FOR_PARENTHESES,
+		SPACE_BEFORE_FOREACH_PARENTHESES,
+		SPACE_BEFORE_SWITCH_PARENTHESES,
+		SPACE_BEFORE_IF_PARENTHESES,
+		SPACE_BEFORE_WHILE_PARENTHESES,
+		SPACE_BEFORE_CATCH_PARENTHESES,
+		SPACE_BEFORE_CALL_PARENTHESES,
+		
 		// Basic operators
 		SPACE_AROUND_UNARY_OPERATORS,
 		SPACE_AROUND_UNARY_MODIFY_OPERATORS,
@@ -30,15 +42,12 @@ public class ArucasStyleSettingsCustomizable {
 		
 		// Methods
 		SPACE_INSIDE_EMPTY_PARAMETERS,
-		SPACE_AFTER_METHOD_NAME,
 		SPACE_AROUND_INSIDE_PARAMETERS,
 		SPACE_BEFORE_PARAMETER_COMMA,
 		SPACE_AFTER_PARAMETER_COMMA,
 	}
 	
-	public static final String SPACE_AROUND_OPERATORS = "Around operators";
-	public static final String SPACE_BEFORE_LBRACE = "Before left brace";
-	public static final String SPACE_LIST = "List";
-	public static final String SPACE_MAP = "Map";
 	public static final String SPACE_METHOD_PARAMETERS = "Method parameters";
+	public static final String SPACE_LIST = "List expression";
+	public static final String SPACE_MAP = "Map expression";
 }

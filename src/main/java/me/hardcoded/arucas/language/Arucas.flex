@@ -46,27 +46,25 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   \"                               { yybegin(STRING_DOUBLE); }
   \'                               { yybegin(STRING_SINGLE); }
 
-/*
-  "if"                             { return ArucasTypes.KEYWORD; }
-  "else"                           { return ArucasTypes.KEYWORD; }
-  "foreach"                        { return ArucasTypes.KEYWORD; }
-  "for"                            { return ArucasTypes.KEYWORD; }
-  "while"                          { return ArucasTypes.KEYWORD; }
-  "try"                            { return ArucasTypes.KEYWORD; }
-  "catch"                          { return ArucasTypes.KEYWORD; }
-  "fun"                            { return ArucasTypes.KEYWORD; }
-  "class"                          { return ArucasTypes.KEYWORD; }
-  "new"                            { return ArucasTypes.KEYWORD; }
-  "static"                         { return ArucasTypes.KEYWORD; }
-  "var"                            { return ArucasTypes.KEYWORD; }
-  "switch"                         { return ArucasTypes.KEYWORD; }
-  "case"                           { return ArucasTypes.KEYWORD; }
-  "default"                        { return ArucasTypes.KEYWORD; }
-  "return"                         { return ArucasTypes.KEYWORD; }
-  "break"                          { return ArucasTypes.KEYWORD; }
-  "continue"                       { return ArucasTypes.KEYWORD; }
-  "operator"                       { return ArucasTypes.KEYWORD; }
-*/
+  "if"                             { return ArucasTypes.KW_IF; }
+  "else"                           { return ArucasTypes.KW_ELSE; }
+  "foreach"                        { return ArucasTypes.KW_FOREACH; }
+  "for"                            { return ArucasTypes.KW_FOR; }
+  "while"                          { return ArucasTypes.KW_WHILE; }
+  "try"                            { return ArucasTypes.KW_TRY; }
+  "catch"                          { return ArucasTypes.KW_CATCH; }
+  "fun"                            { return ArucasTypes.KW_FUN; }
+  "class"                          { return ArucasTypes.KW_CLASS; }
+  "new"                            { return ArucasTypes.KW_NEW; }
+  "static"                         { return ArucasTypes.KW_STATIC; }
+  "var"                            { return ArucasTypes.KW_VAR; }
+  "switch"                         { return ArucasTypes.KW_SWITCH; }
+  "case"                           { return ArucasTypes.KW_CASE; }
+  "default"                        { return ArucasTypes.KW_DEFAULT; }
+  "return"                         { return ArucasTypes.KW_RETURN; }
+  "break"                          { return ArucasTypes.KW_BREAK; }
+  "continue"                       { return ArucasTypes.KW_CONTINUE; }
+  "operator"                       { return ArucasTypes.KW_OPERATOR; }
 
   "+"                              { return ArucasTypes.OP_PLUS; }
   "-"                              { return ArucasTypes.OP_MINUS; }
@@ -100,7 +98,7 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   ","                              { return ArucasTypes.COMMA; }
 
   /* keywords */
-  {Keyword}                        { return ArucasTypes.KEYWORD; }
+  //{Keyword}                        { return ArucasTypes.KEYWORD; }
   {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
   //{Syntax}                         { return ArucasTypes.SYNTAX; }
   //{Operator}                       { return ArucasTypes.OPERATOR; }

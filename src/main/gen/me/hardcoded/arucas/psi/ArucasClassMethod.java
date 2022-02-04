@@ -13,10 +13,10 @@ public interface ArucasClassMethod extends PsiElement {
   @NotNull
   ArucasCodeBlock getCodeBlock();
 
+  @NotNull
+  ArucasIdentifierName getIdentifierName();
+
   @Nullable
   ArucasStaticModifier getStaticModifier();
-
-  @NotNull
-  PsiElement getIdentifier();
 
 }

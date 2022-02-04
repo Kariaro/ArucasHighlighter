@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ArucasUnaryFactorExpression extends PsiElement {
 
   @NotNull
+  List<ArucasCallArguments> getCallArgumentsList();
+
+  @NotNull
   List<ArucasExpression> getExpressionList();
 
   @Nullable

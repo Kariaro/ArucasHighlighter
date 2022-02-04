@@ -11,6 +11,6 @@ public interface ArucasClassDeclaration extends ArucasStatement {
   ArucasClassCodeBlock getClassCodeBlock();
 
   @NotNull
-  PsiElement getIdentifier();
+  ArucasIdentifierName getIdentifierName();
 
 }

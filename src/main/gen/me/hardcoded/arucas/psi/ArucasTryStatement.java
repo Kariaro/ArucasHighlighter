@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface ArucasTryStatement extends ArucasStatement {
 
   @NotNull
-  List<ArucasStatement> getStatementList();
+  ArucasIdentifierName getIdentifierName();
 
   @NotNull
-  PsiElement getIdentifier();
+  List<ArucasStatement> getStatementList();
 
   @NotNull
   ArucasStatement getTryBody();

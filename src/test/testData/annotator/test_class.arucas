@@ -1,0 +1,21 @@
+class TestClass {
+    // Duplicate parameter name
+    TestClass(a, <error>a</error>) {}
+
+    // Wrong constructor name
+    <error>WrongConstructorName</error>() {}
+
+    // Duplicate method with same parameters
+    fun Function() {}
+    fun <error>Function</error>() {}
+
+    // Duplicate operator with same parameters
+    operator + (right) {}
+    operator <error>+</error> (right) {}
+    operator <error>+</error> (a, b) {}
+    operator <error>!</error> (a) {}
+
+    // Duplicate static with same parameters
+    static fun Static() {}
+    static fun <error>Static</error>() {}
+}

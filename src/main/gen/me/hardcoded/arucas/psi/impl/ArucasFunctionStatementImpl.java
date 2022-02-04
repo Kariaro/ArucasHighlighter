@@ -41,8 +41,8 @@ public class ArucasFunctionStatementImpl extends ArucasStatementImpl implements 
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
 }

@@ -29,14 +29,14 @@ public class ArucasNewExpressionImpl extends ArucasExpressionImpl implements Aru
 
   @Override
   @NotNull
-  public List<ArucasExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
+  public ArucasCallArguments getCallArguments() {
+    return findNotNullChildByClass(ArucasCallArguments.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
 }
