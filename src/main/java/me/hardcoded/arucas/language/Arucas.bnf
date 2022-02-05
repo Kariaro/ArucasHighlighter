@@ -116,9 +116,13 @@ Operator ::= '+' | '-' | '*' | '/' | '^' | '!' | '==' | '!='
 
 ClassConstructor ::= IdentifierName Arguments CodeBlock
 ClassOperator ::= 'operator' Operator OperatorArguments CodeBlock { methods=[operator="OPERATOR[0]"] }
-ClassMethod ::= [StaticModifier] 'fun' IdentifierName Arguments CodeBlock
-ClassMember ::= [StaticModifier] 'var' IdentifierName ['=' Expression] ';'
-StaticModifier ::= 'static'
+ClassMethod ::= FunctionModifiers 'fun' IdentifierName Arguments CodeBlock
+ClassMember ::= FunctionModifiers 'var' IdentifierName ['=' Expression] ';'
+FunctionModifiers ::= ( 'static'? ) {
+  mixin="me.hardcoded.arucas.psi.impl.ArucasModifierElementImpl"
+  implements="me.hardcoded.arucas.psi.ArucasModifierElement"
+  methods=[isStatic]
+}
 
 Arguments ::= '(' [ Argument (',' Argument)* ] ')'
 Argument ::= IdentifierName
@@ -153,7 +157,6 @@ private CaseNumber ::= ['-'] NUMBER
 Expression ::= ModifyVariable
   | SizeExpression
 
-// TODO: Make these into two groups Binary and Unary
 private ModifyVariable ::= IdentifierName ModifyOp
 private ModifyOp ::= '++' | '--' | '=' Expression
 
@@ -164,7 +167,7 @@ private ComparisonExpression ::= '!' ComparisonExpression
   | ArithmeticExpression [ComparisonOp ArithmeticExpression]
 private ComparisonOp ::= '==' | '!=' | '<' | '>' | '<=' | '>='
 
-ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression]
+ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression] {extends=Expression}
 private ArithmeticOp ::= '+' | '-'
 
 private TermExpression ::= FactorExpression [TermOp TermExpression]
@@ -173,7 +176,7 @@ private TermOp ::= '*' | '/'
 private FactorExpression ::= UnaryFactorExpression
   | PowerExpression
 private FactorOp ::= '+' | '-'
-UnaryFactorExpression ::= FactorOp FactorExpression
+UnaryFactorExpression ::= FactorOp FactorExpression {extends=Expression}
 
 private PowerExpression ::= CallExpression ['^' FactorExpression]
 private CallExpression ::= MemberExpression [CallArguments]

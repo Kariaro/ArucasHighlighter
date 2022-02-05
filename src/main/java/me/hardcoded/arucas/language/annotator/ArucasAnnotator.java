@@ -1,4 +1,4 @@
-package me.hardcoded.arucas.language;
+package me.hardcoded.arucas.language.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -165,6 +165,7 @@ public class ArucasAnnotator implements Annotator {
 		// TODO: Make sure no function with this name has already been created
 	}
 	
+	// TODO: Allocate less memory by not allocating new objects
 	private void validateClass(ArucasClassDeclaration arucasClass, AnnotationHolder holder) {
 		ArucasClassCodeBlock codeBlock = arucasClass.getClassCodeBlock();
 		
@@ -197,7 +198,7 @@ public class ArucasAnnotator implements Annotator {
 			Map<String, Set<Integer>> methods = new HashMap<>();
 			
 			for (ArucasClassMethod method : codeBlock.getClassMethodList()) {
-				boolean isStatic = method.getStaticModifier() != null;
+				boolean isStatic = method.getFunctionModifiers().isStatic();
 				
 				String name = method.getIdentifierName().getIdentifier().getText();
 				Set<Integer> argumentCount = (isStatic ? staticMethods : methods)
@@ -248,7 +249,7 @@ public class ArucasAnnotator implements Annotator {
 				}
 				
 				if (!argumentCount.add(parameters)) {
-					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > method with " + getParameterString(parameters) + " has already been defined")
+					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > with " + getParameterString(parameters) + " has already been defined")
 						.range(operator.getOperator().getTextRange())
 						.create();
 				}
@@ -349,7 +350,7 @@ public class ArucasAnnotator implements Annotator {
 			
 			// Static methods cannot access 'this'
 			if (parent instanceof ArucasClassMethod) {
-				return ((ArucasClassMethod)parent).getStaticModifier() == null;
+				return ((ArucasClassMethod)parent).getFunctionModifiers().isStatic();
 			}
 			
 			element = parent;

@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasUnaryFactorExpression extends PsiElement {
+public interface ArucasUnaryFactorExpression extends ArucasExpression {
 
   @NotNull
   List<ArucasCallArguments> getCallArgumentsList();
 
   @NotNull
   List<ArucasExpression> getExpressionList();
-
-  @Nullable
-  ArucasUnaryFactorExpression getUnaryFactorExpression();
 
 }

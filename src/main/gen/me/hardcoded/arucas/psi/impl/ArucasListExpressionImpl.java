@@ -27,10 +27,4 @@ public class ArucasListExpressionImpl extends ArucasExpressionImpl implements Ar
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public List<ArucasExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
-  }
-
 }

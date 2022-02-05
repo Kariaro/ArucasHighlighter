@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasArithmeticExpressionImpl extends ASTWrapperPsiElement implements ArucasArithmeticExpression {
+public class ArucasArithmeticExpressionImpl extends ArucasExpressionImpl implements ArucasArithmeticExpression {
 
   public ArucasArithmeticExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitArithmeticExpression(this);
   }
@@ -25,12 +25,6 @@ public class ArucasArithmeticExpressionImpl extends ASTWrapperPsiElement impleme
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ArucasVisitor) accept((ArucasVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ArucasArithmeticExpression getArithmeticExpression() {
-    return findChildByClass(ArucasArithmeticExpression.class);
   }
 
   @Override
@@ -43,12 +37,6 @@ public class ArucasArithmeticExpressionImpl extends ASTWrapperPsiElement impleme
   @NotNull
   public List<ArucasExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ArucasUnaryFactorExpression> getUnaryFactorExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasUnaryFactorExpression.class);
   }
 
 }

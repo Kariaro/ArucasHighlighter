@@ -29,8 +29,8 @@ public class ArucasReturnStatementImpl extends ArucasStatementImpl implements Ar
 
   @Override
   @NotNull
-  public List<ArucasArithmeticExpression> getArithmeticExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasArithmeticExpression.class);
+  public List<ArucasExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }
 
 }

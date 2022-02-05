@@ -36,8 +36,8 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(ATOM, EXPRESSION, FUNCTION_LAMBDA, LIST_EXPRESSION,
-      MAP_EXPRESSION, NEW_EXPRESSION),
+    create_token_set_(ARITHMETIC_EXPRESSION, ATOM, EXPRESSION, FUNCTION_LAMBDA,
+      LIST_EXPRESSION, MAP_EXPRESSION, NEW_EXPRESSION, UNARY_FACTOR_EXPRESSION),
     create_token_set_(BREAK_STATEMENT, CLASS_CODE_BLOCK, CLASS_DECLARATION, CONTINUE_STATEMENT,
       ELSE_STATEMENT, EXPRESSION_STATEMENT, FOR_EACH_STATEMENT, FOR_STATEMENT,
       FUNCTION_STATEMENT, IF_STATEMENT, RETURN_STATEMENT, STATEMENT,
@@ -463,26 +463,19 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // [StaticModifier] 'var' IdentifierName ['=' Expression] ';'
+  // FunctionModifiers 'var' IdentifierName ['=' Expression] ';'
   public static boolean ClassMember(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassMember")) return false;
     if (!nextTokenIs(b, "<class member>", KW_STATIC, KW_VAR)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CLASS_MEMBER, "<class member>");
-    r = ClassMember_0(b, l + 1);
+    r = FunctionModifiers(b, l + 1);
     r = r && consumeToken(b, KW_VAR);
     r = r && IdentifierName(b, l + 1);
     r = r && ClassMember_3(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // [StaticModifier]
-  private static boolean ClassMember_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassMember_0")) return false;
-    StaticModifier(b, l + 1);
-    return true;
   }
 
   // ['=' Expression]
@@ -504,26 +497,19 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // [StaticModifier] 'fun' IdentifierName Arguments CodeBlock
+  // FunctionModifiers 'fun' IdentifierName Arguments CodeBlock
   public static boolean ClassMethod(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassMethod")) return false;
     if (!nextTokenIs(b, "<class method>", KW_FUN, KW_STATIC)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CLASS_METHOD, "<class method>");
-    r = ClassMethod_0(b, l + 1);
+    r = FunctionModifiers(b, l + 1);
     r = r && consumeToken(b, KW_FUN);
     r = r && IdentifierName(b, l + 1);
     r = r && Arguments(b, l + 1);
     r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // [StaticModifier]
-  private static boolean ClassMethod_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ClassMethod_0")) return false;
-    StaticModifier(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -689,7 +675,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   public static boolean Expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, EXPRESSION, "<expression>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, EXPRESSION, "<expression>");
     r = ModifyVariable(b, l + 1);
     if (!r) r = SizeExpression(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -799,6 +785,16 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     r = r && CodeBlock(b, l + 1);
     exit_section_(b, m, FUNCTION_LAMBDA, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // 'static'?
+  public static boolean FunctionModifiers(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionModifiers")) return false;
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_MODIFIERS, "<function modifiers>");
+    consumeToken(b, KW_STATIC);
+    exit_section_(b, l, m, true, false, null);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1278,18 +1274,6 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!r) r = BreakStatement(b, l + 1);
     if (!r) r = ExpressionStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // 'static'
-  public static boolean StaticModifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "StaticModifier")) return false;
-    if (!nextTokenIs(b, KW_STATIC)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, KW_STATIC);
-    exit_section_(b, m, STATIC_MODIFIER, r);
     return r;
   }
 

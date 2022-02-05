@@ -35,14 +35,14 @@ public class ArucasClassMemberImpl extends ASTWrapperPsiElement implements Aruca
 
   @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasFunctionModifiers getFunctionModifiers() {
+    return findNotNullChildByClass(ArucasFunctionModifiers.class);
   }
 
   @Override
-  @Nullable
-  public ArucasStaticModifier getStaticModifier() {
-    return findChildByClass(ArucasStaticModifier.class);
+  @NotNull
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
 }

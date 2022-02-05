@@ -31,6 +31,7 @@ public interface ArucasTypes {
   IElementType FOR_EACH_STATEMENT = new ArucasElementType("FOR_EACH_STATEMENT");
   IElementType FOR_STATEMENT = new ArucasElementType("FOR_STATEMENT");
   IElementType FUNCTION_LAMBDA = new ArucasElementType("FUNCTION_LAMBDA");
+  IElementType FUNCTION_MODIFIERS = new ArucasElementType("FUNCTION_MODIFIERS");
   IElementType FUNCTION_STATEMENT = new ArucasElementType("FUNCTION_STATEMENT");
   IElementType IDENTIFIER_NAME = new ArucasElementType("IDENTIFIER_NAME");
   IElementType IF_STATEMENT = new ArucasElementType("IF_STATEMENT");
@@ -42,7 +43,6 @@ public interface ArucasTypes {
   IElementType OPERATOR_ARGUMENTS = new ArucasElementType("OPERATOR_ARGUMENTS");
   IElementType RETURN_STATEMENT = new ArucasElementType("RETURN_STATEMENT");
   IElementType STATEMENT = new ArucasElementType("STATEMENT");
-  IElementType STATIC_MODIFIER = new ArucasElementType("STATIC_MODIFIER");
   IElementType SWITCH_CODE_BLOCK = new ArucasElementType("SWITCH_CODE_BLOCK");
   IElementType SWITCH_STATEMENT = new ArucasElementType("SWITCH_STATEMENT");
   IElementType TRY_STATEMENT = new ArucasElementType("TRY_STATEMENT");
@@ -174,6 +174,9 @@ public interface ArucasTypes {
       else if (type == FUNCTION_LAMBDA) {
         return new ArucasFunctionLambdaImpl(node);
       }
+      else if (type == FUNCTION_MODIFIERS) {
+        return new ArucasFunctionModifiersImpl(node);
+      }
       else if (type == FUNCTION_STATEMENT) {
         return new ArucasFunctionStatementImpl(node);
       }
@@ -206,9 +209,6 @@ public interface ArucasTypes {
       }
       else if (type == STATEMENT) {
         return new ArucasStatementImpl(node);
-      }
-      else if (type == STATIC_MODIFIER) {
-        return new ArucasStaticModifierImpl(node);
       }
       else if (type == SWITCH_CODE_BLOCK) {
         return new ArucasSwitchCodeBlockImpl(node);

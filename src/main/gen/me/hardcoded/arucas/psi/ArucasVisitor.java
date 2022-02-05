@@ -16,7 +16,7 @@ public class ArucasVisitor extends PsiElementVisitor {
   }
 
   public void visitArithmeticExpression(@NotNull ArucasArithmeticExpression o) {
-    visitPsiElement(o);
+    visitExpression(o);
   }
 
   public void visitAtom(@NotNull ArucasAtom o) {
@@ -99,6 +99,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitFunctionModifiers(@NotNull ArucasFunctionModifiers o) {
+    visitModifierElement(o);
+  }
+
   public void visitFunctionStatement(@NotNull ArucasFunctionStatement o) {
     visitStatement(o);
   }
@@ -143,10 +147,6 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitStaticModifier(@NotNull ArucasStaticModifier o) {
-    visitPsiElement(o);
-  }
-
   public void visitSwitchCodeBlock(@NotNull ArucasSwitchCodeBlock o) {
     visitStatement(o);
   }
@@ -160,11 +160,15 @@ public class ArucasVisitor extends PsiElementVisitor {
   }
 
   public void visitUnaryFactorExpression(@NotNull ArucasUnaryFactorExpression o) {
-    visitPsiElement(o);
+    visitExpression(o);
   }
 
   public void visitWhileStatement(@NotNull ArucasWhileStatement o) {
     visitStatement(o);
+  }
+
+  public void visitModifierElement(@NotNull ArucasModifierElement o) {
+    visitPsiElement(o);
   }
 
   public void visitNamedElement(@NotNull ArucasNamedElement o) {

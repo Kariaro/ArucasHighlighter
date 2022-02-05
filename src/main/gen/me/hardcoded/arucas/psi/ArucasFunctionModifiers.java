@@ -5,6 +5,8 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasStaticModifier extends PsiElement {
+public interface ArucasFunctionModifiers extends ArucasModifierElement {
+
+  boolean isStatic();
 
 }
