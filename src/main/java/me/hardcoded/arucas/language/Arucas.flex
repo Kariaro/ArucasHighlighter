@@ -98,10 +98,7 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   ","                              { return ArucasTypes.COMMA; }
 
   /* keywords */
-  //{Keyword}                        { return ArucasTypes.KEYWORD; }
   {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
-  //{Syntax}                         { return ArucasTypes.SYNTAX; }
-  //{Operator}                       { return ArucasTypes.OPERATOR; }
 
   /* literals */
   {Number}                         { return ArucasTypes.NUMBER; }

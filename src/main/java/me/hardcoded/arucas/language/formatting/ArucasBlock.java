@@ -4,9 +4,9 @@ import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiUtilCore;
 import me.hardcoded.arucas.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +33,13 @@ public class ArucasBlock extends AbstractBlock {
 	
 	@Override
 	protected List<Block> buildChildren() {
+		if (PsiUtilCore.hasErrorElementChild(myNode.getPsi().getContainingFile())) {
+			return AbstractBlock.EMPTY;
+		}
+		
 		List<Block> blocks = new ArrayList<>();
 		
-		for(ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
+		for (ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
 			if (child.getTextRange().getLength() == 0
 				|| child.getElementType() == TokenType.WHITE_SPACE) continue;
 			
@@ -61,11 +65,14 @@ public class ArucasBlock extends AbstractBlock {
 		
 		boolean isCodeBlock = (parent instanceof ArucasCodeBlock
 							|| parent instanceof ArucasClassCodeBlock
-							|| parent instanceof ArucasSwitchCodeBlock);
+							|| parent instanceof ArucasSwitchCodeBlock
+							|| parent instanceof ArucasMapExpression
+							|| parent instanceof ArucasListExpression);
 		
 		// Make sure that the parent is a code block and that the child
-		// is not one of '{', '}'
-		if (isCodeBlock && type != ArucasTypes.RBRACE && type != ArucasTypes.LBRACE) {
+		// is not one of '{', '}', '[', ']'
+		if (isCodeBlock && type != ArucasTypes.RBRACE && type != ArucasTypes.LBRACE
+			&& type != ArucasTypes.RBRACK && type != ArucasTypes.LBRACK) {
 			return Indent.getNormalIndent();
 		}
 		
@@ -75,11 +82,17 @@ public class ArucasBlock extends AbstractBlock {
 	@Nullable
 	@Override
 	protected Indent getChildIndent() {
+		if (PsiUtilCore.hasErrorElementChild(myNode.getPsi().getContainingFile())) {
+			return Indent.getSmartIndent(Indent.Type.SPACES);
+		}
+		
 		PsiElement parent = myNode.getPsi();
 		
 		boolean isCodeBlock = (parent instanceof ArucasCodeBlock
 			|| parent instanceof ArucasClassCodeBlock
-			|| parent instanceof ArucasSwitchCodeBlock);
+			|| parent instanceof ArucasSwitchCodeBlock
+			|| parent instanceof ArucasMapExpression
+			|| parent instanceof ArucasListExpression);
 		
 		// Make sure that the parent is a code block and that the child
 		// is not one of '{', '}'

@@ -115,7 +115,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   public static boolean ArithmeticExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArithmeticExpression")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, ARITHMETIC_EXPRESSION, "<arithmetic expression>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, ARITHMETIC_EXPRESSION, "<expression>");
     r = TermExpression(b, l + 1);
     r = r && ArithmeticExpression_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -686,12 +686,13 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   // Expression ';'
   public static boolean ExpressionStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionStatement")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, EXPRESSION_STATEMENT, "<expression statement>");
     r = Expression(b, l + 1);
+    p = r; // pin = 1
     r = r && consumeToken(b, SEMICOLON);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -882,20 +883,21 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '[' [ListElements] ']'
+  // '[' ListElements? ']'
   public static boolean ListExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ListExpression")) return false;
     if (!nextTokenIs(b, LBRACK)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, LIST_EXPRESSION, null);
     r = consumeToken(b, LBRACK);
-    r = r && ListExpression_1(b, l + 1);
-    r = r && consumeToken(b, RBRACK);
-    exit_section_(b, m, LIST_EXPRESSION, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, ListExpression_1(b, l + 1));
+    r = p && consumeToken(b, RBRACK) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
-  // [ListElements]
+  // ListElements?
   private static boolean ListExpression_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ListExpression_1")) return false;
     ListElements(b, l + 1);
@@ -940,30 +942,32 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   // Expression ':' Expression
   public static boolean MapEntry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapEntry")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, MAP_ENTRY, "<map entry>");
     r = Expression(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    r = r && Expression(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, COLON));
+    r = p && Expression(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
-  // '{' [MapElements] '}'
+  // '{' MapElements? '}'
   public static boolean MapExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapExpression")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MAP_EXPRESSION, null);
     r = consumeToken(b, LBRACE);
-    r = r && MapExpression_1(b, l + 1);
-    r = r && consumeToken(b, RBRACE);
-    exit_section_(b, m, MAP_EXPRESSION, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, MapExpression_1(b, l + 1));
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
-  // [MapElements]
+  // MapElements?
   private static boolean MapExpression_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapExpression_1")) return false;
     MapElements(b, l + 1);
@@ -994,66 +998,52 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   static boolean MemberLoop(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberLoop")) return false;
     if (!nextTokenIs(b, DOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, DOT);
-    r = r && AtomExpression(b, l + 1);
-    r = r && MemberOp(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, AtomExpression(b, l + 1));
+    r = p && MemberOp(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
-  // CallArguments [MemberLoop]
-  //   | '=' Expression
-  //   | '++'
-  //   | '--'
+  // ModifyOp
+  //   | CallArguments [MemberLoop]
   //   | [MemberLoop]
   static boolean MemberOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberOp")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = MemberOp_0(b, l + 1);
+    r = ModifyOp(b, l + 1);
     if (!r) r = MemberOp_1(b, l + 1);
-    if (!r) r = consumeToken(b, OP_PP);
-    if (!r) r = consumeToken(b, OP_MM);
-    if (!r) r = MemberOp_4(b, l + 1);
+    if (!r) r = MemberOp_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // CallArguments [MemberLoop]
-  private static boolean MemberOp_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MemberOp_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = CallArguments(b, l + 1);
-    r = r && MemberOp_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [MemberLoop]
-  private static boolean MemberOp_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MemberOp_0_1")) return false;
-    MemberLoop(b, l + 1);
-    return true;
-  }
-
-  // '=' Expression
   private static boolean MemberOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberOp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ASSIGNMENT);
-    r = r && Expression(b, l + 1);
+    r = CallArguments(b, l + 1);
+    r = r && MemberOp_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // [MemberLoop]
-  private static boolean MemberOp_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MemberOp_4")) return false;
+  private static boolean MemberOp_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MemberOp_1_1")) return false;
+    MemberLoop(b, l + 1);
+    return true;
+  }
+
+  // [MemberLoop]
+  private static boolean MemberOp_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MemberOp_2")) return false;
     MemberLoop(b, l + 1);
     return true;
   }
@@ -1379,9 +1369,9 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   // FactorOp FactorExpression
   public static boolean UnaryFactorExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryFactorExpression")) return false;
-    if (!nextTokenIs(b, "<unary factor expression>", OP_MINUS, OP_PLUS)) return false;
+    if (!nextTokenIs(b, "<expression>", OP_MINUS, OP_PLUS)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, UNARY_FACTOR_EXPRESSION, "<unary factor expression>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, UNARY_FACTOR_EXPRESSION, "<expression>");
     r = FactorOp(b, l + 1);
     r = r && FactorExpression(b, l + 1);
     exit_section_(b, l, m, r, false, null);

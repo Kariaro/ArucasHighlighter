@@ -4,12 +4,16 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.util.IncorrectOperationException;
+import me.hardcoded.arucas.language.ArucasReference;
+import me.hardcoded.arucas.language.refactor.ArucasReferenceResolver;
 import me.hardcoded.arucas.psi.ArucasNamedElement;
 import me.hardcoded.arucas.psi.ArucasTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArucasNamedElementImpl extends ASTWrapperPsiElement implements ArucasNamedElement {
 	public ArucasNamedElementImpl(@NotNull ASTNode node) {
@@ -34,18 +38,35 @@ public class ArucasNamedElementImpl extends ASTWrapperPsiElement implements Aruc
 			// Change name
 		}
 		
-		return getParent();
+		return getNode().getPsi();
 	}
 	
 	@Override
 	public PsiReference getReference() {
-		System.out.println("Get reference: " + this);
 		PsiReference[] references = getReferences();
 		return references.length == 0 ? null : references[0];
 	}
 	
 	@Override
 	public PsiReference @NotNull [] getReferences() {
-		return ReferenceProvidersRegistry.getReferencesFromProviders(this);
+		return PsiReference.EMPTY_ARRAY;
+		/*
+		PsiElement nameIdentifier = getNameIdentifier();
+		if (nameIdentifier != null) {
+			String name = nameIdentifier.getText();
+			
+			List<PsiReference> list = new ArrayList<>();
+			ArucasReferenceResolver.resolve(name, list, getNode().getPsi());
+			if (list.isEmpty()) {
+				return PsiReference.EMPTY_ARRAY;
+			}
+			
+			System.out.println(list);
+			
+			return list.toArray(PsiReference.EMPTY_ARRAY);
+		}
+		
+		return PsiReference.EMPTY_ARRAY;
+		*/
 	}
 }
