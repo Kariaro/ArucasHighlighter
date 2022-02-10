@@ -10,15 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasAtomImpl extends ArucasExpressionImpl implements ArucasAtom {
+public class ArucasLambdaExpressionImpl extends ArucasExpressionImpl implements ArucasLambdaExpression {
 
-  public ArucasAtomImpl(@NotNull ASTNode node) {
+  public ArucasLambdaExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitAtom(this);
+    visitor.visitLambdaExpression(this);
   }
 
   @Override
@@ -28,21 +28,15 @@ public class ArucasAtomImpl extends ArucasExpressionImpl implements ArucasAtom {
   }
 
   @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
+  @NotNull
+  public ArucasArguments getArguments() {
+    return findNotNullChildByClass(ArucasArguments.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getValueKeyword() {
-    return findChildByType(VALUE_KEYWORD);
+  @NotNull
+  public ArucasCodeBlock getCodeBlock() {
+    return findNotNullChildByClass(ArucasCodeBlock.class);
   }
 
 }

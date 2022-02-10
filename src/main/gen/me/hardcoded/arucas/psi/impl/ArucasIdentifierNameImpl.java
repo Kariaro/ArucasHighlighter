@@ -9,7 +9,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
-import com.intellij.util.IncorrectOperationException;
 
 public class ArucasIdentifierNameImpl extends ArucasNamedElementImpl implements ArucasIdentifierName {
 

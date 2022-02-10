@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ArucasArithmeticExpression extends ArucasExpression {
 
   @NotNull
-  List<ArucasCallArguments> getCallArgumentsList();
-
-  @NotNull
   List<ArucasExpression> getExpressionList();
 
 }

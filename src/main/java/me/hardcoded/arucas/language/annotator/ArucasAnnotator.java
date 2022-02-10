@@ -56,8 +56,8 @@ public class ArucasAnnotator implements Annotator {
 			validateFunction((ArucasFunctionStatement)element, holder);
 		}
 		
-		if (element instanceof ArucasAtom) {
-			validateAtom((ArucasAtom)element, holder);
+		if (element instanceof ArucasAtomExpression) {
+			validateAtomExpression((ArucasAtomExpression)element, holder);
 		}
 		
 		if (element instanceof ArucasSwitchStatement) {
@@ -146,7 +146,7 @@ public class ArucasAnnotator implements Annotator {
 	/**
 	 * Used to validate when 'this' is allowed to be used
 	 */
-	private void validateAtom(ArucasAtom atom, AnnotationHolder holder) {
+	private void validateAtomExpression(ArucasAtomExpression atom, AnnotationHolder holder) {
 		PsiElement valueKeyword = atom.getValueKeyword();
 		
 		if (valueKeyword != null && "this".equals(valueKeyword.getText())) {
@@ -286,7 +286,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot use 'continue'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement
 			|| parent instanceof ArucasClassOperator
 			|| parent instanceof ArucasClassConstructor) {
@@ -311,7 +311,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot use 'break'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement
 			|| parent instanceof ArucasClassOperator
 			|| parent instanceof ArucasClassConstructor) {
@@ -337,7 +337,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot access 'this'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement) {
 				return false;
 			}

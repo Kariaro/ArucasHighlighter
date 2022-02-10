@@ -11,9 +11,11 @@ public interface ArucasTypes {
   IElementType ARGUMENT = new ArucasElementType("ARGUMENT");
   IElementType ARGUMENTS = new ArucasElementType("ARGUMENTS");
   IElementType ARITHMETIC_EXPRESSION = new ArucasElementType("ARITHMETIC_EXPRESSION");
-  IElementType ATOM = new ArucasElementType("ATOM");
+  IElementType ASSIGN_EXPRESSION = new ArucasElementType("ASSIGN_EXPRESSION");
+  IElementType ATOM_EXPRESSION = new ArucasElementType("ATOM_EXPRESSION");
   IElementType BREAK_STATEMENT = new ArucasElementType("BREAK_STATEMENT");
   IElementType CALL_ARGUMENTS = new ArucasElementType("CALL_ARGUMENTS");
+  IElementType CALL_EXPRESSION = new ArucasElementType("CALL_EXPRESSION");
   IElementType CASE_STATEMENT = new ArucasElementType("CASE_STATEMENT");
   IElementType CASE_VALUE = new ArucasElementType("CASE_VALUE");
   IElementType CASE_VALUES = new ArucasElementType("CASE_VALUES");
@@ -24,29 +26,37 @@ public interface ArucasTypes {
   IElementType CLASS_METHOD = new ArucasElementType("CLASS_METHOD");
   IElementType CLASS_OPERATOR = new ArucasElementType("CLASS_OPERATOR");
   IElementType CODE_BLOCK = new ArucasElementType("CODE_BLOCK");
+  IElementType CONDITIONAL_AND_EXPRESSION = new ArucasElementType("CONDITIONAL_AND_EXPRESSION");
+  IElementType CONDITIONAL_OR_EXPRESSION = new ArucasElementType("CONDITIONAL_OR_EXPRESSION");
   IElementType CONTINUE_STATEMENT = new ArucasElementType("CONTINUE_STATEMENT");
   IElementType ELSE_STATEMENT = new ArucasElementType("ELSE_STATEMENT");
   IElementType EXPRESSION = new ArucasElementType("EXPRESSION");
   IElementType EXPRESSION_STATEMENT = new ArucasElementType("EXPRESSION_STATEMENT");
+  IElementType FACTOR_EXPRESSION = new ArucasElementType("FACTOR_EXPRESSION");
   IElementType FOR_EACH_STATEMENT = new ArucasElementType("FOR_EACH_STATEMENT");
   IElementType FOR_STATEMENT = new ArucasElementType("FOR_STATEMENT");
-  IElementType FUNCTION_LAMBDA = new ArucasElementType("FUNCTION_LAMBDA");
   IElementType FUNCTION_MODIFIERS = new ArucasElementType("FUNCTION_MODIFIERS");
   IElementType FUNCTION_STATEMENT = new ArucasElementType("FUNCTION_STATEMENT");
   IElementType IDENTIFIER_NAME = new ArucasElementType("IDENTIFIER_NAME");
   IElementType IF_STATEMENT = new ArucasElementType("IF_STATEMENT");
+  IElementType LAMBDA_EXPRESSION = new ArucasElementType("LAMBDA_EXPRESSION");
   IElementType LIST_EXPRESSION = new ArucasElementType("LIST_EXPRESSION");
   IElementType MAP_ENTRY = new ArucasElementType("MAP_ENTRY");
   IElementType MAP_EXPRESSION = new ArucasElementType("MAP_EXPRESSION");
+  IElementType MEMBER_EXPRESSION = new ArucasElementType("MEMBER_EXPRESSION");
   IElementType NEW_EXPRESSION = new ArucasElementType("NEW_EXPRESSION");
   IElementType OPERATOR = new ArucasElementType("OPERATOR");
   IElementType OPERATOR_ARGUMENTS = new ArucasElementType("OPERATOR_ARGUMENTS");
+  IElementType PARENTHESES_EXPRESSION = new ArucasElementType("PARENTHESES_EXPRESSION");
+  IElementType POWER_EXPRESSION = new ArucasElementType("POWER_EXPRESSION");
+  IElementType RELATIONAL_EXPRESSION = new ArucasElementType("RELATIONAL_EXPRESSION");
   IElementType RETURN_STATEMENT = new ArucasElementType("RETURN_STATEMENT");
   IElementType STATEMENT = new ArucasElementType("STATEMENT");
   IElementType SWITCH_CODE_BLOCK = new ArucasElementType("SWITCH_CODE_BLOCK");
   IElementType SWITCH_STATEMENT = new ArucasElementType("SWITCH_STATEMENT");
   IElementType TRY_STATEMENT = new ArucasElementType("TRY_STATEMENT");
-  IElementType UNARY_FACTOR_EXPRESSION = new ArucasElementType("UNARY_FACTOR_EXPRESSION");
+  IElementType UNARY_EXPRESSION = new ArucasElementType("UNARY_EXPRESSION");
+  IElementType UNARY_NOT_EXPRESSION = new ArucasElementType("UNARY_NOT_EXPRESSION");
   IElementType WHILE_STATEMENT = new ArucasElementType("WHILE_STATEMENT");
 
   IElementType ASSIGNMENT = new ArucasTokenType("=");
@@ -114,14 +124,20 @@ public interface ArucasTypes {
       else if (type == ARITHMETIC_EXPRESSION) {
         return new ArucasArithmeticExpressionImpl(node);
       }
-      else if (type == ATOM) {
-        return new ArucasAtomImpl(node);
+      else if (type == ASSIGN_EXPRESSION) {
+        return new ArucasAssignExpressionImpl(node);
+      }
+      else if (type == ATOM_EXPRESSION) {
+        return new ArucasAtomExpressionImpl(node);
       }
       else if (type == BREAK_STATEMENT) {
         return new ArucasBreakStatementImpl(node);
       }
       else if (type == CALL_ARGUMENTS) {
         return new ArucasCallArgumentsImpl(node);
+      }
+      else if (type == CALL_EXPRESSION) {
+        return new ArucasCallExpressionImpl(node);
       }
       else if (type == CASE_STATEMENT) {
         return new ArucasCaseStatementImpl(node);
@@ -153,26 +169,29 @@ public interface ArucasTypes {
       else if (type == CODE_BLOCK) {
         return new ArucasCodeBlockImpl(node);
       }
+      else if (type == CONDITIONAL_AND_EXPRESSION) {
+        return new ArucasConditionalAndExpressionImpl(node);
+      }
+      else if (type == CONDITIONAL_OR_EXPRESSION) {
+        return new ArucasConditionalOrExpressionImpl(node);
+      }
       else if (type == CONTINUE_STATEMENT) {
         return new ArucasContinueStatementImpl(node);
       }
       else if (type == ELSE_STATEMENT) {
         return new ArucasElseStatementImpl(node);
       }
-      else if (type == EXPRESSION) {
-        return new ArucasExpressionImpl(node);
-      }
       else if (type == EXPRESSION_STATEMENT) {
         return new ArucasExpressionStatementImpl(node);
+      }
+      else if (type == FACTOR_EXPRESSION) {
+        return new ArucasFactorExpressionImpl(node);
       }
       else if (type == FOR_EACH_STATEMENT) {
         return new ArucasForEachStatementImpl(node);
       }
       else if (type == FOR_STATEMENT) {
         return new ArucasForStatementImpl(node);
-      }
-      else if (type == FUNCTION_LAMBDA) {
-        return new ArucasFunctionLambdaImpl(node);
       }
       else if (type == FUNCTION_MODIFIERS) {
         return new ArucasFunctionModifiersImpl(node);
@@ -186,6 +205,9 @@ public interface ArucasTypes {
       else if (type == IF_STATEMENT) {
         return new ArucasIfStatementImpl(node);
       }
+      else if (type == LAMBDA_EXPRESSION) {
+        return new ArucasLambdaExpressionImpl(node);
+      }
       else if (type == LIST_EXPRESSION) {
         return new ArucasListExpressionImpl(node);
       }
@@ -195,6 +217,9 @@ public interface ArucasTypes {
       else if (type == MAP_EXPRESSION) {
         return new ArucasMapExpressionImpl(node);
       }
+      else if (type == MEMBER_EXPRESSION) {
+        return new ArucasMemberExpressionImpl(node);
+      }
       else if (type == NEW_EXPRESSION) {
         return new ArucasNewExpressionImpl(node);
       }
@@ -203,6 +228,15 @@ public interface ArucasTypes {
       }
       else if (type == OPERATOR_ARGUMENTS) {
         return new ArucasOperatorArgumentsImpl(node);
+      }
+      else if (type == PARENTHESES_EXPRESSION) {
+        return new ArucasParenthesesExpressionImpl(node);
+      }
+      else if (type == POWER_EXPRESSION) {
+        return new ArucasPowerExpressionImpl(node);
+      }
+      else if (type == RELATIONAL_EXPRESSION) {
+        return new ArucasRelationalExpressionImpl(node);
       }
       else if (type == RETURN_STATEMENT) {
         return new ArucasReturnStatementImpl(node);
@@ -219,8 +253,11 @@ public interface ArucasTypes {
       else if (type == TRY_STATEMENT) {
         return new ArucasTryStatementImpl(node);
       }
-      else if (type == UNARY_FACTOR_EXPRESSION) {
-        return new ArucasUnaryFactorExpressionImpl(node);
+      else if (type == UNARY_EXPRESSION) {
+        return new ArucasUnaryExpressionImpl(node);
+      }
+      else if (type == UNARY_NOT_EXPRESSION) {
+        return new ArucasUnaryNotExpressionImpl(node);
       }
       else if (type == WHILE_STATEMENT) {
         return new ArucasWhileStatementImpl(node);

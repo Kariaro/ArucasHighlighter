@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ArucasReturnStatement extends ArucasStatement {
 
-  @NotNull
-  List<ArucasExpression> getExpressionList();
+  @Nullable
+  ArucasExpression getExpression();
 
 }
