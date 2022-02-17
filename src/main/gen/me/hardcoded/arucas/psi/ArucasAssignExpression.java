@@ -5,6 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasStaticModifier extends PsiElement {
+public interface ArucasAssignExpression extends ArucasExpression {
+
+  @Nullable
+  ArucasExpression getExpression();
+
+  @NotNull
+  ArucasIdentifierName getIdentifierName();
 
 }

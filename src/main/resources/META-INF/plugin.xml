@@ -28,7 +28,7 @@
         />
         <annotator
             language="Arucas"
-            implementationClass="me.hardcoded.arucas.language.ArucasAnnotator"
+            implementationClass="me.hardcoded.arucas.language.annotator.ArucasAnnotator"
         />
         <completion.contributor
             language="Arucas"

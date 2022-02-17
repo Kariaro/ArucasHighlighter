@@ -10,15 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasReturnStatementImpl extends ArucasStatementImpl implements ArucasReturnStatement {
+public class ArucasAssignExpressionImpl extends ArucasExpressionImpl implements ArucasAssignExpression {
 
-  public ArucasReturnStatementImpl(@NotNull ASTNode node) {
+  public ArucasAssignExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitReturnStatement(this);
+    visitor.visitAssignExpression(this);
   }
 
   @Override
@@ -31,6 +31,12 @@ public class ArucasReturnStatementImpl extends ArucasStatementImpl implements Ar
   @Nullable
   public ArucasExpression getExpression() {
     return findChildByClass(ArucasExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
 }

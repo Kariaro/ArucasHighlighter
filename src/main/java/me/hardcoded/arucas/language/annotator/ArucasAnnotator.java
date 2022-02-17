@@ -1,10 +1,11 @@
-package me.hardcoded.arucas.language;
+package me.hardcoded.arucas.language.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import me.hardcoded.arucas.psi.*;
+import me.hardcoded.arucas.psi.ArucasAtomElement.AtomType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,10 +57,6 @@ public class ArucasAnnotator implements Annotator {
 			validateFunction((ArucasFunctionStatement)element, holder);
 		}
 		
-		if (element instanceof ArucasAtom) {
-			validateAtom((ArucasAtom)element, holder);
-		}
-		
 		if (element instanceof ArucasSwitchStatement) {
 			validateSwitch((ArucasSwitchStatement)element, holder);
 		}
@@ -70,6 +67,10 @@ public class ArucasAnnotator implements Annotator {
 		
 		if (element instanceof ArucasContinueStatement) {
 			validateContinue((ArucasContinueStatement)element, holder);
+		}
+		
+		if (element instanceof ArucasAtomExpression) {
+			validateAtomExpression((ArucasAtomExpression)element, holder);
 		}
 	}
 	
@@ -146,10 +147,8 @@ public class ArucasAnnotator implements Annotator {
 	/**
 	 * Used to validate when 'this' is allowed to be used
 	 */
-	private void validateAtom(ArucasAtom atom, AnnotationHolder holder) {
-		PsiElement valueKeyword = atom.getValueKeyword();
-		
-		if (valueKeyword != null && "this".equals(valueKeyword.getText())) {
+	private void validateAtomExpression(ArucasAtomExpression atom, AnnotationHolder holder) {
+		if (atom.getAtomType() == AtomType.THIS) {
 			if (!canUseThis(atom)) {
 				holder.newAnnotation(HighlightSeverity.ERROR, "'this' is not allowed in a non class context")
 					.range(atom.getTextRange())
@@ -165,6 +164,7 @@ public class ArucasAnnotator implements Annotator {
 		// TODO: Make sure no function with this name has already been created
 	}
 	
+	// TODO: Allocate less memory by not allocating new objects
 	private void validateClass(ArucasClassDeclaration arucasClass, AnnotationHolder holder) {
 		ArucasClassCodeBlock codeBlock = arucasClass.getClassCodeBlock();
 		
@@ -197,7 +197,7 @@ public class ArucasAnnotator implements Annotator {
 			Map<String, Set<Integer>> methods = new HashMap<>();
 			
 			for (ArucasClassMethod method : codeBlock.getClassMethodList()) {
-				boolean isStatic = method.getStaticModifier() != null;
+				boolean isStatic = method.getFunctionModifiers().isStatic();
 				
 				String name = method.getIdentifierName().getIdentifier().getText();
 				Set<Integer> argumentCount = (isStatic ? staticMethods : methods)
@@ -248,7 +248,7 @@ public class ArucasAnnotator implements Annotator {
 				}
 				
 				if (!argumentCount.add(parameters)) {
-					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > method with " + getParameterString(parameters) + " has already been defined")
+					holder.newAnnotation(HighlightSeverity.ERROR, "The operator < " + operatorName + " > with " + getParameterString(parameters) + " has already been defined")
 						.range(operator.getOperator().getTextRange())
 						.create();
 				}
@@ -285,7 +285,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot use 'continue'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement
 			|| parent instanceof ArucasClassOperator
 			|| parent instanceof ArucasClassConstructor) {
@@ -310,7 +310,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot use 'break'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement
 			|| parent instanceof ArucasClassOperator
 			|| parent instanceof ArucasClassConstructor) {
@@ -336,7 +336,7 @@ public class ArucasAnnotator implements Annotator {
 			PsiElement parent = element.getParent();
 			
 			// Functions and lambdas cannot access 'this'
-			if (parent instanceof ArucasFunctionLambda
+			if (parent instanceof ArucasLambdaExpression
 			|| parent instanceof ArucasFunctionStatement) {
 				return false;
 			}
@@ -349,7 +349,7 @@ public class ArucasAnnotator implements Annotator {
 			
 			// Static methods cannot access 'this'
 			if (parent instanceof ArucasClassMethod) {
-				return ((ArucasClassMethod)parent).getStaticModifier() == null;
+				return ((ArucasClassMethod)parent).getFunctionModifiers().isStatic();
 			}
 			
 			element = parent;

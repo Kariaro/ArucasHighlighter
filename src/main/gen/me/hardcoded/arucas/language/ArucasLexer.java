@@ -74,13 +74,13 @@ class ArucasLexer implements FlexLexer {
     "\1\0\1\35\1\36\1\37\1\0\1\40\1\41\1\42"+
     "\1\43\1\44\1\45\1\46\1\32\1\47\1\2\1\50"+
     "\12\2\1\51\2\2\1\52\1\2\1\53\2\2\1\4"+
-    "\2\0\1\2\1\54\6\2\1\55\2\2\1\56\2\2"+
-    "\1\0\1\40\5\2\1\57\1\2\1\60\1\61\1\2"+
-    "\1\62\1\2\1\63\1\64\1\2\1\65\2\2\1\66"+
-    "\2\2\1\67\1\70\1\71";
+    "\2\0\2\2\1\54\6\2\1\55\2\2\1\56\1\57"+
+    "\1\60\2\2\1\0\1\40\1\2\1\61\4\2\1\62"+
+    "\1\2\1\63\1\64\1\2\1\65\1\2\1\66\1\67"+
+    "\1\2\1\70\2\2\1\71\2\2\1\72\1\73\1\74";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[145];
+    int [] result = new int[149];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -118,15 +118,15 @@ class ArucasLexer implements FlexLexer {
     "\0\223\0\u0a87\0\u0ab8\0\u0157\0\u0ae9\0\u0b1a\0\u0b4b\0\u0b7c"+
     "\0\u0bad\0\u0bde\0\u0c0f\0\u0c40\0\u0c71\0\u0ca2\0\u0157\0\u0cd3"+
     "\0\u0d04\0\u0157\0\u0d35\0\u0157\0\u0d66\0\u0d97\0\u09f4\0\u0dc8"+
-    "\0\u0df9\0\u0e2a\0\u0157\0\u0e5b\0\u0e8c\0\u0ebd\0\u0eee\0\u0f1f"+
-    "\0\u0f50\0\u0157\0\u0f81\0\u0fb2\0\u0157\0\u0fe3\0\u1014\0\u1045"+
-    "\0\223\0\u1076\0\u10a7\0\u10d8\0\u1109\0\u113a\0\u0157\0\u116b"+
-    "\0\u0157\0\u0157\0\u119c\0\u0157\0\u11cd\0\u0157\0\u0157\0\u11fe"+
-    "\0\u0157\0\u122f\0\u1260\0\u0157\0\u1291\0\u12c2\0\u0157\0\u0157"+
-    "\0\u0157";
+    "\0\u0df9\0\u0e2a\0\u0e5b\0\u0157\0\u0e8c\0\u0ebd\0\u0eee\0\u0f1f"+
+    "\0\u0f50\0\u0f81\0\u0157\0\u0fb2\0\u0fe3\0\u0157\0\u0157\0\u0157"+
+    "\0\u1014\0\u1045\0\u1076\0\223\0\u10a7\0\u0157\0\u10d8\0\u1109"+
+    "\0\u113a\0\u116b\0\u0157\0\u119c\0\u0157\0\u0157\0\u11cd\0\u0157"+
+    "\0\u11fe\0\u0157\0\u0157\0\u122f\0\u0157\0\u1260\0\u1291\0\u0157"+
+    "\0\u12c2\0\u12f3\0\u0157\0\u0157\0\u0157";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[145];
+    int [] result = new int[149];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -191,41 +191,42 @@ class ArucasLexer implements FlexLexer {
     "\2\10\31\0\1\10\1\145\22\10\2\0\2\10\31\0"+
     "\2\10\1\146\21\10\2\0\2\10\60\0\1\147\30\0"+
     "\34\150\1\151\24\150\25\112\1\0\33\112\1\0\2\10"+
-    "\1\152\21\10\2\0\2\10\31\0\4\10\1\140\17\10"+
-    "\2\0\2\10\31\0\2\10\1\153\21\10\2\0\2\10"+
-    "\31\0\13\10\1\154\10\10\2\0\2\10\31\0\13\10"+
-    "\1\155\10\10\2\0\2\10\31\0\6\10\1\156\15\10"+
-    "\2\0\2\10\31\0\15\10\1\157\6\10\2\0\2\10"+
-    "\31\0\4\10\1\160\17\10\2\0\2\10\31\0\13\10"+
-    "\1\161\10\10\2\0\2\10\31\0\2\10\1\162\21\10"+
-    "\2\0\2\10\31\0\10\10\1\163\13\10\2\0\2\10"+
-    "\31\0\3\10\1\164\20\10\2\0\2\10\31\0\2\10"+
-    "\1\165\21\10\2\0\2\10\31\0\4\10\1\165\17\10"+
-    "\2\0\2\10\31\0\3\10\1\165\20\10\2\0\2\10"+
-    "\31\0\7\10\1\166\14\10\2\0\2\10\31\0\7\10"+
-    "\1\167\14\10\2\0\2\10\30\0\34\150\1\170\24\150"+
-    "\34\0\1\151\1\171\24\0\7\10\1\172\14\10\2\0"+
-    "\2\10\31\0\10\10\1\173\13\10\2\0\2\10\31\0"+
-    "\1\174\23\10\2\0\2\10\31\0\7\10\1\175\14\10"+
-    "\2\0\2\10\31\0\6\10\1\176\15\10\2\0\2\10"+
-    "\31\0\4\10\1\177\17\10\2\0\2\10\31\0\1\200"+
-    "\23\10\2\0\2\10\31\0\11\10\1\201\12\10\2\0"+
-    "\2\10\31\0\2\10\1\202\21\10\2\0\2\10\31\0"+
-    "\15\10\1\203\6\10\2\0\2\10\31\0\23\10\1\204"+
-    "\2\0\2\10\30\0\34\150\1\170\1\171\23\150\1\0"+
-    "\10\10\1\205\13\10\2\0\2\10\31\0\11\10\1\206"+
-    "\12\10\2\0\2\10\31\0\10\10\1\207\13\10\2\0"+
-    "\2\10\31\0\13\10\1\210\10\10\2\0\2\10\31\0"+
-    "\16\10\1\211\5\10\2\0\2\10\31\0\16\10\1\212"+
-    "\5\10\2\0\2\10\31\0\3\10\1\213\20\10\2\0"+
-    "\2\10\31\0\11\10\1\214\12\10\2\0\2\10\31\0"+
-    "\5\10\1\215\16\10\2\0\2\10\31\0\15\10\1\216"+
-    "\6\10\2\0\2\10\31\0\13\10\1\217\10\10\2\0"+
-    "\2\10\31\0\6\10\1\220\15\10\2\0\2\10\31\0"+
-    "\2\10\1\221\21\10\2\0\2\10\30\0";
+    "\1\152\21\10\2\0\2\10\31\0\4\10\1\153\17\10"+
+    "\2\0\2\10\31\0\2\10\1\154\21\10\2\0\2\10"+
+    "\31\0\13\10\1\155\10\10\2\0\2\10\31\0\13\10"+
+    "\1\156\10\10\2\0\2\10\31\0\6\10\1\157\15\10"+
+    "\2\0\2\10\31\0\15\10\1\160\6\10\2\0\2\10"+
+    "\31\0\4\10\1\161\17\10\2\0\2\10\31\0\13\10"+
+    "\1\162\10\10\2\0\2\10\31\0\2\10\1\163\21\10"+
+    "\2\0\2\10\31\0\10\10\1\164\13\10\2\0\2\10"+
+    "\31\0\3\10\1\165\20\10\2\0\2\10\31\0\2\10"+
+    "\1\166\21\10\2\0\2\10\31\0\4\10\1\167\17\10"+
+    "\2\0\2\10\31\0\3\10\1\170\20\10\2\0\2\10"+
+    "\31\0\7\10\1\171\14\10\2\0\2\10\31\0\7\10"+
+    "\1\172\14\10\2\0\2\10\30\0\34\150\1\173\24\150"+
+    "\34\0\1\151\1\174\24\0\7\10\1\175\14\10\2\0"+
+    "\2\10\31\0\2\10\1\176\21\10\2\0\2\10\31\0"+
+    "\10\10\1\177\13\10\2\0\2\10\31\0\1\200\23\10"+
+    "\2\0\2\10\31\0\7\10\1\201\14\10\2\0\2\10"+
+    "\31\0\6\10\1\202\15\10\2\0\2\10\31\0\4\10"+
+    "\1\203\17\10\2\0\2\10\31\0\1\204\23\10\2\0"+
+    "\2\10\31\0\11\10\1\205\12\10\2\0\2\10\31\0"+
+    "\2\10\1\206\21\10\2\0\2\10\31\0\15\10\1\207"+
+    "\6\10\2\0\2\10\31\0\23\10\1\210\2\0\2\10"+
+    "\30\0\34\150\1\173\1\174\23\150\1\0\10\10\1\211"+
+    "\13\10\2\0\2\10\31\0\11\10\1\212\12\10\2\0"+
+    "\2\10\31\0\10\10\1\213\13\10\2\0\2\10\31\0"+
+    "\13\10\1\214\10\10\2\0\2\10\31\0\16\10\1\215"+
+    "\5\10\2\0\2\10\31\0\16\10\1\216\5\10\2\0"+
+    "\2\10\31\0\3\10\1\217\20\10\2\0\2\10\31\0"+
+    "\11\10\1\220\12\10\2\0\2\10\31\0\5\10\1\221"+
+    "\16\10\2\0\2\10\31\0\15\10\1\222\6\10\2\0"+
+    "\2\10\31\0\13\10\1\223\10\10\2\0\2\10\31\0"+
+    "\6\10\1\224\15\10\2\0\2\10\31\0\2\10\1\225"+
+    "\21\10\2\0\2\10\30\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[4851];
+    int [] result = new int[4900];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -265,10 +266,10 @@ class ArucasLexer implements FlexLexer {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\3\0\1\11\20\1\1\11\2\1\1\11\1\1\1\11"+
     "\6\1\13\11\1\1\1\11\27\1\1\0\3\11\1\0"+
-    "\1\1\7\11\26\1\2\0\16\1\1\0\1\11\30\1";
+    "\1\1\7\11\26\1\2\0\21\1\1\0\1\11\31\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[145];
+    int [] result = new int[149];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -585,287 +586,302 @@ class ArucasLexer implements FlexLexer {
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 58: break;
+          case 61: break;
           case 2: 
             { return ArucasTypes.IDENTIFIER;
             } 
             // fall through
-          case 59: break;
+          case 62: break;
           case 3: 
             { return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 60: break;
+          case 63: break;
           case 4: 
             { return ArucasTypes.NUMBER;
             } 
             // fall through
-          case 61: break;
+          case 64: break;
           case 5: 
             { return ArucasTypes.DOT;
             } 
             // fall through
-          case 62: break;
+          case 65: break;
           case 6: 
             { return ArucasTypes.OP_MINUS;
             } 
             // fall through
-          case 63: break;
+          case 66: break;
           case 7: 
             { return ArucasTypes.OP_PLUS;
             } 
             // fall through
-          case 64: break;
+          case 67: break;
           case 8: 
             { return ArucasTypes.OP_MUL;
             } 
             // fall through
-          case 65: break;
+          case 68: break;
           case 9: 
             { return ArucasTypes.OP_DIV;
             } 
             // fall through
-          case 66: break;
+          case 69: break;
           case 10: 
             { return ArucasTypes.OP_POW;
             } 
             // fall through
-          case 67: break;
+          case 70: break;
           case 11: 
             { return ArucasTypes.OP_NOT;
             } 
             // fall through
-          case 68: break;
+          case 71: break;
           case 12: 
             { return ArucasTypes.ASSIGNMENT;
             } 
             // fall through
-          case 69: break;
+          case 72: break;
           case 13: 
             { return ArucasTypes.OP_MORETHAN;
             } 
             // fall through
-          case 70: break;
+          case 73: break;
           case 14: 
             { return ArucasTypes.OP_LESSTHAN;
             } 
             // fall through
-          case 71: break;
+          case 74: break;
           case 15: 
             { yybegin(STRING_DOUBLE);
             } 
             // fall through
-          case 72: break;
+          case 75: break;
           case 16: 
             { yybegin(STRING_SINGLE);
             } 
             // fall through
-          case 73: break;
+          case 76: break;
           case 17: 
             { return ArucasTypes.LPAREN;
             } 
             // fall through
-          case 74: break;
+          case 77: break;
           case 18: 
             { return ArucasTypes.RPAREN;
             } 
             // fall through
-          case 75: break;
+          case 78: break;
           case 19: 
             { return ArucasTypes.LBRACK;
             } 
             // fall through
-          case 76: break;
+          case 79: break;
           case 20: 
             { return ArucasTypes.RBRACK;
             } 
             // fall through
-          case 77: break;
+          case 80: break;
           case 21: 
             { return ArucasTypes.LBRACE;
             } 
             // fall through
-          case 78: break;
+          case 81: break;
           case 22: 
             { return ArucasTypes.RBRACE;
             } 
             // fall through
-          case 79: break;
+          case 82: break;
           case 23: 
             { return ArucasTypes.COLON;
             } 
             // fall through
-          case 80: break;
+          case 83: break;
           case 24: 
             { return ArucasTypes.SEMICOLON;
             } 
             // fall through
-          case 81: break;
+          case 84: break;
           case 25: 
             { return ArucasTypes.COMMA;
             } 
             // fall through
-          case 82: break;
+          case 85: break;
           case 26: 
             { 
             } 
             // fall through
-          case 83: break;
+          case 86: break;
           case 27: 
             { yybegin(YYINITIAL); return ArucasTypes.STRING;
             } 
             // fall through
-          case 84: break;
+          case 87: break;
           case 28: 
             { return ArucasTypes.KW_IF;
             } 
             // fall through
-          case 85: break;
+          case 88: break;
           case 29: 
             { return ArucasTypes.OP_MM;
             } 
             // fall through
-          case 86: break;
+          case 89: break;
           case 30: 
             { return ArucasTypes.POINTER;
             } 
             // fall through
-          case 87: break;
+          case 90: break;
           case 31: 
             { return ArucasTypes.OP_PP;
             } 
             // fall through
-          case 88: break;
+          case 91: break;
           case 32: 
             { return ArucasTypes.COMMENT;
             } 
             // fall through
-          case 89: break;
+          case 92: break;
           case 33: 
             { return ArucasTypes.OP_NOTEQUALS;
             } 
             // fall through
-          case 90: break;
+          case 93: break;
           case 34: 
             { return ArucasTypes.OP_EQUALS;
             } 
             // fall through
-          case 91: break;
+          case 94: break;
           case 35: 
             { return ArucasTypes.OP_MORETHANEQ;
             } 
             // fall through
-          case 92: break;
+          case 95: break;
           case 36: 
             { return ArucasTypes.OP_LESSTHANEQ;
             } 
             // fall through
-          case 93: break;
+          case 96: break;
           case 37: 
             { return ArucasTypes.OP_LOGICAL_OR;
             } 
             // fall through
-          case 94: break;
+          case 97: break;
           case 38: 
             { return ArucasTypes.OP_LOGICAL_AND;
             } 
             // fall through
-          case 95: break;
+          case 98: break;
           case 39: 
             { return ArucasTypes.KW_FOR;
             } 
             // fall through
-          case 96: break;
+          case 99: break;
           case 40: 
             { return ArucasTypes.KW_FUN;
             } 
             // fall through
-          case 97: break;
+          case 100: break;
           case 41: 
             { return ArucasTypes.KW_TRY;
             } 
             // fall through
-          case 98: break;
+          case 101: break;
           case 42: 
             { return ArucasTypes.KW_NEW;
             } 
             // fall through
-          case 99: break;
+          case 102: break;
           case 43: 
             { return ArucasTypes.KW_VAR;
             } 
             // fall through
-          case 100: break;
+          case 103: break;
           case 44: 
             { return ArucasTypes.KW_ELSE;
             } 
             // fall through
-          case 101: break;
+          case 104: break;
           case 45: 
             { return ArucasTypes.KW_CASE;
             } 
             // fall through
-          case 102: break;
-          case 46: 
-            { return ArucasTypes.VALUE_KEYWORD;
-            } 
-            // fall through
-          case 103: break;
-          case 47: 
-            { return ArucasTypes.KW_CLASS;
-            } 
-            // fall through
-          case 104: break;
-          case 48: 
-            { return ArucasTypes.KW_CATCH;
-            } 
-            // fall through
           case 105: break;
-          case 49: 
-            { return ArucasTypes.KW_WHILE;
+          case 46: 
+            { return ArucasTypes.KW_TRUE;
             } 
             // fall through
           case 106: break;
-          case 50: 
-            { return ArucasTypes.KW_BREAK;
+          case 47: 
+            { return ArucasTypes.KW_THIS;
             } 
             // fall through
           case 107: break;
-          case 51: 
-            { return ArucasTypes.KW_SWITCH;
+          case 48: 
+            { return ArucasTypes.KW_NULL;
             } 
             // fall through
           case 108: break;
-          case 52: 
-            { return ArucasTypes.KW_STATIC;
+          case 49: 
+            { return ArucasTypes.KW_FALSE;
             } 
             // fall through
           case 109: break;
-          case 53: 
-            { return ArucasTypes.KW_RETURN;
+          case 50: 
+            { return ArucasTypes.KW_CLASS;
             } 
             // fall through
           case 110: break;
-          case 54: 
-            { return ArucasTypes.KW_FOREACH;
+          case 51: 
+            { return ArucasTypes.KW_CATCH;
             } 
             // fall through
           case 111: break;
-          case 55: 
-            { return ArucasTypes.KW_DEFAULT;
+          case 52: 
+            { return ArucasTypes.KW_WHILE;
             } 
             // fall through
           case 112: break;
-          case 56: 
-            { return ArucasTypes.KW_OPERATOR;
+          case 53: 
+            { return ArucasTypes.KW_BREAK;
             } 
             // fall through
           case 113: break;
-          case 57: 
-            { return ArucasTypes.KW_CONTINUE;
+          case 54: 
+            { return ArucasTypes.KW_SWITCH;
             } 
             // fall through
           case 114: break;
+          case 55: 
+            { return ArucasTypes.KW_STATIC;
+            } 
+            // fall through
+          case 115: break;
+          case 56: 
+            { return ArucasTypes.KW_RETURN;
+            } 
+            // fall through
+          case 116: break;
+          case 57: 
+            { return ArucasTypes.KW_FOREACH;
+            } 
+            // fall through
+          case 117: break;
+          case 58: 
+            { return ArucasTypes.KW_DEFAULT;
+            } 
+            // fall through
+          case 118: break;
+          case 59: 
+            { return ArucasTypes.KW_OPERATOR;
+            } 
+            // fall through
+          case 119: break;
+          case 60: 
+            { return ArucasTypes.KW_CONTINUE;
+            } 
+            // fall through
+          case 120: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

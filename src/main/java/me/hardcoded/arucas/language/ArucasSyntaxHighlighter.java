@@ -47,6 +47,13 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		ArucasTypes.KW_CONTINUE
 	);
 	
+	private static final TokenSet VALUE_KEYWORDS = TokenSet.create(
+		ArucasTypes.KW_TRUE,
+		ArucasTypes.KW_FALSE,
+		ArucasTypes.KW_NULL,
+		ArucasTypes.KW_THIS
+	);
+	
 	private static final TextAttributesKey[] BAD_CHAR_KEYS = { BAD_CHARACTER };
 	private static final TextAttributesKey[] DELIMITER_KEYS = { DELIMITER };
 	private static final TextAttributesKey[] NUMBER_KEYS = { NUMBER };
@@ -79,7 +86,7 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		if (KEYWORDS.contains(tokenType)) {
 			return KEYWORD_KEYS;
 		}
-		if (tokenType.equals(ArucasTypes.VALUE_KEYWORD)) {
+		if (VALUE_KEYWORDS.contains(tokenType)) {
 			return KEYWORD_KEYS;
 		}
 		if (tokenType.equals(TokenType.BAD_CHARACTER)) {

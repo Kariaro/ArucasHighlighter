@@ -16,11 +16,16 @@ public class ArucasVisitor extends PsiElementVisitor {
   }
 
   public void visitArithmeticExpression(@NotNull ArucasArithmeticExpression o) {
-    visitPsiElement(o);
+    visitExpression(o);
   }
 
-  public void visitAtom(@NotNull ArucasAtom o) {
+  public void visitAssignExpression(@NotNull ArucasAssignExpression o) {
     visitExpression(o);
+  }
+
+  public void visitAtomExpression(@NotNull ArucasAtomExpression o) {
+    visitExpression(o);
+    // visitAtomElement(o);
   }
 
   public void visitBreakStatement(@NotNull ArucasBreakStatement o) {
@@ -29,6 +34,10 @@ public class ArucasVisitor extends PsiElementVisitor {
 
   public void visitCallArguments(@NotNull ArucasCallArguments o) {
     visitPsiElement(o);
+  }
+
+  public void visitCallExpression(@NotNull ArucasCallExpression o) {
+    visitExpression(o);
   }
 
   public void visitCaseStatement(@NotNull ArucasCaseStatement o) {
@@ -71,6 +80,14 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitConditionalAndExpression(@NotNull ArucasConditionalAndExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitConditionalOrExpression(@NotNull ArucasConditionalOrExpression o) {
+    visitExpression(o);
+  }
+
   public void visitContinueStatement(@NotNull ArucasContinueStatement o) {
     visitStatement(o);
   }
@@ -87,6 +104,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitFactorExpression(@NotNull ArucasFactorExpression o) {
+    visitExpression(o);
+  }
+
   public void visitForEachStatement(@NotNull ArucasForEachStatement o) {
     visitStatement(o);
   }
@@ -95,8 +116,8 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitFunctionLambda(@NotNull ArucasFunctionLambda o) {
-    visitExpression(o);
+  public void visitFunctionModifiers(@NotNull ArucasFunctionModifiers o) {
+    visitModifierElement(o);
   }
 
   public void visitFunctionStatement(@NotNull ArucasFunctionStatement o) {
@@ -111,6 +132,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitLambdaExpression(@NotNull ArucasLambdaExpression o) {
+    visitExpression(o);
+  }
+
   public void visitListExpression(@NotNull ArucasListExpression o) {
     visitExpression(o);
   }
@@ -120,6 +145,10 @@ public class ArucasVisitor extends PsiElementVisitor {
   }
 
   public void visitMapExpression(@NotNull ArucasMapExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitMemberExpression(@NotNull ArucasMemberExpression o) {
     visitExpression(o);
   }
 
@@ -135,15 +164,23 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitParenthesesExpression(@NotNull ArucasParenthesesExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitPowerExpression(@NotNull ArucasPowerExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitRelationalExpression(@NotNull ArucasRelationalExpression o) {
+    visitExpression(o);
+  }
+
   public void visitReturnStatement(@NotNull ArucasReturnStatement o) {
     visitStatement(o);
   }
 
   public void visitStatement(@NotNull ArucasStatement o) {
-    visitPsiElement(o);
-  }
-
-  public void visitStaticModifier(@NotNull ArucasStaticModifier o) {
     visitPsiElement(o);
   }
 
@@ -159,12 +196,20 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitUnaryFactorExpression(@NotNull ArucasUnaryFactorExpression o) {
-    visitPsiElement(o);
+  public void visitUnaryExpression(@NotNull ArucasUnaryExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitUnaryNotExpression(@NotNull ArucasUnaryNotExpression o) {
+    visitExpression(o);
   }
 
   public void visitWhileStatement(@NotNull ArucasWhileStatement o) {
     visitStatement(o);
+  }
+
+  public void visitModifierElement(@NotNull ArucasModifierElement o) {
+    visitPsiElement(o);
   }
 
   public void visitNamedElement(@NotNull ArucasNamedElement o) {

@@ -5,18 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasArithmeticExpression extends PsiElement {
-
-  @Nullable
-  ArucasArithmeticExpression getArithmeticExpression();
-
-  @NotNull
-  List<ArucasCallArguments> getCallArgumentsList();
+public interface ArucasArithmeticExpression extends ArucasExpression {
 
   @NotNull
   List<ArucasExpression> getExpressionList();
-
-  @NotNull
-  List<ArucasUnaryFactorExpression> getUnaryFactorExpressionList();
 
 }

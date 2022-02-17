@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasStaticModifierImpl extends ASTWrapperPsiElement implements ArucasStaticModifier {
+public class ArucasFunctionModifiersImpl extends ArucasModifierElementImpl implements ArucasFunctionModifiers {
 
-  public ArucasStaticModifierImpl(@NotNull ASTNode node) {
+  public ArucasFunctionModifiersImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitStaticModifier(this);
+    visitor.visitFunctionModifiers(this);
   }
 
   @Override

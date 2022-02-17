@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ArucasExpression extends PsiElement {
+public interface ArucasFactorExpression extends ArucasExpression {
+
+  @NotNull
+  List<ArucasExpression> getExpressionList();
 
 }

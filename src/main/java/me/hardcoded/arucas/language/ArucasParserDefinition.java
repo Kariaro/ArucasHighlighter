@@ -16,6 +16,7 @@ import me.hardcoded.arucas.psi.ArucasFile;
 import org.jetbrains.annotations.NotNull;
 
 public class ArucasParserDefinition implements ParserDefinition {
+	public static final TokenSet STRING_LITERALS = TokenSet.create(ArucasTypes.STRING);
 	public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
 	public static final TokenSet COMMENTS = TokenSet.create(ArucasTypes.COMMENT);
 	
@@ -42,7 +43,7 @@ public class ArucasParserDefinition implements ParserDefinition {
 	@NotNull
 	@Override
 	public TokenSet getStringLiteralElements() {
-		return TokenSet.EMPTY;
+		return STRING_LITERALS;
 	}
 	
 	@NotNull
@@ -66,6 +67,7 @@ public class ArucasParserDefinition implements ParserDefinition {
 	@NotNull
 	@Override
 	public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
+		// TODO: Make sure unary and binary plus and minus has a space requirement
 		return SpaceRequirements.MAY;
 	}
 	

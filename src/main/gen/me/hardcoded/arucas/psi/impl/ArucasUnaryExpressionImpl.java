@@ -10,15 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasReturnStatementImpl extends ArucasStatementImpl implements ArucasReturnStatement {
+public class ArucasUnaryExpressionImpl extends ArucasExpressionImpl implements ArucasUnaryExpression {
 
-  public ArucasReturnStatementImpl(@NotNull ASTNode node) {
+  public ArucasUnaryExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitReturnStatement(this);
+    visitor.visitUnaryExpression(this);
   }
 
   @Override

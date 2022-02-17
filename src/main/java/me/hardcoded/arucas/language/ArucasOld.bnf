@@ -16,10 +16,7 @@
     COMMENT='regexp://.*[^\n\r\f]|/\*(.|[\r\n\f])*?\*/'
     WHITESPACE='regexp:\s+'
     NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
-    KW_TRUE="true"
-    KW_FALSE="false"
-    KW_NULL="null"
-    KW_THIS="this"
+    VALUE_KEYWORD='regexp:true|false|null|this'
     KW_IF="if"
     KW_ELSE="else"
     KW_FOR="for"
@@ -97,7 +94,7 @@ IdentifierName ::= IDENTIFIER {
   methods=[setName getNameIdentifier]
 }
 
-ReturnStatement ::= 'return' Expression? ';' {extends=Statement}
+ReturnStatement ::= 'return' SizeExpression? ';' {extends=Statement}
 ContinueStatement ::= 'continue' ';' {extends=Statement}
 BreakStatement ::= 'break' ';' {extends=Statement}
 ExpressionStatement ::= Expression ';' {extends=Statement pin=1}
@@ -159,48 +156,46 @@ private CaseString ::= STRING
 private CaseNumber ::= ['-'] NUMBER
 
 /* Expressions */
-Expression ::= AssignExpression
-  | ConditionalOrExpression
-  | ConditionalAndExpression
-  | UnaryNotExpression
-  | RelationalExpression
-  | ArithmeticExpression
-  | FactorExpression
-  | UnaryExpression
+Expression ::= ModifyVariable
+  | SizeExpression
+
+private ModifyVariable ::= IdentifierName ModifyOp
+private ModifyOp ::= '++' | '--' | '=' Expression
+
+private SizeExpression ::= ComparisonExpression [SizeOp SizeExpression]
+private SizeOp ::= '&&' | '||'
+
+private ComparisonExpression ::= '!' ComparisonExpression
+  | ArithmeticExpression [ComparisonOp ArithmeticExpression]
+private ComparisonOp ::= '==' | '!=' | '<' | '>' | '<=' | '>='
+
+ArithmeticExpression ::= TermExpression [ArithmeticOp ArithmeticExpression] {extends=Expression name="expression"}
+private ArithmeticOp ::= '+' | '-'
+
+private TermExpression ::= FactorExpression [TermOp TermExpression]
+private TermOp ::= '*' | '/'
+
+private FactorExpression ::= UnaryFactorExpression
   | PowerExpression
-  | CallExpression
-  | MemberExpression
-  | AtomExpressionGroup
+private FactorOp ::= '+' | '-'
+UnaryFactorExpression ::= FactorOp FactorExpression {extends=Expression name="expression"}
 
-AssignExpression ::= IdentifierName ('++' | '--' | '=' Expression) {extends=Expression}
-ConditionalOrExpression ::= Expression '||' Expression {extends=Expression}
-ConditionalAndExpression ::= Expression '&&' Expression {extends=Expression}
-RelationalExpression ::= Expression ('==' | '!=' | '<' | '>' | '<=' | '>=') Expression {extends=Expression}
-ArithmeticExpression ::= Expression ('+' | '-') Expression {extends=Expression}
-FactorExpression ::= Expression ('*' | '/') Expression {extends=Expression}
-UnaryNotExpression ::= '!' Expression {extends=Expression}
-UnaryExpression ::= ('+' | '-') Expression {extends=Expression}
-PowerExpression ::= Expression '^' Expression {extends=Expression}
-CallExpression ::= Expression &'(' CallArguments {extends=Expression}
-CallArguments ::= '(' [ Expression (',' Expression)* ] ')' {pin=1}
-MemberExpression ::= Expression '.' ( &IDENTIFIER ) Expression {extends=Expression}
-private AtomExpressionGroup ::= AtomExpression
-  | &'[' ListExpression
-  | &'{' MapExpression
-  | &'fun' LambdaExpression
-  | &'new' NewExpression
-  | &'(' ParenthesesExpression
+private PowerExpression ::= CallExpression ['^' FactorExpression]
+private CallExpression ::= MemberExpression [CallArguments]
+CallArguments ::= '(' [ Expression (',' Expression)* ] ')'
 
-AtomExpression ::= IdentifierName
-  | ValueKeyword
-  | STRING
-  | NUMBER {
-  extends=Expression
-  mixin="me.hardcoded.arucas.psi.impl.ArucasAtomElementImpl"
-  implements="me.hardcoded.arucas.psi.ArucasAtomElement"
-  methods=[getAtomType]
-}
-private ValueKeyword ::= KW_TRUE | KW_FALSE | KW_NULL | KW_THIS
+private MemberExpression ::= AtomExpression [MemberLoop] {extends=Expression}
+private MemberLoop ::= '.' AtomExpression MemberOp {pin=1}
+private MemberOp ::= ModifyOp
+  | CallArguments [MemberLoop]
+  | [MemberLoop]
+
+private AtomExpression ::= Atom
+  | ListExpression
+  | MapExpression
+  | FunctionLambda
+  | NewExpression
+  | '(' Expression ')'
 
 ListExpression ::= '[' ListElements? ']' {extends=Expression pin=1}
 private ListElements ::= Expression (',' Expression)*
@@ -211,7 +206,12 @@ MapEntry ::= Expression ':' Expression {
     key="Expression[0]"
     value="Expression[1]"
   ]
+  pin=1
 }
-LambdaExpression ::= 'fun' Arguments CodeBlock {extends=Expression}
+
 NewExpression ::= 'new' IdentifierName CallArguments {extends=Expression}
-ParenthesesExpression ::= '(' Expression ')' {extends=Expression}
+FunctionLambda ::= 'fun' Arguments CodeBlock {extends=Expression}
+Atom ::= IdentifierName
+  | VALUE_KEYWORD
+  | STRING
+  | NUMBER {extends=Expression}

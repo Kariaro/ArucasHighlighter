@@ -79,7 +79,7 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 			.spaceIf(data.SPACE_AROUND_UNARY_MODIFY_OPERATORS)
 			.after(ArucasTypes.OP_NOT)
 			.spaceIf(data.SPACE_AROUND_UNARY_OPERATORS)
-			.aroundInside(UNARY_FACTOR_OP, ArucasTypes.UNARY_FACTOR_EXPRESSION)
+			.aroundInside(UNARY_FACTOR_OP, ArucasTypes.UNARY_EXPRESSION)
 			.spaceIf(data.SPACE_AROUND_UNARY_OPERATORS)
 			
 			// Code block spaces

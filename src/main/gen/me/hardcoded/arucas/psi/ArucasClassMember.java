@@ -11,9 +11,9 @@ public interface ArucasClassMember extends PsiElement {
   ArucasExpression getExpression();
 
   @NotNull
-  ArucasIdentifierName getIdentifierName();
+  ArucasFunctionModifiers getFunctionModifiers();
 
-  @Nullable
-  ArucasStaticModifier getStaticModifier();
+  @NotNull
+  ArucasIdentifierName getIdentifierName();
 
 }
