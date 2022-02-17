@@ -16,12 +16,6 @@ public abstract class ArucasPlatformTestBase extends BasePlatformTestCase {
 	@NotNull
 	@Override
 	protected String getTestDataPath() {
-		return "src/test/testData/" + getDirectory();
+		return "src/test/testData/";
 	}
-	
-	/**
-	 * Returns the name of the subdirectory of test files
-	 */
-	@NotNull
-	public abstract String getDirectory();
 }

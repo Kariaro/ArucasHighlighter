@@ -54,6 +54,14 @@
         <liveTemplateContext
             implementation="me.hardcoded.arucas.liveTemplates.ArucasContext"
         />
+        <lang.foldingBuilder
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.folding.ArucasFoldingBuilder"
+        />
+        <lang.commenter
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.commenter.ArucasCommenter"
+        />
         <!--
         <psi.referenceContributor
             implementation="me.hardcoded.arucas.language.ArucasReferenceContributor"

@@ -10,6 +10,7 @@ public class ArucasRefactoringSupportProvider extends RefactoringSupportProvider
 	@Override
 	public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, @Nullable PsiElement context) {
 		// And not part of a binary expression
-		return element instanceof ArucasNamedElement;
+		return false;
+		// return element instanceof ArucasNamedElement;
 	}
 }
