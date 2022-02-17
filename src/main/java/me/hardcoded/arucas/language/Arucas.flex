@@ -46,6 +46,11 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   \"                               { yybegin(STRING_DOUBLE); }
   \'                               { yybegin(STRING_SINGLE); }
 
+  "true"                           { return ArucasTypes.KW_TRUE; }
+  "false"                          { return ArucasTypes.KW_FALSE; }
+  "null"                           { return ArucasTypes.KW_NULL; }
+  "this"                           { return ArucasTypes.KW_THIS; }
+
   "if"                             { return ArucasTypes.KW_IF; }
   "else"                           { return ArucasTypes.KW_ELSE; }
   "foreach"                        { return ArucasTypes.KW_FOREACH; }
@@ -96,9 +101,6 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   "="                              { return ArucasTypes.ASSIGNMENT; }
   ";"                              { return ArucasTypes.SEMICOLON; }
   ","                              { return ArucasTypes.COMMA; }
-
-  /* keywords */
-  {ValueKeyword}                   { return ArucasTypes.VALUE_KEYWORD; }
 
   /* literals */
   {Number}                         { return ArucasTypes.NUMBER; }

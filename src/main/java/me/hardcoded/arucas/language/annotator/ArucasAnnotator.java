@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import me.hardcoded.arucas.psi.*;
+import me.hardcoded.arucas.psi.ArucasAtomElement.AtomType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,10 +57,6 @@ public class ArucasAnnotator implements Annotator {
 			validateFunction((ArucasFunctionStatement)element, holder);
 		}
 		
-		if (element instanceof ArucasAtomExpression) {
-			validateAtomExpression((ArucasAtomExpression)element, holder);
-		}
-		
 		if (element instanceof ArucasSwitchStatement) {
 			validateSwitch((ArucasSwitchStatement)element, holder);
 		}
@@ -70,6 +67,10 @@ public class ArucasAnnotator implements Annotator {
 		
 		if (element instanceof ArucasContinueStatement) {
 			validateContinue((ArucasContinueStatement)element, holder);
+		}
+		
+		if (element instanceof ArucasAtomExpression) {
+			validateAtomExpression((ArucasAtomExpression)element, holder);
 		}
 	}
 	
@@ -147,9 +148,7 @@ public class ArucasAnnotator implements Annotator {
 	 * Used to validate when 'this' is allowed to be used
 	 */
 	private void validateAtomExpression(ArucasAtomExpression atom, AnnotationHolder holder) {
-		PsiElement valueKeyword = atom.getValueKeyword();
-		
-		if (valueKeyword != null && "this".equals(valueKeyword.getText())) {
+		if (atom.getAtomType() == AtomType.THIS) {
 			if (!canUseThis(atom)) {
 				holder.newAnnotation(HighlightSeverity.ERROR, "'this' is not allowed in a non class context")
 					.range(atom.getTextRange())

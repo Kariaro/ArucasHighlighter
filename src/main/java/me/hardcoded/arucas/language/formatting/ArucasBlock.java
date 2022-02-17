@@ -4,10 +4,8 @@ import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.formatter.common.AbstractBlock;
-import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
 import me.hardcoded.arucas.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +31,6 @@ public class ArucasBlock extends AbstractBlock {
 	}
 	
 	private boolean hasErrors() {
-		// TODO: Only disable formatting after the error token and not before
-		// TODO: This might be really slow
-//		return true;
 		return PsiTreeUtil.findChildOfType(myNode.getPsi(), PsiErrorElement.class) != null;
 	}
 	

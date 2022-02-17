@@ -72,15 +72,19 @@ public interface ArucasTypes {
   IElementType KW_CONTINUE = new ArucasTokenType("continue");
   IElementType KW_DEFAULT = new ArucasTokenType("default");
   IElementType KW_ELSE = new ArucasTokenType("else");
+  IElementType KW_FALSE = new ArucasTokenType("false");
   IElementType KW_FOR = new ArucasTokenType("for");
   IElementType KW_FOREACH = new ArucasTokenType("foreach");
   IElementType KW_FUN = new ArucasTokenType("fun");
   IElementType KW_IF = new ArucasTokenType("if");
   IElementType KW_NEW = new ArucasTokenType("new");
+  IElementType KW_NULL = new ArucasTokenType("null");
   IElementType KW_OPERATOR = new ArucasTokenType("operator");
   IElementType KW_RETURN = new ArucasTokenType("return");
   IElementType KW_STATIC = new ArucasTokenType("static");
   IElementType KW_SWITCH = new ArucasTokenType("switch");
+  IElementType KW_THIS = new ArucasTokenType("this");
+  IElementType KW_TRUE = new ArucasTokenType("true");
   IElementType KW_TRY = new ArucasTokenType("try");
   IElementType KW_VAR = new ArucasTokenType("var");
   IElementType KW_WHILE = new ArucasTokenType("while");
@@ -110,7 +114,6 @@ public interface ArucasTypes {
   IElementType RPAREN = new ArucasTokenType(")");
   IElementType SEMICOLON = new ArucasTokenType(";");
   IElementType STRING = new ArucasTokenType("STRING");
-  IElementType VALUE_KEYWORD = new ArucasTokenType("VALUE_KEYWORD");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

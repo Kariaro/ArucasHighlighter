@@ -16,7 +16,10 @@
     COMMENT='regexp://.*[^\n\r\f]|/\*(.|[\r\n\f])*?\*/'
     WHITESPACE='regexp:\s+'
     NUMBER='regexp:[0-9]+(\\.[0-9]+)?'
-    VALUE_KEYWORD='regexp:true|false|null|this'
+    KW_TRUE="true"
+    KW_FALSE="false"
+    KW_NULL="null"
+    KW_THIS="this"
     KW_IF="if"
     KW_ELSE="else"
     KW_FOR="for"
@@ -180,7 +183,7 @@ UnaryExpression ::= ('+' | '-') Expression {extends=Expression}
 PowerExpression ::= Expression '^' Expression {extends=Expression}
 CallExpression ::= Expression &'(' CallArguments {extends=Expression}
 CallArguments ::= '(' [ Expression (',' Expression)* ] ')' {pin=1}
-MemberExpression ::= Expression '.' (!'this') Expression {extends=Expression}
+MemberExpression ::= Expression '.' ( &IDENTIFIER ) Expression {extends=Expression}
 private AtomExpressionGroup ::= AtomExpression
   | &'[' ListExpression
   | &'{' MapExpression
@@ -189,9 +192,16 @@ private AtomExpressionGroup ::= AtomExpression
   | &'(' ParenthesesExpression
 
 AtomExpression ::= IdentifierName
-  | VALUE_KEYWORD
+  | ValueKeyword
   | STRING
-  | NUMBER {extends=Expression}
+  | NUMBER {
+  extends=Expression
+  mixin="me.hardcoded.arucas.psi.impl.ArucasAtomElementImpl"
+  implements="me.hardcoded.arucas.psi.ArucasAtomElement"
+  methods=[getAtomType]
+}
+private ValueKeyword ::= KW_TRUE | KW_FALSE | KW_NULL | KW_THIS
+
 ListExpression ::= '[' ListElements? ']' {extends=Expression pin=1}
 private ListElements ::= Expression (',' Expression)*
 MapExpression ::= '{' MapElements? '}' {extends=Expression pin=1}

@@ -25,6 +25,7 @@ public class ArucasVisitor extends PsiElementVisitor {
 
   public void visitAtomExpression(@NotNull ArucasAtomExpression o) {
     visitExpression(o);
+    // visitAtomElement(o);
   }
 
   public void visitBreakStatement(@NotNull ArucasBreakStatement o) {

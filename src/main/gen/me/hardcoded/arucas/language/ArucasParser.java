@@ -862,6 +862,18 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // KW_TRUE | KW_FALSE | KW_NULL | KW_THIS
+  static boolean ValueKeyword(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ValueKeyword")) return false;
+    boolean r;
+    r = consumeToken(b, KW_TRUE);
+    if (!r) r = consumeToken(b, KW_FALSE);
+    if (!r) r = consumeToken(b, KW_NULL);
+    if (!r) r = consumeToken(b, KW_THIS);
+    return r;
+  }
+
+  /* ********************************************************** */
   // 'while' '(' Expression ')' Statement
   public static boolean WhileStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WhileStatement")) return false;
@@ -1089,7 +1101,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '.' (!'this')
+  // '.' ( &IDENTIFIER )
   private static boolean MemberExpression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberExpression_0")) return false;
     boolean r;
@@ -1100,18 +1112,18 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // !'this'
+  // &IDENTIFIER
   private static boolean MemberExpression_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberExpression_0_1")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !consumeTokenSmart(b, "this");
+    Marker m = enter_section_(b, l, _AND_);
+    r = consumeTokenSmart(b, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // IdentifierName
-  //   | VALUE_KEYWORD
+  //   | ValueKeyword
   //   | STRING
   //   | NUMBER
   public static boolean AtomExpression(PsiBuilder b, int l) {
@@ -1119,7 +1131,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ATOM_EXPRESSION, "<atom expression>");
     r = IdentifierName(b, l + 1);
-    if (!r) r = consumeTokenSmart(b, VALUE_KEYWORD);
+    if (!r) r = ValueKeyword(b, l + 1);
     if (!r) r = consumeTokenSmart(b, STRING);
     if (!r) r = consumeTokenSmart(b, NUMBER);
     exit_section_(b, l, m, r, false, null);

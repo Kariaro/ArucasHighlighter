@@ -9,14 +9,14 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
+import me.hardcoded.arucas.psi.ArucasAtomElement.AtomType;
 
-public class ArucasAtomExpressionImpl extends ArucasExpressionImpl implements ArucasAtomExpression {
+public class ArucasAtomExpressionImpl extends ArucasAtomElementImpl implements ArucasAtomExpression {
 
   public ArucasAtomExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitAtomExpression(this);
   }
@@ -43,12 +43,6 @@ public class ArucasAtomExpressionImpl extends ArucasExpressionImpl implements Ar
   @Nullable
   public PsiElement getString() {
     return findChildByType(STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getValueKeyword() {
-    return findChildByType(VALUE_KEYWORD);
   }
 
 }
