@@ -33,4 +33,18 @@ public class ArucasMemberExpressionImpl extends ArucasExpressionImpl implements 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasExpression.class);
   }
 
+  @Override
+  @NotNull
+  public ArucasExpression getLeft() {
+    List<ArucasExpression> p1 = getExpressionList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public ArucasExpression getRight() {
+    List<ArucasExpression> p1 = getExpressionList();
+    return p1.size() < 2 ? null : p1.get(1);
+  }
+
 }

@@ -35,8 +35,8 @@ public class ArucasClassDeclarationImpl extends ArucasStatementImpl implements A
 
   @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasClassName getClassName() {
+    return findNotNullChildByClass(ArucasClassName.class);
   }
 
 }

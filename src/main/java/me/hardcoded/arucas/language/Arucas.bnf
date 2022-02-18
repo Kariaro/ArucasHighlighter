@@ -91,7 +91,12 @@ Statement ::= CodeBlock
   | BreakStatement
   | ExpressionStatement
 
-IdentifierName ::= IDENTIFIER {
+IdentifierName ::= IDENTIFIER {extends=Name}
+ClassName ::= IDENTIFIER {extends=Name}
+VariableName ::= IDENTIFIER {extends=Name}
+FunctionName ::= IDENTIFIER {extends=Name}
+
+fake Name ::= {
   mixin="me.hardcoded.arucas.psi.impl.ArucasNamedElementImpl"
   implements="me.hardcoded.arucas.psi.ArucasNamedElement"
   methods=[setName getNameIdentifier]
@@ -107,7 +112,7 @@ ElseStatement ::= 'else' Statement {extends=Statement}
 WhileStatement ::= 'while' '(' Expression ')' Statement {extends=Statement}
 
 /* Class Statement */
-ClassDeclaration ::= 'class' IdentifierName ClassCodeBlock {extends=Statement}
+ClassDeclaration ::= 'class' ClassName ClassCodeBlock {extends=Statement}
 ClassCodeBlock ::= '{' ClassBodyStatement* '}' {extends=Statement}
 private ClassBodyStatement ::= ClassMember
   | ClassConstructor
@@ -117,10 +122,10 @@ private ClassBodyStatement ::= ClassMember
 Operator ::= '+' | '-' | '*' | '/' | '^' | '!' | '==' | '!='
   | '++' | '--' | '&&' | '||' | '>=' | '<=' | '>' | '<'
 
-ClassConstructor ::= IdentifierName Arguments CodeBlock
+ClassConstructor ::= FunctionName Arguments CodeBlock
 ClassOperator ::= 'operator' Operator OperatorArguments CodeBlock { methods=[operator="OPERATOR[0]"] }
-ClassMethod ::= FunctionModifiers 'fun' IdentifierName Arguments CodeBlock
-ClassMember ::= FunctionModifiers 'var' IdentifierName ['=' Expression] ';'
+ClassMethod ::= FunctionModifiers 'fun' FunctionName Arguments CodeBlock
+ClassMember ::= FunctionModifiers 'var' VariableName ['=' Expression] ';'
 FunctionModifiers ::= ( 'static'? ) {
   mixin="me.hardcoded.arucas.psi.impl.ArucasModifierElementImpl"
   implements="me.hardcoded.arucas.psi.ArucasModifierElement"
@@ -133,7 +138,7 @@ Argument ::= IdentifierName
 OperatorArguments ::= Arguments
 
 /* Function Statement */
-FunctionStatement ::= 'fun' IdentifierName Arguments CodeBlock {extends=Statement}
+FunctionStatement ::= 'fun' FunctionName Arguments CodeBlock {extends=Statement}
 TryStatement ::= 'try' Statement 'catch' '(' IdentifierName ')' Statement {
   extends=Statement
   methods=[
@@ -183,7 +188,13 @@ UnaryExpression ::= ('+' | '-') Expression {extends=Expression}
 PowerExpression ::= Expression '^' Expression {extends=Expression}
 CallExpression ::= Expression &'(' CallArguments {extends=Expression}
 CallArguments ::= '(' [ Expression (',' Expression)* ] ')' {pin=1}
-MemberExpression ::= Expression '.' ( &IDENTIFIER ) Expression {extends=Expression}
+MemberExpression ::= Expression '.' ( &IDENTIFIER ) Expression {
+  extends=Expression
+  methods=[
+    LEFT="Expression[0]"
+    RIGHT="Expression[1]"
+  ]
+}
 private AtomExpressionGroup ::= AtomExpression
   | &'[' ListExpression
   | &'{' MapExpression
@@ -213,5 +224,5 @@ MapEntry ::= Expression ':' Expression {
   ]
 }
 LambdaExpression ::= 'fun' Arguments CodeBlock {extends=Expression}
-NewExpression ::= 'new' IdentifierName CallArguments {extends=Expression}
+NewExpression ::= 'new' ClassName CallArguments {extends=Expression}
 ParenthesesExpression ::= '(' Expression ')' {extends=Expression}

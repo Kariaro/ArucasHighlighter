@@ -169,22 +169,22 @@ public class ArucasAnnotator implements Annotator {
 		ArucasClassCodeBlock codeBlock = arucasClass.getClassCodeBlock();
 		
 		/* Constructors */ {
-			String className = arucasClass.getIdentifierName().getIdentifier().getText();
+			String className = arucasClass.getClassName().getIdentifier().getText();
 			Set<Integer> argumentCount = new HashSet<>();
 			
 			for (ArucasClassConstructor constructor : codeBlock.getClassConstructorList()) {
 				ArucasArguments arguments = constructor.getArguments();
 				int parameters = getNumberOfArguments(arguments);
 				
-				if (!className.equals(constructor.getIdentifierName().getIdentifier().getText())) {
+				if (!className.equals(constructor.getFunctionName().getIdentifier().getText())) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "Constructor name is different from class name")
-						.range(constructor.getIdentifierName().getIdentifier().getTextRange())
+						.range(constructor.getFunctionName().getIdentifier().getTextRange())
 						.create();
 				}
 				
 				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with " + getParameterString(parameters) + " has already been defined")
-						.range(constructor.getIdentifierName().getIdentifier().getTextRange())
+						.range(constructor.getFunctionName().getIdentifier().getTextRange())
 						.create();
 				}
 				
@@ -199,7 +199,7 @@ public class ArucasAnnotator implements Annotator {
 			for (ArucasClassMethod method : codeBlock.getClassMethodList()) {
 				boolean isStatic = method.getFunctionModifiers().isStatic();
 				
-				String name = method.getIdentifierName().getIdentifier().getText();
+				String name = method.getFunctionName().getIdentifier().getText();
 				Set<Integer> argumentCount = (isStatic ? staticMethods : methods)
 					.computeIfAbsent(name, v -> new HashSet<>());
 				
@@ -208,7 +208,7 @@ public class ArucasAnnotator implements Annotator {
 				
 				if (!argumentCount.add(parameters)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " method with " + getParameterString(parameters) + " has already been defined")
-						.range(method.getIdentifierName().getIdentifier().getTextRange())
+						.range(method.getFunctionName().getIdentifier().getTextRange())
 						.create();
 				}
 				
@@ -220,11 +220,11 @@ public class ArucasAnnotator implements Annotator {
 			Set<String> members = new HashSet<>();
 			
 			for (ArucasClassMember member : codeBlock.getClassMemberList()) {
-				String name = member.getIdentifierName().getIdentifier().getText();
+				String name = member.getVariableName().getIdentifier().getText();
 				
 				if (!members.add(name)) {
 					holder.newAnnotation(HighlightSeverity.ERROR, "A member the name '" + name + "' has already been defined")
-						.range(member.getIdentifierName().getIdentifier().getTextRange())
+						.range(member.getVariableName().getIdentifier().getTextRange())
 						.create();
 				}
 			}

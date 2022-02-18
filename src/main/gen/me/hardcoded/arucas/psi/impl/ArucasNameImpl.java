@@ -8,41 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasClassMemberImpl extends ASTWrapperPsiElement implements ArucasClassMember {
+public class ArucasNameImpl extends ArucasNamedElementImpl implements ArucasName {
 
-  public ArucasClassMemberImpl(@NotNull ASTNode node) {
+  public ArucasNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ArucasVisitor visitor) {
-    visitor.visitClassMember(this);
+    visitor.visitName(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ArucasVisitor) accept((ArucasVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ArucasExpression getExpression() {
-    return findChildByClass(ArucasExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public ArucasFunctionModifiers getFunctionModifiers() {
-    return findNotNullChildByClass(ArucasFunctionModifiers.class);
-  }
-
-  @Override
-  @NotNull
-  public ArucasVariableName getVariableName() {
-    return findNotNullChildByClass(ArucasVariableName.class);
   }
 
 }

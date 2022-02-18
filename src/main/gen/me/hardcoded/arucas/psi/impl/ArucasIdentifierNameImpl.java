@@ -10,12 +10,13 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static me.hardcoded.arucas.psi.ArucasTypes.*;
 import me.hardcoded.arucas.psi.*;
 
-public class ArucasIdentifierNameImpl extends ArucasNamedElementImpl implements ArucasIdentifierName {
+public class ArucasIdentifierNameImpl extends ArucasNameImpl implements ArucasIdentifierName {
 
   public ArucasIdentifierNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull ArucasVisitor visitor) {
     visitor.visitIdentifierName(this);
   }

@@ -14,6 +14,6 @@ public interface ArucasFunctionStatement extends ArucasStatement {
   ArucasCodeBlock getCodeBlock();
 
   @NotNull
-  ArucasIdentifierName getIdentifierName();
+  ArucasFunctionName getFunctionName();
 
 }

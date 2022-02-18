@@ -23,8 +23,10 @@ public class ArucasStyleSettingsCustomizable {
 		SPACE_AROUND_EQUALITY_OPERATORS,
 		SPACE_AROUND_ASSIGNMENT_OPERATORS,
 		
+		// Before left brace
 		SPACE_BEFORE_CLASS_BODY,
 		SPACE_BEFORE_METHOD_BODY,
+		SPACE_BEFORE_LEFT_BRACE,
 		
 		// List expression
 		SPACE_INSIDE_EMPTY_LIST,

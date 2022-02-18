@@ -36,6 +36,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(CLASS_NAME, FUNCTION_NAME, IDENTIFIER_NAME, VARIABLE_NAME),
     create_token_set_(BREAK_STATEMENT, CLASS_CODE_BLOCK, CLASS_DECLARATION, CONTINUE_STATEMENT,
       ELSE_STATEMENT, EXPRESSION_STATEMENT, FOR_EACH_STATEMENT, FOR_STATEMENT,
       FUNCTION_STATEMENT, IF_STATEMENT, RETURN_STATEMENT, STATEMENT,
@@ -329,13 +330,13 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierName Arguments CodeBlock
+  // FunctionName Arguments CodeBlock
   public static boolean ClassConstructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassConstructor")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = IdentifierName(b, l + 1);
+    r = FunctionName(b, l + 1);
     r = r && Arguments(b, l + 1);
     r = r && CodeBlock(b, l + 1);
     exit_section_(b, m, CLASS_CONSTRUCTOR, r);
@@ -343,21 +344,21 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'class' IdentifierName ClassCodeBlock
+  // 'class' ClassName ClassCodeBlock
   public static boolean ClassDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassDeclaration")) return false;
     if (!nextTokenIs(b, KW_CLASS)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, KW_CLASS);
-    r = r && IdentifierName(b, l + 1);
+    r = r && ClassName(b, l + 1);
     r = r && ClassCodeBlock(b, l + 1);
     exit_section_(b, m, CLASS_DECLARATION, r);
     return r;
   }
 
   /* ********************************************************** */
-  // FunctionModifiers 'var' IdentifierName ['=' Expression] ';'
+  // FunctionModifiers 'var' VariableName ['=' Expression] ';'
   public static boolean ClassMember(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassMember")) return false;
     if (!nextTokenIs(b, "<class member>", KW_STATIC, KW_VAR)) return false;
@@ -365,7 +366,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CLASS_MEMBER, "<class member>");
     r = FunctionModifiers(b, l + 1);
     r = r && consumeToken(b, KW_VAR);
-    r = r && IdentifierName(b, l + 1);
+    r = r && VariableName(b, l + 1);
     r = r && ClassMember_3(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, false, null);
@@ -391,7 +392,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FunctionModifiers 'fun' IdentifierName Arguments CodeBlock
+  // FunctionModifiers 'fun' FunctionName Arguments CodeBlock
   public static boolean ClassMethod(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ClassMethod")) return false;
     if (!nextTokenIs(b, "<class method>", KW_FUN, KW_STATIC)) return false;
@@ -399,10 +400,22 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CLASS_METHOD, "<class method>");
     r = FunctionModifiers(b, l + 1);
     r = r && consumeToken(b, KW_FUN);
-    r = r && IdentifierName(b, l + 1);
+    r = r && FunctionName(b, l + 1);
     r = r && Arguments(b, l + 1);
     r = r && CodeBlock(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean ClassName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ClassName")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, CLASS_NAME, r);
     return r;
   }
 
@@ -577,14 +590,26 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'fun' IdentifierName Arguments CodeBlock
+  // IDENTIFIER
+  public static boolean FunctionName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionName")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, FUNCTION_NAME, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'fun' FunctionName Arguments CodeBlock
   public static boolean FunctionStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionStatement")) return false;
     if (!nextTokenIs(b, KW_FUN)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, KW_FUN);
-    r = r && IdentifierName(b, l + 1);
+    r = r && FunctionName(b, l + 1);
     r = r && Arguments(b, l + 1);
     r = r && CodeBlock(b, l + 1);
     exit_section_(b, m, FUNCTION_STATEMENT, r);
@@ -870,6 +895,18 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, KW_FALSE);
     if (!r) r = consumeToken(b, KW_NULL);
     if (!r) r = consumeToken(b, KW_THIS);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean VariableName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableName")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, VARIABLE_NAME, r);
     return r;
   }
 
@@ -1193,14 +1230,14 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'new' IdentifierName CallArguments
+  // 'new' ClassName CallArguments
   public static boolean NewExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NewExpression")) return false;
     if (!nextTokenIsSmart(b, KW_NEW)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, KW_NEW);
-    r = r && IdentifierName(b, l + 1);
+    r = r && ClassName(b, l + 1);
     r = r && CallArguments(b, l + 1);
     exit_section_(b, m, NEW_EXPRESSION, r);
     return r;

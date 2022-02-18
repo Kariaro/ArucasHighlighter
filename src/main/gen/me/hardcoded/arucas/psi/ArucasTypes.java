@@ -24,6 +24,7 @@ public interface ArucasTypes {
   IElementType CLASS_DECLARATION = new ArucasElementType("CLASS_DECLARATION");
   IElementType CLASS_MEMBER = new ArucasElementType("CLASS_MEMBER");
   IElementType CLASS_METHOD = new ArucasElementType("CLASS_METHOD");
+  IElementType CLASS_NAME = new ArucasElementType("CLASS_NAME");
   IElementType CLASS_OPERATOR = new ArucasElementType("CLASS_OPERATOR");
   IElementType CODE_BLOCK = new ArucasElementType("CODE_BLOCK");
   IElementType CONDITIONAL_AND_EXPRESSION = new ArucasElementType("CONDITIONAL_AND_EXPRESSION");
@@ -36,6 +37,7 @@ public interface ArucasTypes {
   IElementType FOR_EACH_STATEMENT = new ArucasElementType("FOR_EACH_STATEMENT");
   IElementType FOR_STATEMENT = new ArucasElementType("FOR_STATEMENT");
   IElementType FUNCTION_MODIFIERS = new ArucasElementType("FUNCTION_MODIFIERS");
+  IElementType FUNCTION_NAME = new ArucasElementType("FUNCTION_NAME");
   IElementType FUNCTION_STATEMENT = new ArucasElementType("FUNCTION_STATEMENT");
   IElementType IDENTIFIER_NAME = new ArucasElementType("IDENTIFIER_NAME");
   IElementType IF_STATEMENT = new ArucasElementType("IF_STATEMENT");
@@ -57,6 +59,7 @@ public interface ArucasTypes {
   IElementType TRY_STATEMENT = new ArucasElementType("TRY_STATEMENT");
   IElementType UNARY_EXPRESSION = new ArucasElementType("UNARY_EXPRESSION");
   IElementType UNARY_NOT_EXPRESSION = new ArucasElementType("UNARY_NOT_EXPRESSION");
+  IElementType VARIABLE_NAME = new ArucasElementType("VARIABLE_NAME");
   IElementType WHILE_STATEMENT = new ArucasElementType("WHILE_STATEMENT");
 
   IElementType ASSIGNMENT = new ArucasTokenType("=");
@@ -166,6 +169,9 @@ public interface ArucasTypes {
       else if (type == CLASS_METHOD) {
         return new ArucasClassMethodImpl(node);
       }
+      else if (type == CLASS_NAME) {
+        return new ArucasClassNameImpl(node);
+      }
       else if (type == CLASS_OPERATOR) {
         return new ArucasClassOperatorImpl(node);
       }
@@ -198,6 +204,9 @@ public interface ArucasTypes {
       }
       else if (type == FUNCTION_MODIFIERS) {
         return new ArucasFunctionModifiersImpl(node);
+      }
+      else if (type == FUNCTION_NAME) {
+        return new ArucasFunctionNameImpl(node);
       }
       else if (type == FUNCTION_STATEMENT) {
         return new ArucasFunctionStatementImpl(node);
@@ -261,6 +270,9 @@ public interface ArucasTypes {
       }
       else if (type == UNARY_NOT_EXPRESSION) {
         return new ArucasUnaryNotExpressionImpl(node);
+      }
+      else if (type == VARIABLE_NAME) {
+        return new ArucasVariableNameImpl(node);
       }
       else if (type == WHILE_STATEMENT) {
         return new ArucasWhileStatementImpl(node);

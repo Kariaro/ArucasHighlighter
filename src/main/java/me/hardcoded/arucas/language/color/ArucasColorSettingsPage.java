@@ -15,12 +15,18 @@ import java.util.Map;
 
 public class ArucasColorSettingsPage implements ColorSettingsPage {
 	private static final AttributesDescriptor[] DESCRIPTORS = {
-		new AttributesDescriptor("String", ArucasSyntaxHighlighter.STRING),
-		new AttributesDescriptor("Delimiter", ArucasSyntaxHighlighter.DELIMITER),
-		new AttributesDescriptor("Number", ArucasSyntaxHighlighter.NUMBER),
-		new AttributesDescriptor("Keyword", ArucasSyntaxHighlighter.KEYWORD),
-		new AttributesDescriptor("Comment", ArucasSyntaxHighlighter.COMMENT),
-		new AttributesDescriptor("Bad value", ArucasSyntaxHighlighter.BAD_CHARACTER),
+		new AttributesDescriptor("String", ArucasHighlightingColors.STRING),
+		new AttributesDescriptor("Identifier", ArucasHighlightingColors.IDENTIFIER),
+		new AttributesDescriptor("Delimiter", ArucasHighlightingColors.DELIMITER),
+		new AttributesDescriptor("Number", ArucasHighlightingColors.NUMBER),
+		new AttributesDescriptor("Keyword", ArucasHighlightingColors.KEYWORD),
+		new AttributesDescriptor("Comment", ArucasHighlightingColors.COMMENT),
+		new AttributesDescriptor("Delimiter", ArucasHighlightingColors.DELIMITER),
+		new AttributesDescriptor("Bad value", ArucasHighlightingColors.BAD_CHARACTER),
+		
+		new AttributesDescriptor("Identifiers//Class name", ArucasHighlightingColors.CLASS_NAME),
+		new AttributesDescriptor("Identifiers//Function name", ArucasHighlightingColors.FUNCTION_NAME),
+		new AttributesDescriptor("Identifiers//Variable name", ArucasHighlightingColors.VARIABLE_NAME),
 	};
 	
 	@Nullable

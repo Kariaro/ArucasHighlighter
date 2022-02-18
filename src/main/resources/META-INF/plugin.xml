@@ -62,6 +62,10 @@
             language="Arucas"
             implementationClass="me.hardcoded.arucas.language.commenter.ArucasCommenter"
         />
+        <annotator
+            language="Arucas"
+            implementationClass="me.hardcoded.arucas.language.annotator.ArucasSemanticAnnotator"
+        />
         <!--
         <psi.referenceContributor
             implementation="me.hardcoded.arucas.language.ArucasReferenceContributor"
