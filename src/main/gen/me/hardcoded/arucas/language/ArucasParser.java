@@ -523,7 +523,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'foreach' '(' IdentifierName ':' MemberExpression ')' Statement
+  // 'foreach' '(' IdentifierName ':' Expression ')' Statement
   public static boolean ForEachStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForEachStatement")) return false;
     if (!nextTokenIs(b, KW_FOREACH)) return false;
@@ -532,7 +532,7 @@ public class ArucasParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, KW_FOREACH, LPAREN);
     r = r && IdentifierName(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && Expression(b, l + 1, 9);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, RPAREN);
     r = r && Statement(b, l + 1);
     exit_section_(b, m, FOR_EACH_STATEMENT, r);

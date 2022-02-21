@@ -148,7 +148,7 @@ TryStatement ::= 'try' Statement 'catch' '(' IdentifierName ')' Statement {
 }
 
 /* For Statements */
-ForEachStatement ::= 'foreach' '(' IdentifierName ':' MemberExpression ')' Statement {
+ForEachStatement ::= 'foreach' '(' IdentifierName ':' Expression ')' Statement {
   extends=Statement
 }
 ForStatement ::= 'for' '(' Expression? ';' Expression? ';' Expression? ')' Statement {extends=Statement}

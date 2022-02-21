@@ -9,6 +9,10 @@ public class ArucasHighlightingColors {
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
 	public static final TextAttributesKey KEYWORD
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+	public static final TextAttributesKey VALUE_KEYWORD
+		= TextAttributesKey.createTextAttributesKey("ARUCAS_VALUE_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+	public static final TextAttributesKey OPERATOR
+		= TextAttributesKey.createTextAttributesKey("ARUCAS_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
 	public static final TextAttributesKey NUMBER
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
 	public static final TextAttributesKey DELIMITER
@@ -21,11 +25,11 @@ public class ArucasHighlightingColors {
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 	
 	public static final TextAttributesKey CLASS_NAME
-		= TextAttributesKey.createTextAttributesKey("ARUCAS_CLASS_NAME", DefaultLanguageHighlighterColors.CLASS_NAME);
+		= TextAttributesKey.createTextAttributesKey("ARUCAS_CLASS_NAME", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	public static final TextAttributesKey FUNCTION_NAME
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_FUNCTION_NAME", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	public static final TextAttributesKey VARIABLE_NAME
-		= TextAttributesKey.createTextAttributesKey("ARUCAS_VARIABLE_NAME", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+		= TextAttributesKey.createTextAttributesKey("ARUCAS_VARIABLE_NAME", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	
 	public static final TextAttributesKey FUNCTION_CALL
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL);

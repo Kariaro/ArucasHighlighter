@@ -145,6 +145,18 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 			.spaceIf(data.SPACE_AFTER_PARAMETER_COMMA)
 			.beforeInside(ArucasTypes.COMMA, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_BEFORE_PARAMETER_COMMA)
+			
+			// Call parameters
+			.betweenInside(ArucasTypes.LPAREN, ArucasTypes.RPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_INSIDE_EMPTY_CALL_PARAMETERS)
+			.afterInside(ArucasTypes.LPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AROUND_INSIDE_CALL_PARAMETERS)
+			.beforeInside(ArucasTypes.RPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AROUND_INSIDE_CALL_PARAMETERS)
+			.afterInside(ArucasTypes.COMMA, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AFTER_PARAMETER_CALL_COMMA)
+			.beforeInside(ArucasTypes.COMMA, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_BEFORE_PARAMETER_CALL_COMMA)
 			;
 	}
 	

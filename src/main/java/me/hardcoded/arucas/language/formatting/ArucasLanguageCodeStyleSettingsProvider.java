@@ -73,6 +73,13 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_PARAMETERS, "Around walls", groupName);
 			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_COMMA, "Before comma", groupName);
 			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_COMMA, "After comma", groupName);
+			
+			// Call parameters
+			groupName = SPACE_CALL_PARAMETERS;
+			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_CALL_PARAMETERS, "Empty space", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_CALL_PARAMETERS, "Around walls", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_CALL_COMMA, "Before comma", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_CALL_COMMA, "After comma", groupName);
 		} else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
 			consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
 		}
@@ -95,7 +102,7 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"            len = length(item);\n" +
 			"            if (!(len > 0 && len <= value) || value > 100) {\n" +
 			"                for (i = 0; i < 10; i++) {\n" +
-			"                    local.append('text' + (i * 3 / 2.0));\n" +
+			"                    local.append('text' + (i * 3 / 2.0), 'a', null);\n" +
 			"                }\n" +
 			"            } else {\n" +
 			"                i = 10;\n" +

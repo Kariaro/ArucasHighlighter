@@ -45,6 +45,26 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		ArucasTypes.COMMA
 	);
 	
+	private static final TokenSet OPERATORS = TokenSet.create(
+		ArucasTypes.OP_DIV,
+		ArucasTypes.OP_EQUALS,
+		ArucasTypes.OP_LESSTHAN,
+		ArucasTypes.OP_LESSTHANEQ,
+		ArucasTypes.OP_LOGICAL_AND,
+		ArucasTypes.OP_LOGICAL_OR,
+		ArucasTypes.OP_MINUS,
+		ArucasTypes.OP_MM,
+		ArucasTypes.OP_MORETHAN,
+		ArucasTypes.OP_MORETHANEQ,
+		ArucasTypes.OP_MUL,
+		ArucasTypes.OP_NOT,
+		ArucasTypes.OP_NOTEQUALS,
+		ArucasTypes.OP_PLUS,
+		ArucasTypes.OP_POW,
+		ArucasTypes.OP_PP,
+		ArucasTypes.POINTER
+	);
+	
 	private static final TextAttributesKey[] IDENTIFIER_KEYS = { ArucasHighlightingColors.IDENTIFIER };
 	private static final TextAttributesKey[] BAD_CHAR_KEYS = { ArucasHighlightingColors.BAD_CHARACTER };
 	private static final TextAttributesKey[] DELIMITER_KEYS = { ArucasHighlightingColors.DELIMITER };
@@ -52,11 +72,9 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 	private static final TextAttributesKey[] STRING_KEYS = { ArucasHighlightingColors.STRING };
 	private static final TextAttributesKey[] COMMENT_KEYS = { ArucasHighlightingColors.COMMENT };
 	private static final TextAttributesKey[] KEYWORD_KEYS = { ArucasHighlightingColors.KEYWORD };
+	private static final TextAttributesKey[] OPERATOR_KEYS = { ArucasHighlightingColors.OPERATOR };
+	private static final TextAttributesKey[] VALUE_KEYWORD_KEYS = { ArucasHighlightingColors.VALUE_KEYWORD };
 	private static final TextAttributesKey[] EMPTY_KEYS = {};
-	
-	// private static final TextAttributesKey[] CLASS_NAME_KEYS = { ArucasHighlightingColors.CLASS_NAME };
-	// private static final TextAttributesKey[] FUNCTION_NAME_KEYS = { ArucasHighlightingColors.FUNCTION_NAME };
-	// private static final TextAttributesKey[] VARIABLE_NAME_KEYS = { ArucasHighlightingColors.VARIABLE_NAME };
 	
 	@NotNull
 	@Override
@@ -81,6 +99,9 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		if (tokenType.equals(TokenType.BAD_CHARACTER)) {
 			return BAD_CHAR_KEYS;
 		}
+		if (OPERATORS.contains(tokenType)) {
+			return OPERATOR_KEYS;
+		}
 		if (DELIMITERS.contains(tokenType)) {
 			return DELIMITER_KEYS;
 		}
@@ -88,7 +109,7 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 			return KEYWORD_KEYS;
 		}
 		if (VALUE_KEYWORDS.contains(tokenType)) {
-			return KEYWORD_KEYS;
+			return VALUE_KEYWORD_KEYS;
 		}
 		return EMPTY_KEYS;
 	}

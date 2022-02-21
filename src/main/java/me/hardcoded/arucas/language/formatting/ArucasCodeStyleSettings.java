@@ -65,4 +65,10 @@ public class ArucasCodeStyleSettings extends CustomCodeStyleSettings {
 	public boolean SPACE_AROUND_INSIDE_PARAMETERS = false;
 	public boolean SPACE_BEFORE_PARAMETER_COMMA = false;
 	public boolean SPACE_AFTER_PARAMETER_COMMA = true;
+	
+	// Call parameters
+	public boolean SPACE_INSIDE_EMPTY_CALL_PARAMETERS = false;
+	public boolean SPACE_AROUND_INSIDE_CALL_PARAMETERS = false;
+	public boolean SPACE_BEFORE_PARAMETER_CALL_COMMA = false;
+	public boolean SPACE_AFTER_PARAMETER_CALL_COMMA = true;
 }

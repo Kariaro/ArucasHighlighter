@@ -29,14 +29,14 @@ public class ArucasForEachStatementImpl extends ArucasStatementImpl implements A
 
   @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasExpression getExpression() {
+    return findNotNullChildByClass(ArucasExpression.class);
   }
 
   @Override
   @NotNull
-  public ArucasMemberExpression getMemberExpression() {
-    return findNotNullChildByClass(ArucasMemberExpression.class);
+  public ArucasIdentifierName getIdentifierName() {
+    return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
   @Override
