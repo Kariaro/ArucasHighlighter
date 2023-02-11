@@ -11,11 +11,19 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArgumentArbitrary(@NotNull ArucasArgumentArbitrary o) {
+    visitPsiElement(o);
+  }
+
   public void visitArguments(@NotNull ArucasArguments o) {
     visitPsiElement(o);
   }
 
   public void visitArithmeticExpression(@NotNull ArucasArithmeticExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitArrayExpression(@NotNull ArucasArrayExpression o) {
     visitExpression(o);
   }
 
@@ -26,6 +34,10 @@ public class ArucasVisitor extends PsiElementVisitor {
   public void visitAtomExpression(@NotNull ArucasAtomExpression o) {
     visitExpression(o);
     // visitAtomElement(o);
+  }
+
+  public void visitBitExpression(@NotNull ArucasBitExpression o) {
+    visitExpression(o);
   }
 
   public void visitBreakStatement(@NotNull ArucasBreakStatement o) {
@@ -64,6 +76,10 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitClassInheritance(@NotNull ArucasClassInheritance o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassMember(@NotNull ArucasClassMember o) {
     visitPsiElement(o);
   }
@@ -92,12 +108,32 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitConstructorArguments(@NotNull ArucasConstructorArguments o) {
+    visitPsiElement(o);
+  }
+
   public void visitContinueStatement(@NotNull ArucasContinueStatement o) {
     visitStatement(o);
   }
 
   public void visitElseStatement(@NotNull ArucasElseStatement o) {
     visitStatement(o);
+  }
+
+  public void visitEnumCodeBlock(@NotNull ArucasEnumCodeBlock o) {
+    visitStatement(o);
+  }
+
+  public void visitEnumCodeValues(@NotNull ArucasEnumCodeValues o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumDeclaration(@NotNull ArucasEnumDeclaration o) {
+    visitStatement(o);
+  }
+
+  public void visitEnumValue(@NotNull ArucasEnumValue o) {
+    visitPsiElement(o);
   }
 
   public void visitExpression(@NotNull ArucasExpression o) {
@@ -140,12 +176,44 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitImportClassName(@NotNull ArucasImportClassName o) {
+    visitName(o);
+  }
+
+  public void visitImportElement(@NotNull ArucasImportElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitImportPath(@NotNull ArucasImportPath o) {
+    visitPsiElement(o);
+  }
+
+  public void visitImportStatement(@NotNull ArucasImportStatement o) {
+    visitStatement(o);
+  }
+
+  public void visitInterfaceCodeBlock(@NotNull ArucasInterfaceCodeBlock o) {
+    visitStatement(o);
+  }
+
+  public void visitInterfaceDeclaration(@NotNull ArucasInterfaceDeclaration o) {
+    visitStatement(o);
+  }
+
+  public void visitInterfaceMethod(@NotNull ArucasInterfaceMethod o) {
+    visitPsiElement(o);
+  }
+
   public void visitLambdaExpression(@NotNull ArucasLambdaExpression o) {
     visitExpression(o);
   }
 
   public void visitListExpression(@NotNull ArucasListExpression o) {
     visitExpression(o);
+  }
+
+  public void visitLocalStatement(@NotNull ArucasLocalStatement o) {
+    visitStatement(o);
   }
 
   public void visitMapEntry(@NotNull ArucasMapEntry o) {
@@ -162,6 +230,14 @@ public class ArucasVisitor extends PsiElementVisitor {
 
   public void visitName(@NotNull ArucasName o) {
     visitNamedElement(o);
+  }
+
+  public void visitNamedTypeHint(@NotNull ArucasNamedTypeHint o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedTypeHintName(@NotNull ArucasNamedTypeHintName o) {
+    visitPsiElement(o);
   }
 
   public void visitNewExpression(@NotNull ArucasNewExpression o) {
@@ -204,8 +280,16 @@ public class ArucasVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitThrowStatement(@NotNull ArucasThrowStatement o) {
+    visitStatement(o);
+  }
+
   public void visitTryStatement(@NotNull ArucasTryStatement o) {
     visitStatement(o);
+  }
+
+  public void visitTryStatementFinally(@NotNull ArucasTryStatementFinally o) {
+    visitPsiElement(o);
   }
 
   public void visitUnaryExpression(@NotNull ArucasUnaryExpression o) {
@@ -214,6 +298,10 @@ public class ArucasVisitor extends PsiElementVisitor {
 
   public void visitUnaryNotExpression(@NotNull ArucasUnaryNotExpression o) {
     visitExpression(o);
+  }
+
+  public void visitUnpackExtension(@NotNull ArucasUnpackExtension o) {
+    visitPsiElement(o);
   }
 
   public void visitVariableName(@NotNull ArucasVariableName o) {

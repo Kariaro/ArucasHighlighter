@@ -30,7 +30,15 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		ArucasTypes.KW_DEFAULT,
 		ArucasTypes.KW_RETURN,
 		ArucasTypes.KW_BREAK,
-		ArucasTypes.KW_CONTINUE
+		ArucasTypes.KW_CONTINUE,
+		ArucasTypes.KW_IMPORT,
+		ArucasTypes.KW_FROM,
+		ArucasTypes.KW_FINALLY,
+		ArucasTypes.KW_LOCAL,
+		ArucasTypes.KW_ENUM,
+		ArucasTypes.KW_INTERFACE,
+		ArucasTypes.KW_SUPER,
+		ArucasTypes.KW_THROW
 	);
 	
 	private static final TokenSet VALUE_KEYWORDS = TokenSet.create(
@@ -62,7 +70,14 @@ public class ArucasSyntaxHighlighter extends SyntaxHighlighterBase {
 		ArucasTypes.OP_PLUS,
 		ArucasTypes.OP_POW,
 		ArucasTypes.OP_PP,
-		ArucasTypes.POINTER
+		ArucasTypes.POINTER,
+		ArucasTypes.ARBITRARY,
+		
+		ArucasTypes.OP_BSHL,
+		ArucasTypes.OP_BSHR,
+		ArucasTypes.OP_BAND,
+		ArucasTypes.OP_BOR,
+		ArucasTypes.OP_BXOR
 	);
 	
 	private static final TextAttributesKey[] IDENTIFIER_KEYS = { ArucasHighlightingColors.IDENTIFIER };

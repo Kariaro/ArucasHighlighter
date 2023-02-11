@@ -10,4 +10,7 @@ public interface ArucasExpressionStatement extends ArucasStatement {
   @NotNull
   ArucasExpression getExpression();
 
+  @Nullable
+  ArucasUnpackExtension getUnpackExtension();
+
 }

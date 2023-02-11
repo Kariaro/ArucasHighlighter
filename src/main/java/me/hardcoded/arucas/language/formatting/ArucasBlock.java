@@ -62,15 +62,21 @@ public class ArucasBlock extends AbstractBlock {
 		return indent;
 	}
 	
+	private boolean isCodeBlock(Object obj) {
+		return obj instanceof ArucasCodeBlock 
+			|| obj instanceof ArucasClassCodeBlock 
+			|| obj instanceof ArucasSwitchCodeBlock 
+			|| obj instanceof ArucasMapExpression 
+			|| obj instanceof ArucasListExpression 
+			|| obj instanceof ArucasEnumCodeBlock 
+			|| obj instanceof ArucasInterfaceCodeBlock;
+	}
+	
 	private Indent calcIndent(ASTNode child) {
 		PsiElement parent = myNode.getPsi();
 		IElementType type = child.getElementType();
 		
-		boolean isCodeBlock = (parent instanceof ArucasCodeBlock
-							|| parent instanceof ArucasClassCodeBlock
-							|| parent instanceof ArucasSwitchCodeBlock
-							|| parent instanceof ArucasMapExpression
-							|| parent instanceof ArucasListExpression);
+		boolean isCodeBlock = isCodeBlock(parent);
 		
 		// Make sure that the parent is a code block and that the child
 		// is not one of '{', '}', '[', ']'
@@ -90,12 +96,7 @@ public class ArucasBlock extends AbstractBlock {
 		}
 		
 		PsiElement parent = myNode.getPsi();
-		
-		boolean isCodeBlock = (parent instanceof ArucasCodeBlock
-			|| parent instanceof ArucasClassCodeBlock
-			|| parent instanceof ArucasSwitchCodeBlock
-			|| parent instanceof ArucasMapExpression
-			|| parent instanceof ArucasListExpression);
+		boolean isCodeBlock = isCodeBlock(parent);
 		
 		// Make sure that the parent is a code block and that the child
 		// is not one of '{', '}'

@@ -16,4 +16,7 @@ public interface ArucasFunctionStatement extends ArucasStatement {
   @NotNull
   ArucasFunctionName getFunctionName();
 
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
+
 }

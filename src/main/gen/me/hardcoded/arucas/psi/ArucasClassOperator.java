@@ -10,6 +10,9 @@ public interface ArucasClassOperator extends PsiElement {
   @NotNull
   ArucasCodeBlock getCodeBlock();
 
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
+
   @NotNull
   ArucasOperator getOperator();
 

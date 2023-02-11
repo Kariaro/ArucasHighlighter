@@ -19,6 +19,7 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 		new AttributesDescriptor("Declarations//Class name", ArucasHighlightingColors.CLASS_NAME),
 		new AttributesDescriptor("Declarations//Function name", ArucasHighlightingColors.FUNCTION_NAME),
 		new AttributesDescriptor("Declarations//Variable name", ArucasHighlightingColors.VARIABLE_NAME),
+		new AttributesDescriptor("Declarations//Type hint", ArucasHighlightingColors.TYPE_HINT),
 		new AttributesDescriptor("Function call", ArucasHighlightingColors.FUNCTION_CALL),
 		
 		new AttributesDescriptor("Identifier", ArucasHighlightingColors.IDENTIFIER),
@@ -40,6 +41,7 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 		customTags.put("funName", ArucasHighlightingColors.FUNCTION_NAME);
 		customTags.put("varName", ArucasHighlightingColors.VARIABLE_NAME);
 		customTags.put("funCall", ArucasHighlightingColors.FUNCTION_CALL);
+		customTags.put("typeHint", ArucasHighlightingColors.TYPE_HINT);
 	}
 	
 	@Nullable
@@ -67,7 +69,7 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 			"        localVariable = [ 'a', 1, { 1: '321' }];\n" +
 			"    }\n" +
 			"\n" +
-			"    fun <funName>method</funName>(value) {\n" +
+			"    fun <funName>method</funName>(value: <typeHint>Error</typeHint> | <typeHint>String</typeHint>) {\n" +
 			"         <funCall>print</funCall>(value);\n" +
 			"    }\n" +
 			"\n" +

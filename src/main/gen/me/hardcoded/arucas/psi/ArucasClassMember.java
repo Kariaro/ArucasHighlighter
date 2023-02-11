@@ -13,6 +13,9 @@ public interface ArucasClassMember extends PsiElement {
   @NotNull
   ArucasFunctionModifiers getFunctionModifiers();
 
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
+
   @NotNull
   ArucasVariableName getVariableName();
 

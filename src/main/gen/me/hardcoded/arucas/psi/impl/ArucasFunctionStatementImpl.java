@@ -45,4 +45,10 @@ public class ArucasFunctionStatementImpl extends ArucasStatementImpl implements 
     return findNotNullChildByClass(ArucasFunctionName.class);
   }
 
+  @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
 }

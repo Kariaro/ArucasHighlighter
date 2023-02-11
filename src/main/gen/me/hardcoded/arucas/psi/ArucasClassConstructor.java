@@ -13,6 +13,9 @@ public interface ArucasClassConstructor extends PsiElement {
   @NotNull
   ArucasCodeBlock getCodeBlock();
 
+  @Nullable
+  ArucasConstructorArguments getConstructorArguments();
+
   @NotNull
   ArucasFunctionName getFunctionName();
 

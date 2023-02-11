@@ -40,6 +40,12 @@ public class ArucasClassConstructorImpl extends ASTWrapperPsiElement implements 
   }
 
   @Override
+  @Nullable
+  public ArucasConstructorArguments getConstructorArguments() {
+    return findChildByClass(ArucasConstructorArguments.class);
+  }
+
+  @Override
   @NotNull
   public ArucasFunctionName getFunctionName() {
     return findNotNullChildByClass(ArucasFunctionName.class);

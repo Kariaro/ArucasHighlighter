@@ -39,6 +39,14 @@
     KW_RETURN="return"
     KW_BREAK="break"
     KW_CONTINUE="continue"
+    KW_IMPORT="import"
+    KW_FROM="from"
+    KW_FINALLY="finally"
+    KW_LOCAL="local"
+    KW_ENUM="enum"
+    KW_INTERFACE="interface"
+    KW_SUPER="super"
+    KW_THROW="throw"
     IDENTIFIER='regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|(\"([^\"\\]|\\.)*\"|'([^'\\]|\\.)*\")"
     OP_LOGICAL_OR="||"
@@ -57,6 +65,12 @@
     OP_NOT="!"
     OP_MM="--"
     OP_PP="++"
+    OP_BSHL="<<"
+    OP_BSHR=">>"
+    OP_BOR="|"
+    OP_BAND="&"
+    OP_BXOR="~"
+    ARBITRARY="..."
     COMMA=","
     SEMICOLON=";"
     ASSIGNMENT="="
@@ -81,12 +95,17 @@ Statement ::= CodeBlock
   | IfStatement
   | WhileStatement
   | ClassDeclaration
+  | EnumDeclaration
+  | InterfaceDeclaration
+  | ImportStatement
+  | ThrowStatement
   | FunctionStatement
   | TryStatement
   | ForEachStatement
   | ForStatement
   | SwitchStatement
   | ReturnStatement
+  | LocalStatement
   | ContinueStatement
   | BreakStatement
   | ExpressionStatement
@@ -102,17 +121,39 @@ fake Name ::= {
   methods=[setName getNameIdentifier]
 }
 
+ImportStatement ::= 'import' ImportElement 'from' ImportPath ';' {extends=Statement}
+ImportElement ::= '*'
+  | ImportClassName ( ',' ImportClassName)*
+ImportClassName ::= IDENTIFIER {extends=Name}
+ImportPath ::= IDENTIFIER ( '.' IDENTIFIER )*
+
+ThrowStatement ::= 'throw' Expression ';' {extends=Statement}
 ReturnStatement ::= 'return' Expression? ';' {extends=Statement}
+LocalStatement ::= 'local' IDENTIFIER NamedTypeHint? '=' Expression ';' {extends=Statement}
 ContinueStatement ::= 'continue' ';' {extends=Statement}
 BreakStatement ::= 'break' ';' {extends=Statement}
-ExpressionStatement ::= Expression ';' {extends=Statement pin=1}
+ExpressionStatement ::= Expression (&',' UnpackExtension)? ';' {extends=Statement pin=1}
+UnpackExtension ::= (',' Expression)+
 
 IfStatement ::= 'if' '(' Expression ')' Statement ElseStatement? {extends=Statement}
 ElseStatement ::= 'else' Statement {extends=Statement}
 WhileStatement ::= 'while' '(' Expression ')' Statement {extends=Statement}
 
+/* Enum Statement */
+EnumDeclaration ::= 'enum' ClassName ClassInheritance? EnumCodeBlock {extends=Statement}
+EnumCodeBlock ::= '{' EnumCodeValues? (';' ClassBodyStatement*)? '}' {extends=Statement}
+EnumCodeValues ::= EnumValue (',' EnumValue )* ','?
+EnumValue ::= IDENTIFIER CallArguments?
+
+/* Interface Statement */
+InterfaceDeclaration ::= 'interface' ClassName InterfaceCodeBlock {extends=Statement}
+InterfaceCodeBlock ::= '{' InterfaceBodyStatement* '}' {extends=Statement}
+private InterfaceBodyStatement ::= InterfaceMethod {extends=Statement}
+InterfaceMethod ::= 'fun' FunctionName Arguments NamedTypeHint? ';'
+
 /* Class Statement */
-ClassDeclaration ::= 'class' ClassName ClassCodeBlock {extends=Statement}
+ClassDeclaration ::= 'class' ClassName ClassInheritance? ClassCodeBlock {extends=Statement}
+ClassInheritance ::= ':' ClassName (',' ClassName)*
 ClassCodeBlock ::= '{' ClassBodyStatement* '}' {extends=Statement}
 private ClassBodyStatement ::= ClassMember
   | ClassConstructor
@@ -121,31 +162,39 @@ private ClassBodyStatement ::= ClassMember
 
 Operator ::= '+' | '-' | '*' | '/' | '^' | '!' | '==' | '!='
   | '++' | '--' | '&&' | '||' | '>=' | '<=' | '>' | '<'
+  | '&' | '|' | '~' | '>>' | '<<' | '[' ']'
 
-ClassConstructor ::= FunctionName Arguments CodeBlock
-ClassOperator ::= 'operator' Operator OperatorArguments CodeBlock { methods=[operator="OPERATOR[0]"] }
-ClassMethod ::= FunctionModifiers 'fun' FunctionName Arguments CodeBlock
-ClassMember ::= FunctionModifiers 'var' VariableName ['=' Expression] ';'
+ClassConstructor ::= FunctionName Arguments ConstructorArguments? CodeBlock
+ConstructorArguments ::= ':' ('super' | 'this') CallArguments
+ClassOperator ::= 'operator' Operator OperatorArguments NamedTypeHint? CodeBlock { methods=[operator="OPERATOR[0]"] }
+ClassMethod ::= FunctionModifiers 'fun' FunctionName Arguments NamedTypeHint? CodeBlock
+ClassMember ::= FunctionModifiers 'var' VariableName NamedTypeHint? ['=' Expression] ';'
 FunctionModifiers ::= ( 'static'? ) {
   mixin="me.hardcoded.arucas.psi.impl.ArucasModifierElementImpl"
   implements="me.hardcoded.arucas.psi.ArucasModifierElement"
   methods=[isStatic]
 }
 
-Arguments ::= '(' [ Argument (',' Argument)* ] ')'
-Argument ::= IdentifierName
+NamedTypeHint ::= ':' NamedTypeHintName ( '|' NamedTypeHintName )*
+NamedTypeHintName ::= ClassName
+
+Arguments ::= '(' IDENTIFIER ArgumentArbitrary ')' 
+    | '(' [ Argument (',' Argument)* ] ')'
+ArgumentArbitrary ::= '...'
+Argument ::= IdentifierName NamedTypeHint?
 
 OperatorArguments ::= Arguments
 
 /* Function Statement */
-FunctionStatement ::= 'fun' FunctionName Arguments CodeBlock {extends=Statement}
-TryStatement ::= 'try' Statement 'catch' '(' IdentifierName ')' Statement {
+FunctionStatement ::= 'fun' FunctionName Arguments NamedTypeHint? CodeBlock {extends=Statement}
+TryStatement ::= 'try' Statement 'catch' '(' IdentifierName NamedTypeHint? ')' Statement TryStatementFinally? {
   extends=Statement
   methods=[
     TRY_BODY="Statement[0]"
     CATCH_BODY="Statement[1]"
   ]
 }
+TryStatementFinally ::= 'finally' Statement
 
 /* For Statements */
 ForEachStatement ::= 'foreach' '(' IdentifierName ':' Expression ')' Statement {
@@ -168,8 +217,10 @@ Expression ::= AssignExpression
   | ConditionalOrExpression
   | ConditionalAndExpression
   | UnaryNotExpression
+  | ArrayExpression
   | RelationalExpression
   | ArithmeticExpression
+  | BitExpression
   | FactorExpression
   | UnaryExpression
   | PowerExpression
@@ -182,7 +233,9 @@ ConditionalOrExpression ::= Expression '||' Expression {extends=Expression}
 ConditionalAndExpression ::= Expression '&&' Expression {extends=Expression}
 RelationalExpression ::= Expression ('==' | '!=' | '<' | '>' | '<=' | '>=') Expression {extends=Expression}
 ArithmeticExpression ::= Expression ('+' | '-') Expression {extends=Expression}
+BitExpression ::= Expression ('>>' | '<<' | '~' | '|' | '&') Expression {extends=Expression}
 FactorExpression ::= Expression ('*' | '/') Expression {extends=Expression}
+ArrayExpression ::= Expression '[' Expression ']' ( '=' Expression )? {extends=Expression}
 UnaryNotExpression ::= '!' Expression {extends=Expression}
 UnaryExpression ::= ('+' | '-') Expression {extends=Expression}
 PowerExpression ::= Expression '^' Expression {extends=Expression}
@@ -223,6 +276,6 @@ MapEntry ::= Expression ':' Expression {
     value="Expression[1]"
   ]
 }
-LambdaExpression ::= 'fun' Arguments CodeBlock {extends=Expression}
+LambdaExpression ::= 'fun' Arguments NamedTypeHint? ( CodeBlock | Expression ) {extends=Expression}
 NewExpression ::= 'new' ClassName CallArguments {extends=Expression}
 ParenthesesExpression ::= '(' Expression ')' {extends=Expression}

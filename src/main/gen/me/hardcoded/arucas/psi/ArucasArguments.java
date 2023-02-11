@@ -10,4 +10,10 @@ public interface ArucasArguments extends PsiElement {
   @NotNull
   List<ArucasArgument> getArgumentList();
 
+  @Nullable
+  ArucasArgumentArbitrary getArgumentArbitrary();
+
+  @Nullable
+  PsiElement getIdentifier();
+
 }

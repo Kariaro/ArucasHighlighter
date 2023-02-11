@@ -10,7 +10,13 @@ public interface ArucasLambdaExpression extends ArucasExpression {
   @NotNull
   ArucasArguments getArguments();
 
-  @NotNull
+  @Nullable
   ArucasCodeBlock getCodeBlock();
+
+  @Nullable
+  ArucasExpression getExpression();
+
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
 
 }

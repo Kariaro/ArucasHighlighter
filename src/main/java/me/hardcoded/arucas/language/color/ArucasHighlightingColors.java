@@ -30,6 +30,8 @@ public class ArucasHighlightingColors {
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_FUNCTION_NAME", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	public static final TextAttributesKey VARIABLE_NAME
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_VARIABLE_NAME", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+	public static final TextAttributesKey TYPE_HINT
+		= TextAttributesKey.createTextAttributesKey("ARUCAS_TYPE_HINT", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	
 	public static final TextAttributesKey FUNCTION_CALL
 		= TextAttributesKey.createTextAttributesKey("ARUCAS_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL);

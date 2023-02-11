@@ -51,4 +51,10 @@ public class ArucasClassMethodImpl extends ASTWrapperPsiElement implements Aruca
     return findNotNullChildByClass(ArucasFunctionName.class);
   }
 
+  @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
 }

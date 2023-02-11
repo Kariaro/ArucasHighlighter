@@ -97,12 +97,12 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"    var memberVariable;\n" +
 			"\n" +
 			"    Example(value) {\n" +
-			"        local = ['a', { 1: 'b', 2: {} }, []];\n" +
-			"        foreach (item : local) {\n" +
+			"        a_local = ['a', { 1: 'b', 2: {} }, []];\n" +
+			"        foreach (item : a_local) {\n" +
 			"            len = length(item);\n" +
 			"            if (!(len > 0 && len <= value) || value > 100) {\n" +
 			"                for (i = 0; i < 10; i++) {\n" +
-			"                    local.append('text' + (i * 3 / 2.0), 'a', null);\n" +
+			"                    a_local.append('text' + (i * 3 / 2.0), 'a', null);\n" +
 			"                }\n" +
 			"            } else {\n" +
 			"                i = 10;\n" +
@@ -110,7 +110,7 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"                    switch (i--) {\n" +
 			"                        case 1, 2, 3 -> {\n" +
 			"                            {\n" +
-			"                                local.append('text' + i);\n" +
+			"                                a_local.append('text' + i);\n" +
 			"                            }\n" +
 			"                        }\n" +
 			"                        default -> {}\n" +
@@ -127,7 +127,7 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"    }\n" +
 			"\n" +
 			"    operator +(right) {\n" +
-			"        return this.local + right;\n" +
+			"        return this.a_local + right;\n" +
 			"    }\n" +
 			"\n" +
 			"    static fun testInequality(a, b, expected) {\n" +

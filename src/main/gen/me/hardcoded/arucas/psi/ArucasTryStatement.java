@@ -10,8 +10,14 @@ public interface ArucasTryStatement extends ArucasStatement {
   @NotNull
   ArucasIdentifierName getIdentifierName();
 
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
+
   @NotNull
   List<ArucasStatement> getStatementList();
+
+  @Nullable
+  ArucasTryStatementFinally getTryStatementFinally();
 
   @NotNull
   ArucasStatement getTryBody();

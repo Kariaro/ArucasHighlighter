@@ -45,6 +45,12 @@ public class ArucasAnnotator implements Annotator {
 		addOperator("!", 0);
 		addOperator("++", 0);
 		addOperator("--", 0);
+		addOperator("<<", 1);
+		addOperator(">>", 1);
+		addOperator("~", 1);
+		addOperator("&", 1);
+		addOperator("|", 1);
+		addOperator("[]", 1, 2);
 	}
 	
 	@Override
@@ -183,9 +189,15 @@ public class ArucasAnnotator implements Annotator {
 				}
 				
 				if (!argumentCount.add(parameters)) {
-					holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with " + getParameterString(parameters) + " has already been defined")
-						.range(constructor.getFunctionName().getIdentifier().getTextRange())
-						.create();
+					if (parameters < 0) {
+						holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with varargs has already been defined")
+							.range(constructor.getFunctionName().getIdentifier().getTextRange())
+							.create();
+					} else {
+						holder.newAnnotation(HighlightSeverity.ERROR, "A constructor with " + getParameterString(parameters) + " has already been defined")
+							.range(constructor.getFunctionName().getIdentifier().getTextRange())
+							.create();
+					}
 				}
 				
 				validateArguments(arguments, holder);
@@ -207,9 +219,15 @@ public class ArucasAnnotator implements Annotator {
 				int parameters = getNumberOfArguments(arguments);
 				
 				if (!argumentCount.add(parameters)) {
-					holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " method with " + getParameterString(parameters) + " has already been defined")
-						.range(method.getFunctionName().getIdentifier().getTextRange())
-						.create();
+					if (parameters < 0) {
+						holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " vararg method has already been defined")
+							.range(method.getFunctionName().getIdentifier().getTextRange())
+							.create();
+					} else {
+						holder.newAnnotation(HighlightSeverity.ERROR, "A " + (isStatic ? "static" : "") + " method with " + getParameterString(parameters) + " has already been defined")
+							.range(method.getFunctionName().getIdentifier().getTextRange())
+							.create();
+					}
 				}
 				
 				validateArguments(arguments, holder);
@@ -273,7 +291,15 @@ public class ArucasAnnotator implements Annotator {
 	}
 	
 	private static int getNumberOfArguments(@Nullable ArucasArguments arguments) {
-		return arguments == null ? 0 : arguments.getArgumentList().size();
+		if (arguments == null) {
+			return 0;
+		}
+		
+		if (arguments.getArgumentArbitrary() != null) {
+			return -1;
+		}
+		
+		return arguments.getArgumentList().size();
 	}
 	
 	private static String getParameterString(int count) {

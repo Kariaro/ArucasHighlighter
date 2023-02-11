@@ -17,9 +17,10 @@ import com.intellij.psi.TokenType;
 
 
 Keyword = "if" | "else" | "foreach" | "for" | "while" | "try" | "catch"
-  | "fun" | "class" | "operator" | "new" | "static" | "var" | "switch"
-  | "case" | "default" | "return" | "break" | "continue"
-
+  | "fun" | "class" | "new" | "static" | "var" | "switch"
+  | "case" | "default" | "return" | "break" | "continue" | "operator"
+  | "import" | "from" | "finally" | "local" | "enum" |"interface" | "super"
+  
 ValueKeyword = "true" | "false" | "this" | "null"
 
 LineTerminator = \r|\n|\r\n
@@ -29,7 +30,7 @@ WhiteSpace = [ \t\r\n\f]+
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 Number = [0-9]+(\.[0-9]+)?
 
-Operator = "--" | "++" | "+" | "-" | "*" | "/" | "^" | "!"
+Operator = "--" | "++" | "+" | "-" | "*" | "/" | "^" | "!" | ">>" | "<<" | "~" | "|" | "&"
 Syntax = "==" | "!=" | ">=" | "<=" | ">" | "<" | "||" | "&&"
 
 /* comments */
@@ -70,6 +71,14 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   "break"                          { return ArucasTypes.KW_BREAK; }
   "continue"                       { return ArucasTypes.KW_CONTINUE; }
   "operator"                       { return ArucasTypes.KW_OPERATOR; }
+  "import"                         { return ArucasTypes.KW_IMPORT; }
+  "from"                           { return ArucasTypes.KW_FROM; }
+  "finally"                        { return ArucasTypes.KW_FINALLY; }
+  "local"                          { return ArucasTypes.KW_LOCAL; }
+  "enum"                           { return ArucasTypes.KW_ENUM; }
+  "interface"                      { return ArucasTypes.KW_INTERFACE; }
+  "super"                          { return ArucasTypes.KW_SUPER; }
+  "throw"                          { return ArucasTypes.KW_THROW; }
 
   "+"                              { return ArucasTypes.OP_PLUS; }
   "-"                              { return ArucasTypes.OP_MINUS; }
@@ -89,6 +98,13 @@ TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
   "<="                             { return ArucasTypes.OP_LESSTHANEQ; }
   "<"                              { return ArucasTypes.OP_LESSTHAN; }
 
+  "<<"                             { return ArucasTypes.OP_BSHL; }
+  ">>"                             { return ArucasTypes.OP_BSHR; }
+  "~"                              { return ArucasTypes.OP_BXOR; }
+  "&"                              { return ArucasTypes.OP_BAND; }
+  "|"                              { return ArucasTypes.OP_BOR; }
+
+  "..."                            { return ArucasTypes.ARBITRARY; }
   "("                              { return ArucasTypes.LPAREN; }
   ")"                              { return ArucasTypes.RPAREN; }
   "["                              { return ArucasTypes.LBRACK; }

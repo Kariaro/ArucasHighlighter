@@ -25,7 +25,9 @@ public class ArucasFoldingBuilder extends FoldingBuilderEx implements DumbAware 
 			ArucasClassCodeBlock.class,
 			ArucasLambdaExpression.class,
 			ArucasSwitchCodeBlock.class,
-			ArucasCodeBlock.class
+			ArucasCodeBlock.class,
+			ArucasEnumCodeBlock.class,
+			ArucasInterfaceCodeBlock.class
 		);
 		
 		for (final PsiElement element : elements) {

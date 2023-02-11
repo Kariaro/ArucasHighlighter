@@ -34,9 +34,21 @@ public class ArucasLambdaExpressionImpl extends ArucasExpressionImpl implements 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ArucasCodeBlock getCodeBlock() {
-    return findNotNullChildByClass(ArucasCodeBlock.class);
+    return findChildByClass(ArucasCodeBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasExpression getExpression() {
+    return findChildByClass(ArucasExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
   }
 
 }

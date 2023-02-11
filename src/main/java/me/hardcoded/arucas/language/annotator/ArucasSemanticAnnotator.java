@@ -16,6 +16,14 @@ public class ArucasSemanticAnnotator implements Annotator {
 			annotateClassName(((ArucasClassDeclaration)element).getClassName(), holder);
 		}
 		
+		if (element instanceof ArucasInterfaceDeclaration) {
+			annotateClassName(((ArucasInterfaceDeclaration)element).getClassName(), holder);
+		}
+		
+		if (element instanceof ArucasEnumDeclaration) {
+			annotateClassName(((ArucasEnumDeclaration)element).getClassName(), holder);
+		}
+		
 		if (element instanceof ArucasNewExpression) {
 			annotateClassName(((ArucasNewExpression)element).getClassName(), holder);
 		}
@@ -26,6 +34,10 @@ public class ArucasSemanticAnnotator implements Annotator {
 
 		if (element instanceof ArucasClassMethod) {
 			annotateFunctionName(((ArucasClassMethod)element).getFunctionName(), holder);
+		}
+		
+		if (element instanceof ArucasInterfaceMethod) {
+			annotateFunctionName(((ArucasInterfaceMethod)element).getFunctionName(), holder);
 		}
 
 		if (element instanceof ArucasFunctionStatement) {
@@ -38,6 +50,10 @@ public class ArucasSemanticAnnotator implements Annotator {
 
 		if (element instanceof ArucasCallExpression) {
 			annotateCallExpression((ArucasCallExpression)element, holder);
+		}
+		
+		if (element instanceof ArucasNamedTypeHintName) {
+			annotateNamedTypeHintName((ArucasNamedTypeHintName)element, holder);
 		}
 	}
 	
@@ -82,6 +98,15 @@ public class ArucasSemanticAnnotator implements Annotator {
 			.create();
 		holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(name)
 			.textAttributes(ArucasHighlightingColors.CLASS_NAME)
+			.create();
+	}
+	
+	private void annotateNamedTypeHintName(ArucasNamedTypeHintName name, AnnotationHolder holder) {
+		holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(name)
+			.enforcedTextAttributes(TextAttributes.ERASE_MARKER)
+			.create();
+		holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(name)
+			.textAttributes(ArucasHighlightingColors.TYPE_HINT)
 			.create();
 	}
 	

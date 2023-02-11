@@ -33,4 +33,10 @@ public class ArucasExpressionStatementImpl extends ArucasStatementImpl implement
     return findNotNullChildByClass(ArucasExpression.class);
   }
 
+  @Override
+  @Nullable
+  public ArucasUnpackExtension getUnpackExtension() {
+    return findChildByClass(ArucasUnpackExtension.class);
+  }
+
 }
