@@ -10,4 +10,10 @@ public interface ArucasMemberExpression extends ArucasExpression {
   @NotNull
   List<ArucasExpression> getExpressionList();
 
+  @NotNull
+  ArucasExpression getLeft();
+
+  @Nullable
+  ArucasExpression getRight();
+
 }

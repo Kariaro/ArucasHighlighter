@@ -34,6 +34,12 @@ public class ArucasClassOperatorImpl extends ASTWrapperPsiElement implements Aru
   }
 
   @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
+  @Override
   @NotNull
   public ArucasOperator getOperator() {
     return findNotNullChildByClass(ArucasOperator.class);

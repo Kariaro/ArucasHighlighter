@@ -23,8 +23,10 @@ public class ArucasStyleSettingsCustomizable {
 		SPACE_AROUND_EQUALITY_OPERATORS,
 		SPACE_AROUND_ASSIGNMENT_OPERATORS,
 		
+		// Before left brace
 		SPACE_BEFORE_CLASS_BODY,
 		SPACE_BEFORE_METHOD_BODY,
+		SPACE_BEFORE_LEFT_BRACE,
 		
 		// List expression
 		SPACE_INSIDE_EMPTY_LIST,
@@ -45,9 +47,16 @@ public class ArucasStyleSettingsCustomizable {
 		SPACE_AROUND_INSIDE_PARAMETERS,
 		SPACE_BEFORE_PARAMETER_COMMA,
 		SPACE_AFTER_PARAMETER_COMMA,
+		
+		// Call parameters
+		SPACE_INSIDE_EMPTY_CALL_PARAMETERS,
+		SPACE_AROUND_INSIDE_CALL_PARAMETERS,
+		SPACE_BEFORE_PARAMETER_CALL_COMMA,
+		SPACE_AFTER_PARAMETER_CALL_COMMA,
 	}
 	
 	public static final String SPACE_METHOD_PARAMETERS = "Method parameters";
+	public static final String SPACE_CALL_PARAMETERS = "Call parameters";
 	public static final String SPACE_LIST = "List expression";
 	public static final String SPACE_MAP = "Map expression";
 }

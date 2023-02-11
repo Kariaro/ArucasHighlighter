@@ -41,8 +41,14 @@ public class ArucasFunctionStatementImpl extends ArucasStatementImpl implements 
 
   @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasFunctionName getFunctionName() {
+    return findNotNullChildByClass(ArucasFunctionName.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
   }
 
 }

@@ -33,4 +33,16 @@ public class ArucasArgumentsImpl extends ASTWrapperPsiElement implements ArucasA
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasArgument.class);
   }
 
+  @Override
+  @Nullable
+  public ArucasArgumentArbitrary getArgumentArbitrary() {
+    return findChildByClass(ArucasArgumentArbitrary.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
 }

@@ -33,4 +33,10 @@ public class ArucasArgumentImpl extends ASTWrapperPsiElement implements ArucasAr
     return findNotNullChildByClass(ArucasIdentifierName.class);
   }
 
+  @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
 }

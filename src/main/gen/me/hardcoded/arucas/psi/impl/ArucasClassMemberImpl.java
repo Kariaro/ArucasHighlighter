@@ -40,9 +40,15 @@ public class ArucasClassMemberImpl extends ASTWrapperPsiElement implements Aruca
   }
 
   @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
+  @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasVariableName getVariableName() {
+    return findNotNullChildByClass(ArucasVariableName.class);
   }
 
 }

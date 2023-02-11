@@ -17,6 +17,9 @@ public interface ArucasClassMethod extends PsiElement {
   ArucasFunctionModifiers getFunctionModifiers();
 
   @NotNull
-  ArucasIdentifierName getIdentifierName();
+  ArucasFunctionName getFunctionName();
+
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
 
 }

@@ -11,17 +11,38 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ArucasColorSettingsPage implements ColorSettingsPage {
 	private static final AttributesDescriptor[] DESCRIPTORS = {
-		new AttributesDescriptor("String", ArucasSyntaxHighlighter.STRING),
-		new AttributesDescriptor("Delimiter", ArucasSyntaxHighlighter.DELIMITER),
-		new AttributesDescriptor("Number", ArucasSyntaxHighlighter.NUMBER),
-		new AttributesDescriptor("Keyword", ArucasSyntaxHighlighter.KEYWORD),
-		new AttributesDescriptor("Comment", ArucasSyntaxHighlighter.COMMENT),
-		new AttributesDescriptor("Bad value", ArucasSyntaxHighlighter.BAD_CHARACTER),
+		new AttributesDescriptor("Declarations//Class name", ArucasHighlightingColors.CLASS_NAME),
+		new AttributesDescriptor("Declarations//Function name", ArucasHighlightingColors.FUNCTION_NAME),
+		new AttributesDescriptor("Declarations//Variable name", ArucasHighlightingColors.VARIABLE_NAME),
+		new AttributesDescriptor("Declarations//Type hint", ArucasHighlightingColors.TYPE_HINT),
+		new AttributesDescriptor("Function call", ArucasHighlightingColors.FUNCTION_CALL),
+		
+		new AttributesDescriptor("Identifier", ArucasHighlightingColors.IDENTIFIER),
+		new AttributesDescriptor("Comment", ArucasHighlightingColors.COMMENT),
+		new AttributesDescriptor("String", ArucasHighlightingColors.STRING),
+		new AttributesDescriptor("Number", ArucasHighlightingColors.NUMBER),
+		new AttributesDescriptor("Operator", ArucasHighlightingColors.OPERATOR),
+		new AttributesDescriptor("Delimiter", ArucasHighlightingColors.DELIMITER),
+		new AttributesDescriptor("Value Keyword", ArucasHighlightingColors.VALUE_KEYWORD),
+		new AttributesDescriptor("Keyword", ArucasHighlightingColors.KEYWORD),
+		new AttributesDescriptor("Bad value", ArucasHighlightingColors.BAD_CHARACTER),
 	};
+	
+	private static final Map<String, TextAttributesKey> customTags;
+	
+	static {
+		customTags = new HashMap<>();
+		customTags.put("className", ArucasHighlightingColors.CLASS_NAME);
+		customTags.put("funName", ArucasHighlightingColors.FUNCTION_NAME);
+		customTags.put("varName", ArucasHighlightingColors.VARIABLE_NAME);
+		customTags.put("funCall", ArucasHighlightingColors.FUNCTION_CALL);
+		customTags.put("typeHint", ArucasHighlightingColors.TYPE_HINT);
+	}
 	
 	@Nullable
 	@Override
@@ -39,24 +60,29 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 	@Override
 	public String getDemoText() {
 		return "/* This is an example class */\n" +
-			"class Example {\n" +
-			"    static var staticVariable = 'string';\n" +
-			"    var memberVariable = 321;\n" +
+			"class <className>Example</className> {\n" +
+			"    static var <varName>staticVariable</varName> = 'string';\n" +
+			"    var <varName>memberVariable</varName> = 321;\n" +
 			"\n" +
-			"    Example() {\n" +
+			"    <funName>Example</funName>() {\n" +
 			"        this.memberVariable = true;\n" +
 			"        localVariable = [ 'a', 1, { 1: '321' }];\n" +
 			"    }\n" +
 			"\n" +
-			"    static fun staticMethod(obj) {\n" +
+			"    fun <funName>method</funName>(value: <typeHint>Error</typeHint> | <typeHint>String</typeHint>) {\n" +
+			"         <funCall>print</funCall>(value);\n" +
+			"    }\n" +
+			"\n" +
+			"    static fun <funName>staticMethod</funName>(obj) {\n" +
 			"        return obj == null;\n" +
 			"    }\n" +
 			"}\n" +
 			"\n" +
 			"// Create a function lambda\n" +
 			"lambda = fun() {\n" +
-			"    return new Example();\n" +
+			"    return new <className>Example</className>();\n" +
 			"}();\n" +
+			"lambda.<funCall>method</funCall>('message')\n" +
 			"\n" +
 			"// Invalid character\n" +
 			"test = invalid^;";
@@ -65,7 +91,7 @@ public class ArucasColorSettingsPage implements ColorSettingsPage {
 	@Nullable
 	@Override
 	public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
-		return null;
+		return customTags;
 	}
 	
 	@Override

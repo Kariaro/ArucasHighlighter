@@ -34,9 +34,21 @@ public class ArucasTryStatementImpl extends ArucasStatementImpl implements Aruca
   }
 
   @Override
+  @Nullable
+  public ArucasNamedTypeHint getNamedTypeHint() {
+    return findChildByClass(ArucasNamedTypeHint.class);
+  }
+
+  @Override
   @NotNull
   public List<ArucasStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ArucasStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public ArucasTryStatementFinally getTryStatementFinally() {
+    return findChildByClass(ArucasTryStatementFinally.class);
   }
 
   @Override

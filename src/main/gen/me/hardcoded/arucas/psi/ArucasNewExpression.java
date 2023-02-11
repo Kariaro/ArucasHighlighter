@@ -11,6 +11,6 @@ public interface ArucasNewExpression extends ArucasExpression {
   ArucasCallArguments getCallArguments();
 
   @NotNull
-  ArucasIdentifierName getIdentifierName();
+  ArucasClassName getClassName();
 
 }

@@ -35,8 +35,8 @@ public class ArucasNewExpressionImpl extends ArucasExpressionImpl implements Aru
 
   @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasClassName getClassName() {
+    return findNotNullChildByClass(ArucasClassName.class);
   }
 
 }

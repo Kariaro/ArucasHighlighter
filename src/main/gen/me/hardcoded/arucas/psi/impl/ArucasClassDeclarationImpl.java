@@ -34,9 +34,15 @@ public class ArucasClassDeclarationImpl extends ArucasStatementImpl implements A
   }
 
   @Override
+  @Nullable
+  public ArucasClassInheritance getClassInheritance() {
+    return findChildByClass(ArucasClassInheritance.class);
+  }
+
+  @Override
   @NotNull
-  public ArucasIdentifierName getIdentifierName() {
-    return findNotNullChildByClass(ArucasIdentifierName.class);
+  public ArucasClassName getClassName() {
+    return findNotNullChildByClass(ArucasClassName.class);
   }
 
 }

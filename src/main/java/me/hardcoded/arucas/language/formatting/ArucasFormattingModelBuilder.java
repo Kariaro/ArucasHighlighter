@@ -38,6 +38,24 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 				return super.getSpacing(parent, child1, child2);
 			}
 		}
+			// After statement
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.IF_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.FOR_EACH_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.FOR_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.WHILE_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.CASE_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.SWITCH_CODE_BLOCK, ArucasTypes.SWITCH_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.TRY_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			.beforeInside(ArucasTypes.STATEMENT, ArucasTypes.ELSE_STATEMENT)
+			.spaceIf(data.SPACE_BEFORE_LEFT_BRACE)
+			
 			// Before parentheses
 			.before(ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_BEFORE_METHOD_PARENTHESES)
@@ -127,6 +145,18 @@ public class ArucasFormattingModelBuilder implements FormattingModelBuilder {
 			.spaceIf(data.SPACE_AFTER_PARAMETER_COMMA)
 			.beforeInside(ArucasTypes.COMMA, ArucasTypes.ARGUMENTS)
 			.spaceIf(data.SPACE_BEFORE_PARAMETER_COMMA)
+			
+			// Call parameters
+			.betweenInside(ArucasTypes.LPAREN, ArucasTypes.RPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_INSIDE_EMPTY_CALL_PARAMETERS)
+			.afterInside(ArucasTypes.LPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AROUND_INSIDE_CALL_PARAMETERS)
+			.beforeInside(ArucasTypes.RPAREN, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AROUND_INSIDE_CALL_PARAMETERS)
+			.afterInside(ArucasTypes.COMMA, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_AFTER_PARAMETER_CALL_COMMA)
+			.beforeInside(ArucasTypes.COMMA, ArucasTypes.CALL_ARGUMENTS)
+			.spaceIf(data.SPACE_BEFORE_PARAMETER_CALL_COMMA)
 			;
 	}
 	

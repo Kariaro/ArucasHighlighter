@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static me.hardcoded.arucas.language.formatting.ArucasStyleSettingsCustomizable.*;
 
 public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
+	
 	@NotNull
 	@Override
 	public Language getLanguage() {
@@ -48,26 +49,37 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			groupName = CodeStyleSettingsCustomizableOptions.getInstance().SPACES_BEFORE_LEFT_BRACE;
 			showSpacingOption(consumer, Type.SPACE_BEFORE_CLASS_BODY, "Class body", groupName);
 			showSpacingOption(consumer, Type.SPACE_BEFORE_METHOD_BODY, "Method body", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_LEFT_BRACE, "Space before left brace", groupName);
 			
 			// List expression
-			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_LIST, "Empty space", SPACE_LIST);
-			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_LIST, "Around walls", SPACE_LIST);
-			showSpacingOption(consumer, Type.SPACE_BEFORE_LIST_COMMA, "Before comma", SPACE_LIST);
-			showSpacingOption(consumer, Type.SPACE_AFTER_LIST_COMMA, "After comma", SPACE_LIST);
+			groupName = SPACE_LIST;
+			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_LIST, "Empty space", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_LIST, "Around walls", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_LIST_COMMA, "Before comma", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_LIST_COMMA, "After comma", groupName);
 			
 			// Map expression
-			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_MAP, "Empty space", SPACE_MAP);
-			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_MAP, "Around walls", SPACE_MAP);
-			showSpacingOption(consumer, Type.SPACE_BEFORE_MAP_COLON, "Before colon", SPACE_MAP);
-			showSpacingOption(consumer, Type.SPACE_AFTER_MAP_COLON, "After colon", SPACE_MAP);
-			showSpacingOption(consumer, Type.SPACE_BEFORE_MAP_COMMA, "Before comma", SPACE_MAP);
-			showSpacingOption(consumer, Type.SPACE_AFTER_MAP_COMMA, "After comma", SPACE_MAP);
+			groupName = SPACE_MAP;
+			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_MAP, "Empty space", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_MAP, "Around walls", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_MAP_COLON, "Before colon", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_MAP_COLON, "After colon", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_MAP_COMMA, "Before comma", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_MAP_COMMA, "After comma", groupName);
 			
 			// Method parameters
-			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_PARAMETERS, "Empty space", SPACE_METHOD_PARAMETERS);
-			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_PARAMETERS, "Around walls", SPACE_METHOD_PARAMETERS);
-			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_COMMA, "Before comma", SPACE_METHOD_PARAMETERS);
-			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_COMMA, "After comma", SPACE_METHOD_PARAMETERS);
+			groupName = SPACE_METHOD_PARAMETERS;
+			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_PARAMETERS, "Empty space", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_PARAMETERS, "Around walls", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_COMMA, "Before comma", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_COMMA, "After comma", groupName);
+			
+			// Call parameters
+			groupName = SPACE_CALL_PARAMETERS;
+			showSpacingOption(consumer, Type.SPACE_INSIDE_EMPTY_CALL_PARAMETERS, "Empty space", groupName);
+			showSpacingOption(consumer, Type.SPACE_AROUND_INSIDE_CALL_PARAMETERS, "Around walls", groupName);
+			showSpacingOption(consumer, Type.SPACE_BEFORE_PARAMETER_CALL_COMMA, "Before comma", groupName);
+			showSpacingOption(consumer, Type.SPACE_AFTER_PARAMETER_CALL_COMMA, "After comma", groupName);
 		} else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
 			consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
 		}
@@ -85,12 +97,12 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"    var memberVariable;\n" +
 			"\n" +
 			"    Example(value) {\n" +
-			"        local = ['a', { 1: 'b', 2: {} }, []];\n" +
-			"        foreach (item : local) {\n" +
+			"        a_local = ['a', { 1: 'b', 2: {} }, []];\n" +
+			"        foreach (item : a_local) {\n" +
 			"            len = length(item);\n" +
 			"            if (!(len > 0 && len <= value) || value > 100) {\n" +
 			"                for (i = 0; i < 10; i++) {\n" +
-			"                    local.append('text' + (i * 3 / 2.0));\n" +
+			"                    a_local.append('text' + (i * 3 / 2.0), 'a', null);\n" +
 			"                }\n" +
 			"            } else {\n" +
 			"                i = 10;\n" +
@@ -98,7 +110,7 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"                    switch (i--) {\n" +
 			"                        case 1, 2, 3 -> {\n" +
 			"                            {\n" +
-			"                                local.append('text' + i);\n" +
+			"                                a_local.append('text' + i);\n" +
 			"                            }\n" +
 			"                        }\n" +
 			"                        default -> {}\n" +
@@ -115,7 +127,7 @@ public class ArucasLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 			"    }\n" +
 			"\n" +
 			"    operator +(right) {\n" +
-			"        return this.local + right;\n" +
+			"        return this.a_local + right;\n" +
 			"    }\n" +
 			"\n" +
 			"    static fun testInequality(a, b, expected) {\n" +

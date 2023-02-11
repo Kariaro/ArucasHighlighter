@@ -10,4 +10,7 @@ public interface ArucasArgument extends PsiElement {
   @NotNull
   ArucasIdentifierName getIdentifierName();
 
+  @Nullable
+  ArucasNamedTypeHint getNamedTypeHint();
+
 }

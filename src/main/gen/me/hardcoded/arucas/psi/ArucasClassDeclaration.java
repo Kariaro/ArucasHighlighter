@@ -10,7 +10,10 @@ public interface ArucasClassDeclaration extends ArucasStatement {
   @NotNull
   ArucasClassCodeBlock getClassCodeBlock();
 
+  @Nullable
+  ArucasClassInheritance getClassInheritance();
+
   @NotNull
-  ArucasIdentifierName getIdentifierName();
+  ArucasClassName getClassName();
 
 }

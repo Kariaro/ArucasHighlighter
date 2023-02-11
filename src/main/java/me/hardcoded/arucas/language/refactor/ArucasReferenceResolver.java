@@ -11,8 +11,8 @@
 //		// Calculate the local root scope
 ////		PsiElement scopeRoot = getScopeRoot(element);
 //
-//		// TODO: We will solve this differently if the element is inside the root scope
-//		// TODO: Traverse upwards from this element and get all the references
+//		// T O D O: We will solve this differently if the element is inside the root scope
+//		// T O D O: Traverse upwards from this element and get all the references
 //		// Look for the reference in the root scope and if it's not defined we stop at the furthest we can reach
 //
 ////		boolean isRoot = scopeRoot instanceof ArucasFile;
@@ -85,13 +85,13 @@
 //				resolveExpression(name, isRoot, arg, references);
 //			}
 //		} else if (expr instanceof ArucasMemberExpression) {
-//			// TODO: Allow this only for the first item
-//			// TODO: Allow member expressions
+//			// T O D O: Allow this only for the first item
+//			// T O D O: Allow member expressions
 //			for (ArucasExpression e : ((ArucasMemberExpression)expr).getExpressionList()) {
 //				resolveExpression(name, isRoot, e, references);
 //			}
 //		} else if (expr instanceof ArucasLambdaExpression) {
-//			// TODO: Is root
+//			// T O D O: Is root
 ////			ArucasLambdaExpression e = (ArucasLambdaExpression)expr;
 ////			resolveExpression(name, isRoot, e.getExpression(), references);
 ////			for (ArucasExpression arg : e.getCallArguments().getExpressionList()) {
@@ -160,7 +160,7 @@
 //			}
 //
 //			if (element instanceof ArucasClassMethod) {
-//				// TODO: If the method is static we should not be able to modify it
+//				// T O D O: If the method is static we should not be able to modify it
 //				ArucasClassMethod stat = (ArucasClassMethod)element;
 //				for (ArucasArgument argument : stat.getArguments().getArgumentList()) {
 //					resolveElement(name, isRoot, argument.getIdentifierName(), references);
@@ -171,7 +171,7 @@
 //			}
 //
 //			if (element instanceof ArucasClassOperator) {
-//				// TODO: If the method is static we should not be able to modify it
+//				// T O D O: If the method is static we should not be able to modify it
 //				ArucasClassOperator stat = (ArucasClassOperator)element;
 //				for (ArucasArgument argument : stat.getOperatorArguments().getArguments().getArgumentList()) {
 //					resolveElement(name, isRoot, argument.getIdentifierName(), references);
